@@ -1,0 +1,42 @@
+{
+  "operation_id": "queryMeasurements",
+  "case": "unsupported_axes",
+  "description": "Неподдерживаемая пара осей",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {},
+    "query": {},
+    "headers": {},
+    "body": {
+      "investigation_id": "inv_psi69",
+      "data_revision": "psi-20261115-r1",
+      "x_metric": "conditions.pressure",
+      "y_metric": "metrics.flame_spread_rate"
+    }
+  },
+  "response": {
+    "status": 422,
+    "headers": {},
+    "body": {
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Эта пара показателей не поддерживается.",
+        "details": [
+          {
+            "field": "y_metric",
+            "reason": "unsupported_axis",
+            "current_revision": null
+          }
+        ],
+        "retryable": false
+      },
+      "meta": {
+        "request_id": "req_demo02",
+        "contract_version": "1.1.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

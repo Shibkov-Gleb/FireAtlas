@@ -1,0 +1,99 @@
+{
+  "operation_id": "search",
+  "case": "semantic_unavailable",
+  "description": "Семантический слой недоступен - lexical с предупреждением (FR-05)",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {},
+    "query": {},
+    "headers": {},
+    "body": {
+      "query": "дым и чувствительность датчиков",
+      "locale": "ru",
+      "data_revision": "psi-20261115-r1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {},
+    "body": {
+      "data": {
+        "items": [
+          {
+            "investigation": {
+              "id": "inv_psi101",
+              "data_revision": "psi-20261115-r1",
+              "psi_id": "PSI-101",
+              "acronym": "SAME-R",
+              "title": "Smoke Aerosol Measurement Experiment - Refurbished",
+              "objectives": [
+                "[FIXTURE] Цель SAME-R; формулировку поставляет AI 1."
+              ],
+              "setup_summary": "[FIXTURE] Краткое описание установки SAME-R.",
+              "scopes": [
+                "detection"
+              ],
+              "fuel_states": [
+                "solid"
+              ],
+              "gravity_regimes": [
+                "microgravity"
+              ],
+              "material_ids": [],
+              "source_ids": [
+                "src_psi101_dataset"
+              ],
+              "claim_ids": [],
+              "conditions_coverage": [],
+              "available_assets": []
+            },
+            "relevance_category": "direct",
+            "match_reasons": [
+              {
+                "code": "scope",
+                "text": "Направление: обнаружение",
+                "field": "scopes",
+                "evidence_ids": []
+              }
+            ],
+            "differences": [],
+            "missing_fields": [],
+            "matching_run_ids": [],
+            "related": false,
+            "evidence_ids": [
+              "ev_psi101_fixture01"
+            ]
+          }
+        ],
+        "next_cursor": null,
+        "total": 1,
+        "retrieval_mode": "lexical",
+        "applied_filters": {
+          "scopes": [],
+          "investigation_ids": [],
+          "material_ids": [],
+          "fuel_states": [],
+          "gravity_regimes": [],
+          "oxygen_range": null,
+          "pressure_range": null,
+          "airflow_range": null,
+          "has_measurements": null,
+          "include_unknown": false
+        }
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.1.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": [
+          {
+            "code": "SEMANTIC_SEARCH_UNAVAILABLE",
+            "message": "Семантический поиск недоступен; используется поиск по тексту и фильтрам.",
+            "field": null
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "operation_id": "queryMeasurements",
+  "case": "no_points",
+  "description": "Нет измерений: все записи исключены с причинами",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {},
+    "query": {},
+    "headers": {},
+    "body": {
+      "investigation_id": "inv_psi25",
+      "data_revision": "psi-20261115-r1",
+      "x_metric": "sample.initial_diameter",
+      "y_metric": "metrics.burn_duration"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {},
+    "body": {
+      "data": {
+        "x_axis": {
+          "key": "sample.initial_diameter",
+          "label": "Начальный диаметр капли",
+          "unit": "m"
+        },
+        "y_axis": {
+          "key": "metrics.burn_duration",
+          "label": "Время горения",
+          "unit": "s"
+        },
+        "points": [],
+        "excluded_count": 1,
+        "exclusions_by_reason": {
+          "missing_x": 1,
+          "missing_y": 0,
+          "unusable_unit": 0,
+          "unverified_record": 0,
+          "filtered_out": 0
+        },
+        "truncated": false,
+        "next_cursor": null
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.1.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

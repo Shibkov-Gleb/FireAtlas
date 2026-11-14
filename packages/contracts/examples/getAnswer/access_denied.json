@@ -1,0 +1,33 @@
+{
+  "operation_id": "getAnswer",
+  "case": "access_denied",
+  "description": "Чужой ответ (AT-19)",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {
+      "id": "ans_other"
+    },
+    "query": {},
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 403,
+    "headers": {},
+    "body": {
+      "error": {
+        "code": "ACCESS_DENIED",
+        "message": "Этот ответ принадлежит другой сессии.",
+        "details": [],
+        "retryable": false
+      },
+      "meta": {
+        "request_id": "req_demo02",
+        "contract_version": "1.1.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

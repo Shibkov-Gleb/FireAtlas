@@ -1,0 +1,41 @@
+{
+  "operation_id": "getInvestigation",
+  "case": "revision_gone",
+  "description": "Ревизия удалена",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {
+      "id": "inv_psi69"
+    },
+    "query": {
+      "data_revision": "psi-20261012-r1"
+    },
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 410,
+    "headers": {},
+    "body": {
+      "error": {
+        "code": "DATA_REVISION_GONE",
+        "message": "Эта версия данных больше недоступна. Откройте актуальную версию.",
+        "details": [
+          {
+            "field": "data_revision",
+            "reason": "gone",
+            "current_revision": "psi-20261115-r1"
+          }
+        ],
+        "retryable": false
+      },
+      "meta": {
+        "request_id": "req_demo02",
+        "contract_version": "1.1.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "operation_id": "getSource",
+  "case": "available",
+  "description": "Источник с локальным файлом",
+  "fixture": true,
+  "default": true,
+  "request": {
+    "path_params": {
+      "id": "src_psi69_exptable"
+    },
+    "query": {
+      "data_revision": "psi-20261115-r1"
+    },
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {},
+    "body": {
+      "data": {
+        "id": "src_psi69_exptable",
+        "data_revision": "psi-20261115-r1",
+        "title": "FLEX (PSI-69) - Experimental Table, версия 5",
+        "kind": "experimental_table",
+        "canonical_url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-69",
+        "doi": null,
+        "publication_date": null,
+        "retrieved_at": "2026-11-15T08:00:00Z",
+        "license": null,
+        "availability": "available",
+        "local_asset_id": "asset_psi69_exptable_v5",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000001"
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.1.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

@@ -1,0 +1,881 @@
+{
+  "operation_id": "listInvestigationRuns",
+  "case": "flex",
+  "description": "Опыты FLEX",
+  "fixture": true,
+  "default": true,
+  "request": {
+    "path_params": {
+      "id": "inv_psi69"
+    },
+    "query": {
+      "data_revision": "psi-20261115-r1",
+      "limit": 20
+    },
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {},
+    "body": {
+      "data": {
+        "items": [
+          {
+            "id": "run_psi69_20cal08",
+            "data_revision": "psi-20261115-r1",
+            "investigation_id": "inv_psi69",
+            "source_test_id": "20CAL08",
+            "material_id": "mat_methanol",
+            "sample": {
+              "geometry": "droplet",
+              "thickness": {
+                "value": null,
+                "unit": "m",
+                "status": "not_applicable",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              },
+              "initial_diameter": {
+                "value": 0.00169,
+                "unit": "m",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "1.69",
+                "raw_unit": "mm",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal08"
+                ],
+                "derivation": null
+              }
+            },
+            "conditions": {
+              "gravity_regime": "microgravity",
+              "gravity_level": {
+                "value": null,
+                "unit": "g_fraction",
+                "status": "not_reported",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              },
+              "oxygen_fraction": {
+                "value": 0.21,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0.21",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal08"
+                ],
+                "derivation": null
+              },
+              "nitrogen_fraction": {
+                "value": 0.79,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0.79",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal08"
+                ],
+                "derivation": null
+              },
+              "co2_fraction": {
+                "value": 0.0,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal08"
+                ],
+                "derivation": null
+              },
+              "helium_fraction": {
+                "value": 0.0,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal08"
+                ],
+                "derivation": null
+              },
+              "pressure": {
+                "value": 101018.37,
+                "unit": "Pa",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "757.7",
+                "raw_unit": "mmHg",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal08"
+                ],
+                "derivation": null
+              },
+              "airflow_speed": {
+                "value": null,
+                "unit": "m_s",
+                "status": "not_reported",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              },
+              "flow_configuration": "unknown",
+              "ambient_temperature": {
+                "value": null,
+                "unit": "K",
+                "status": "not_reported",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              }
+            },
+            "metrics": [
+              {
+                "metric_key": "burn_duration",
+                "quantity": {
+                  "value": 4.3,
+                  "unit": "s",
+                  "status": "reported",
+                  "qualifier": "eq",
+                  "raw_value": "4.3",
+                  "raw_unit": "s",
+                  "uncertainty": null,
+                  "evidence_ids": [
+                    "ev_psi69_20cal08"
+                  ],
+                  "derivation": null
+                }
+              }
+            ],
+            "terminal_outcome": {
+              "category": "disruption",
+              "raw_label": "Disruption",
+              "interpretation_status": "source_explicit",
+              "evidence_ids": [
+                "ev_psi69_20cal08"
+              ]
+            },
+            "regime_tags": [],
+            "evidence_ids": [
+              "ev_psi69_20cal08"
+            ],
+            "quality_notes": [
+              "Начальная доля кислорода 0.21 по описанию серии (приложение А)."
+            ]
+          },
+          {
+            "id": "run_psi69_20cal10",
+            "data_revision": "psi-20261115-r1",
+            "investigation_id": "inv_psi69",
+            "source_test_id": "20CAL10",
+            "material_id": "mat_methanol",
+            "sample": {
+              "geometry": "droplet",
+              "thickness": {
+                "value": null,
+                "unit": "m",
+                "status": "not_applicable",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              },
+              "initial_diameter": {
+                "value": 0.00186,
+                "unit": "m",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "1.86",
+                "raw_unit": "mm",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal10"
+                ],
+                "derivation": null
+              }
+            },
+            "conditions": {
+              "gravity_regime": "microgravity",
+              "gravity_level": {
+                "value": null,
+                "unit": "g_fraction",
+                "status": "not_reported",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              },
+              "oxygen_fraction": {
+                "value": 0.21,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0.21",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal10"
+                ],
+                "derivation": null
+              },
+              "nitrogen_fraction": {
+                "value": 0.79,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0.79",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal10"
+                ],
+                "derivation": null
+              },
+              "co2_fraction": {
+                "value": 0.0,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal10"
+                ],
+                "derivation": null
+              },
+              "helium_fraction": {
+                "value": 0.0,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal10"
+                ],
+                "derivation": null
+              },
+              "pressure": {
+                "value": 101591.66,
+                "unit": "Pa",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "762",
+                "raw_unit": "mmHg",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal10"
+                ],
+                "derivation": null
+              },
+              "airflow_speed": {
+                "value": null,
+                "unit": "m_s",
+                "status": "not_reported",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              },
+              "flow_configuration": "unknown",
+              "ambient_temperature": {
+                "value": null,
+                "unit": "K",
+                "status": "not_reported",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              }
+            },
+            "metrics": [
+              {
+                "metric_key": "burn_duration",
+                "quantity": {
+                  "value": 5.0,
+                  "unit": "s",
+                  "status": "reported",
+                  "qualifier": "eq",
+                  "raw_value": "5.0",
+                  "raw_unit": "s",
+                  "uncertainty": null,
+                  "evidence_ids": [
+                    "ev_psi69_20cal10"
+                  ],
+                  "derivation": null
+                }
+              }
+            ],
+            "terminal_outcome": {
+              "category": "extinction",
+              "raw_label": "Extinction",
+              "interpretation_status": "source_explicit",
+              "evidence_ids": [
+                "ev_psi69_20cal10"
+              ]
+            },
+            "regime_tags": [],
+            "evidence_ids": [
+              "ev_psi69_20cal10"
+            ],
+            "quality_notes": [
+              "Начальная доля кислорода 0.21 по описанию серии (приложение А)."
+            ]
+          },
+          {
+            "id": "run_psi69_20cal12",
+            "data_revision": "psi-20261115-r1",
+            "investigation_id": "inv_psi69",
+            "source_test_id": "20CAL12",
+            "material_id": "mat_methanol",
+            "sample": {
+              "geometry": "droplet",
+              "thickness": {
+                "value": null,
+                "unit": "m",
+                "status": "not_applicable",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              },
+              "initial_diameter": {
+                "value": 0.00161,
+                "unit": "m",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "1.61",
+                "raw_unit": "mm",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal12"
+                ],
+                "derivation": null
+              }
+            },
+            "conditions": {
+              "gravity_regime": "microgravity",
+              "gravity_level": {
+                "value": null,
+                "unit": "g_fraction",
+                "status": "not_reported",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              },
+              "oxygen_fraction": {
+                "value": 0.21,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0.21",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal12"
+                ],
+                "derivation": null
+              },
+              "nitrogen_fraction": {
+                "value": 0.79,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0.79",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal12"
+                ],
+                "derivation": null
+              },
+              "co2_fraction": {
+                "value": 0.0,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal12"
+                ],
+                "derivation": null
+              },
+              "helium_fraction": {
+                "value": 0.0,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal12"
+                ],
+                "derivation": null
+              },
+              "pressure": {
+                "value": 101884.97,
+                "unit": "Pa",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "764.2",
+                "raw_unit": "mmHg",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_20cal12"
+                ],
+                "derivation": null
+              },
+              "airflow_speed": {
+                "value": null,
+                "unit": "m_s",
+                "status": "not_reported",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              },
+              "flow_configuration": "unknown",
+              "ambient_temperature": {
+                "value": null,
+                "unit": "K",
+                "status": "not_reported",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              }
+            },
+            "metrics": [
+              {
+                "metric_key": "burn_duration",
+                "quantity": {
+                  "value": 3.2,
+                  "unit": "s",
+                  "status": "reported",
+                  "qualifier": "eq",
+                  "raw_value": "3.2",
+                  "raw_unit": "s",
+                  "uncertainty": null,
+                  "evidence_ids": [
+                    "ev_psi69_20cal12"
+                  ],
+                  "derivation": null
+                }
+              }
+            ],
+            "terminal_outcome": {
+              "category": "extinction",
+              "raw_label": "Extinction",
+              "interpretation_status": "source_explicit",
+              "evidence_ids": [
+                "ev_psi69_20cal12"
+              ]
+            },
+            "regime_tags": [],
+            "evidence_ids": [
+              "ev_psi69_20cal12"
+            ],
+            "quality_notes": [
+              "Начальная доля кислорода 0.21 по описанию серии (приложение А)."
+            ]
+          },
+          {
+            "id": "run_psi69_30cal02",
+            "data_revision": "psi-20261115-r1",
+            "investigation_id": "inv_psi69",
+            "source_test_id": "30CAL02",
+            "material_id": "mat_methanol",
+            "sample": {
+              "geometry": "droplet",
+              "thickness": {
+                "value": null,
+                "unit": "m",
+                "status": "not_applicable",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              },
+              "initial_diameter": {
+                "value": 0.00206,
+                "unit": "m",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "2.06",
+                "raw_unit": "mm",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_30cal02"
+                ],
+                "derivation": null
+              }
+            },
+            "conditions": {
+              "gravity_regime": "microgravity",
+              "gravity_level": {
+                "value": null,
+                "unit": "g_fraction",
+                "status": "not_reported",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              },
+              "oxygen_fraction": {
+                "value": 0.21,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0.21",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_30cal02"
+                ],
+                "derivation": null
+              },
+              "nitrogen_fraction": {
+                "value": 0.79,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0.79",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_30cal02"
+                ],
+                "derivation": null
+              },
+              "co2_fraction": {
+                "value": 0.0,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_30cal02"
+                ],
+                "derivation": null
+              },
+              "helium_fraction": {
+                "value": 0.0,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_30cal02"
+                ],
+                "derivation": null
+              },
+              "pressure": {
+                "value": 101325.01,
+                "unit": "Pa",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "760",
+                "raw_unit": "mmHg",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_30cal02"
+                ],
+                "derivation": null
+              },
+              "airflow_speed": {
+                "value": null,
+                "unit": "m_s",
+                "status": "not_reported",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              },
+              "flow_configuration": "unknown",
+              "ambient_temperature": {
+                "value": null,
+                "unit": "K",
+                "status": "not_reported",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              }
+            },
+            "metrics": [
+              {
+                "metric_key": "burn_duration",
+                "quantity": {
+                  "value": 7.64,
+                  "unit": "s",
+                  "status": "reported",
+                  "qualifier": "eq",
+                  "raw_value": "7.64",
+                  "raw_unit": "s",
+                  "uncertainty": null,
+                  "evidence_ids": [
+                    "ev_psi69_30cal02"
+                  ],
+                  "derivation": null
+                }
+              }
+            ],
+            "terminal_outcome": {
+              "category": "extinction",
+              "raw_label": "Extinction",
+              "interpretation_status": "source_explicit",
+              "evidence_ids": [
+                "ev_psi69_30cal02"
+              ]
+            },
+            "regime_tags": [],
+            "evidence_ids": [
+              "ev_psi69_30cal02"
+            ],
+            "quality_notes": [
+              "Начальная доля кислорода 0.21 по описанию серии (приложение А)."
+            ]
+          },
+          {
+            "id": "run_psi69_30cal03",
+            "data_revision": "psi-20261115-r1",
+            "investigation_id": "inv_psi69",
+            "source_test_id": "30CAL03",
+            "material_id": "mat_methanol",
+            "sample": {
+              "geometry": "droplet",
+              "thickness": {
+                "value": null,
+                "unit": "m",
+                "status": "not_applicable",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              },
+              "initial_diameter": {
+                "value": 0.00192,
+                "unit": "m",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "1.92",
+                "raw_unit": "mm",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_30cal03"
+                ],
+                "derivation": null
+              }
+            },
+            "conditions": {
+              "gravity_regime": "microgravity",
+              "gravity_level": {
+                "value": null,
+                "unit": "g_fraction",
+                "status": "not_reported",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              },
+              "oxygen_fraction": {
+                "value": 0.21,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0.21",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_30cal03"
+                ],
+                "derivation": null
+              },
+              "nitrogen_fraction": {
+                "value": 0.79,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0.79",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_30cal03"
+                ],
+                "derivation": null
+              },
+              "co2_fraction": {
+                "value": 0.0,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_30cal03"
+                ],
+                "derivation": null
+              },
+              "helium_fraction": {
+                "value": 0.0,
+                "unit": "fraction",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "0",
+                "raw_unit": "mole fraction",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_30cal03"
+                ],
+                "derivation": null
+              },
+              "pressure": {
+                "value": 101325.01,
+                "unit": "Pa",
+                "status": "reported",
+                "qualifier": "eq",
+                "raw_value": "760",
+                "raw_unit": "mmHg",
+                "uncertainty": null,
+                "evidence_ids": [
+                  "ev_psi69_30cal03"
+                ],
+                "derivation": null
+              },
+              "airflow_speed": {
+                "value": null,
+                "unit": "m_s",
+                "status": "not_reported",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              },
+              "flow_configuration": "unknown",
+              "ambient_temperature": {
+                "value": null,
+                "unit": "K",
+                "status": "not_reported",
+                "qualifier": null,
+                "raw_value": null,
+                "raw_unit": null,
+                "uncertainty": null,
+                "evidence_ids": [],
+                "derivation": null
+              }
+            },
+            "metrics": [
+              {
+                "metric_key": "burn_duration",
+                "quantity": {
+                  "value": 6.34,
+                  "unit": "s",
+                  "status": "reported",
+                  "qualifier": "eq",
+                  "raw_value": "6.34",
+                  "raw_unit": "s",
+                  "uncertainty": null,
+                  "evidence_ids": [
+                    "ev_psi69_30cal03"
+                  ],
+                  "derivation": null
+                }
+              }
+            ],
+            "terminal_outcome": {
+              "category": "extinction",
+              "raw_label": "Extinction",
+              "interpretation_status": "source_explicit",
+              "evidence_ids": [
+                "ev_psi69_30cal03"
+              ]
+            },
+            "regime_tags": [],
+            "evidence_ids": [
+              "ev_psi69_30cal03"
+            ],
+            "quality_notes": [
+              "Начальная доля кислорода 0.21 по описанию серии (приложение А)."
+            ]
+          }
+        ],
+        "next_cursor": null,
+        "total": 5
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.1.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

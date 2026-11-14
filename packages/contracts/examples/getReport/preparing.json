@@ -1,0 +1,39 @@
+{
+  "operation_id": "getReport",
+  "case": "preparing",
+  "description": "Отчет готовится",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {
+      "id": "rpt_demo01"
+    },
+    "query": {},
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {},
+    "body": {
+      "data": {
+        "id": "rpt_demo01",
+        "state": "preparing",
+        "title": "Вентиляция и горение материалов",
+        "source_workspace_revision": 4,
+        "data_revision": "psi-20261115-r1",
+        "created_at": "2026-11-15T10:00:00Z",
+        "expires_at": "2026-11-16T10:00:00Z",
+        "download_path": null,
+        "sha256": null,
+        "error": null
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.1.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

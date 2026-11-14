@@ -1,0 +1,124 @@
+{
+  "operation_id": "getAnswer",
+  "case": "conflicting_evidence",
+  "description": "Противоречие оснований [FIXTURE]",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {
+      "id": "ans_demo03"
+    },
+    "query": {},
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {},
+    "body": {
+      "data": {
+        "id": "ans_demo03",
+        "data_revision": "psi-20261115-r1",
+        "workspace_revision": 3,
+        "scenario_snapshot": {
+          "scenario_id": "orbital_custom",
+          "name": "Орбитальная станция",
+          "environment": "orbital_habitat",
+          "celestial_body": null,
+          "safety_task": "prevention",
+          "material_ids": [],
+          "geometry": null,
+          "oxygen_fraction": null,
+          "pressure": null,
+          "airflow_speed": null,
+          "gravity_regime": "microgravity",
+          "assumptions": [
+            {
+              "field": "gravity_regime",
+              "text": "Орбитальная среда задает микрогравитационный контекст; давление и кислород пресетом не задаются.",
+              "origin": "preset_source",
+              "source_ids": [
+                "src_track_flame_in_freefall"
+              ]
+            }
+          ]
+        },
+        "question": "[FIXTURE] Вопрос с расходящимися основаниями",
+        "status": "conflicting_evidence",
+        "answer_blocks": [
+          {
+            "id": "block_c1",
+            "kind": "observation",
+            "text": "[FIXTURE] Первое основание сообщает один исход.",
+            "evidence_ids": [
+              "ev_psi25_fixture01"
+            ],
+            "quantities": []
+          },
+          {
+            "id": "block_c2",
+            "kind": "observation",
+            "text": "[FIXTURE] Второе основание при других условиях сообщает другой исход.",
+            "evidence_ids": [
+              "ev_psi25_fixture02"
+            ],
+            "quantities": []
+          },
+          {
+            "id": "block_c3",
+            "kind": "limitation",
+            "text": "[FIXTURE] Условия опытов различаются; общий вывод не делается.",
+            "evidence_ids": [],
+            "quantities": []
+          }
+        ],
+        "applicability": null,
+        "citations": [
+          {
+            "evidence_id": "ev_psi25_fixture01",
+            "source_id": "src_ntrs_20160000593",
+            "label": "[FIXTURE] Отчет BASS-II",
+            "locator": {
+              "page": null,
+              "section": "[FIXTURE] Results",
+              "row_key": null,
+              "start_s": null,
+              "end_s": null
+            }
+          },
+          {
+            "evidence_id": "ev_psi25_fixture02",
+            "source_id": "src_psi25_dataset",
+            "label": "[FIXTURE] Таблица BASS-II",
+            "locator": {
+              "page": null,
+              "section": "[FIXTURE] Test matrix",
+              "row_key": null,
+              "start_s": null,
+              "end_s": null
+            }
+          }
+        ],
+        "limitations": [
+          "[FIXTURE] Основания противоречат друг другу."
+        ],
+        "follow_up_questions": [],
+        "retrieval_mode": "lexical",
+        "reasoning_revision": "reasoning-0.1-fixture",
+        "validation_summary": {
+          "schema_valid": true,
+          "references_valid": true,
+          "quantities_valid": true,
+          "scope_valid": true
+        },
+        "created_at": "2026-11-15T09:00:20Z"
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.1.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "data_revision": "fixture-20261115-r1",
+  "created_at": "2026-11-15T08:30:00Z",
+  "producer": "backend-fixtures (fixture=true, not a corpus)",
+  "files": [
+    {
+      "path": "investigations.jsonl",
+      "entity_type": "investigation",
+      "sha256": "3aaf86397d28ce3dcd5d195910f75d1d467adf0f4884ccde6cb6636f0dd8d210",
+      "record_count": 3
+    },
+    {
+      "path": "materials.jsonl",
+      "entity_type": "material",
+      "sha256": "a9c2e0f9bb8c46446919d2c52b4eac8e59fe396a6033d07c2c50816f42bfc4bd",
+      "record_count": 2
+    },
+    {
+      "path": "runs.jsonl",
+      "entity_type": "run",
+      "sha256": "6d11200e6085a77a09b19665ff36cf005f5aeb8674e786240fd92141b291b3ee",
+      "record_count": 6
+    },
+    {
+      "path": "sources.jsonl",
+      "entity_type": "source",
+      "sha256": "8f31810d126b439e96b73261daad3fc22dbee7d222a47c13fb42857f7d2548c9",
+      "record_count": 5
+    },
+    {
+      "path": "evidence.jsonl",
+      "entity_type": "evidence",
+      "sha256": "7b1c0788bfdb28f57c23c32f7bd94d765ccf2c41042872821f4fcea0f75939a3",
+      "record_count": 9
+    },
+    {
+      "path": "claims.jsonl",
+      "entity_type": "claim",
+      "sha256": "7c10216c5201c45045ded069fbc9caa28c270e5394b5fd41a6851a271f9f102f",
+      "record_count": 3
+    }
+  ],
+  "quality_summary": {
+    "checked_records": 28,
+    "quarantined_records": 0,
+    "blocking_errors": 0,
+    "warning_count": 0
+  }
+}

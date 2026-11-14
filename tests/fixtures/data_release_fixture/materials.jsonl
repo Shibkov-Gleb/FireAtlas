@@ -1,0 +1,2 @@
+{"aliases":["methanol"],"composition":"CH3OH","id":"mat_methanol","label":"Метанол","state":"liquid"}
+{"aliases":[],"composition":null,"id":"mat_psi25_fixture_solid","label":"[FIXTURE] твердый образец","state":"solid"}

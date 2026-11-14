@@ -1,0 +1,164 @@
+{
+  "operation_id": "search",
+  "case": "oxygen_021",
+  "description": "Вентиляция и твердые материалы, кислород 0.18-0.23 (Б.2, include_unknown=true)",
+  "fixture": true,
+  "default": true,
+  "request": {
+    "path_params": {},
+    "query": {},
+    "headers": {},
+    "body": {
+      "query": "влияние вентиляции на твердые материалы",
+      "locale": "ru",
+      "data_revision": "psi-20261115-r1",
+      "filters": {
+        "scopes": [
+          "prevention"
+        ],
+        "investigation_ids": [],
+        "material_ids": [],
+        "fuel_states": [
+          "solid"
+        ],
+        "gravity_regimes": [
+          "microgravity"
+        ],
+        "oxygen_range": {
+          "min": 0.18,
+          "max": 0.23,
+          "unit": "fraction"
+        },
+        "pressure_range": null,
+        "airflow_range": null,
+        "has_measurements": null,
+        "include_unknown": true
+      },
+      "scenario": null,
+      "include_related": false,
+      "cursor": null,
+      "limit": 20
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {},
+    "body": {
+      "data": {
+        "items": [
+          {
+            "investigation": {
+              "id": "inv_psi25",
+              "data_revision": "psi-20261115-r1",
+              "psi_id": "PSI-25",
+              "acronym": "BASS-II",
+              "title": "Burning and Suppression of Solids - II",
+              "objectives": [
+                "[FIXTURE] Цель BASS-II; формулировку поставляет AI 1."
+              ],
+              "setup_summary": "[FIXTURE] Краткое описание установки BASS-II.",
+              "scopes": [
+                "prevention",
+                "suppression"
+              ],
+              "fuel_states": [
+                "solid"
+              ],
+              "gravity_regimes": [
+                "microgravity"
+              ],
+              "material_ids": [
+                "mat_psi25_fixture_solid"
+              ],
+              "source_ids": [
+                "src_psi25_dataset",
+                "src_ntrs_20160000593"
+              ],
+              "claim_ids": [
+                "clm_psi25_fixture_obs",
+                "clm_psi25_fixture_hyp"
+              ],
+              "conditions_coverage": [
+                {
+                  "field": "conditions.pressure",
+                  "min_value": null,
+                  "max_value": null,
+                  "unit": "Pa",
+                  "known_count": 0,
+                  "unknown_count": 1,
+                  "derivation_evidence_ids": []
+                }
+              ],
+              "available_assets": []
+            },
+            "relevance_category": "direct",
+            "match_reasons": [
+              {
+                "code": "fuel_state",
+                "text": "Твердые образцы",
+                "field": "fuel_states",
+                "evidence_ids": []
+              },
+              {
+                "code": "scope",
+                "text": "Направление: предотвращение",
+                "field": "scopes",
+                "evidence_ids": []
+              },
+              {
+                "code": "query_terms",
+                "text": "[FIXTURE] Совпадение по теме потока воздуха",
+                "field": null,
+                "evidence_ids": [
+                  "ev_psi25_fixture01"
+                ]
+              }
+            ],
+            "differences": [],
+            "missing_fields": [
+              "conditions.oxygen_fraction"
+            ],
+            "matching_run_ids": [
+              "run_psi25_fixture01"
+            ],
+            "related": false,
+            "evidence_ids": [
+              "ev_psi25_fixture01"
+            ]
+          }
+        ],
+        "next_cursor": null,
+        "total": 1,
+        "retrieval_mode": "lexical",
+        "applied_filters": {
+          "scopes": [
+            "prevention"
+          ],
+          "investigation_ids": [],
+          "material_ids": [],
+          "fuel_states": [
+            "solid"
+          ],
+          "gravity_regimes": [
+            "microgravity"
+          ],
+          "oxygen_range": {
+            "min": 0.18,
+            "max": 0.23,
+            "unit": "fraction"
+          },
+          "pressure_range": null,
+          "airflow_range": null,
+          "has_measurements": null,
+          "include_unknown": true
+        }
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.1.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

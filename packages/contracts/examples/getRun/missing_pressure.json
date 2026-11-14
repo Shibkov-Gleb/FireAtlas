@@ -1,0 +1,171 @@
+{
+  "operation_id": "getRun",
+  "case": "missing_pressure",
+  "description": "Неизвестное давление: null и причина (AT-05)",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {
+      "id": "run_psi25_fixture01"
+    },
+    "query": {
+      "data_revision": "psi-20261115-r1"
+    },
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {},
+    "body": {
+      "data": {
+        "id": "run_psi25_fixture01",
+        "data_revision": "psi-20261115-r1",
+        "investigation_id": "inv_psi25",
+        "source_test_id": null,
+        "material_id": "mat_psi25_fixture_solid",
+        "sample": {
+          "geometry": "unknown",
+          "thickness": {
+            "value": null,
+            "unit": "m",
+            "status": "not_reported",
+            "qualifier": null,
+            "raw_value": null,
+            "raw_unit": null,
+            "uncertainty": null,
+            "evidence_ids": [],
+            "derivation": null
+          },
+          "initial_diameter": {
+            "value": null,
+            "unit": "m",
+            "status": "not_applicable",
+            "qualifier": null,
+            "raw_value": null,
+            "raw_unit": null,
+            "uncertainty": null,
+            "evidence_ids": [],
+            "derivation": null
+          }
+        },
+        "conditions": {
+          "gravity_regime": "microgravity",
+          "gravity_level": {
+            "value": null,
+            "unit": "g_fraction",
+            "status": "not_reported",
+            "qualifier": null,
+            "raw_value": null,
+            "raw_unit": null,
+            "uncertainty": null,
+            "evidence_ids": [],
+            "derivation": null
+          },
+          "oxygen_fraction": {
+            "value": null,
+            "unit": "fraction",
+            "status": "not_reported",
+            "qualifier": null,
+            "raw_value": null,
+            "raw_unit": null,
+            "uncertainty": null,
+            "evidence_ids": [
+              "ev_psi25_fixture02"
+            ],
+            "derivation": null
+          },
+          "nitrogen_fraction": {
+            "value": null,
+            "unit": "fraction",
+            "status": "not_reported",
+            "qualifier": null,
+            "raw_value": null,
+            "raw_unit": null,
+            "uncertainty": null,
+            "evidence_ids": [],
+            "derivation": null
+          },
+          "co2_fraction": {
+            "value": null,
+            "unit": "fraction",
+            "status": "not_reported",
+            "qualifier": null,
+            "raw_value": null,
+            "raw_unit": null,
+            "uncertainty": null,
+            "evidence_ids": [],
+            "derivation": null
+          },
+          "helium_fraction": {
+            "value": null,
+            "unit": "fraction",
+            "status": "not_reported",
+            "qualifier": null,
+            "raw_value": null,
+            "raw_unit": null,
+            "uncertainty": null,
+            "evidence_ids": [],
+            "derivation": null
+          },
+          "pressure": {
+            "value": null,
+            "unit": "Pa",
+            "status": "not_reported",
+            "qualifier": null,
+            "raw_value": null,
+            "raw_unit": null,
+            "uncertainty": null,
+            "evidence_ids": [
+              "ev_psi25_fixture02"
+            ],
+            "derivation": null
+          },
+          "airflow_speed": {
+            "value": null,
+            "unit": "m_s",
+            "status": "not_reported",
+            "qualifier": null,
+            "raw_value": null,
+            "raw_unit": null,
+            "uncertainty": null,
+            "evidence_ids": [],
+            "derivation": null
+          },
+          "flow_configuration": "unknown",
+          "ambient_temperature": {
+            "value": null,
+            "unit": "K",
+            "status": "not_reported",
+            "qualifier": null,
+            "raw_value": null,
+            "raw_unit": null,
+            "uncertainty": null,
+            "evidence_ids": [],
+            "derivation": null
+          }
+        },
+        "metrics": [],
+        "terminal_outcome": {
+          "category": "unknown",
+          "raw_label": null,
+          "interpretation_status": "unmapped",
+          "evidence_ids": []
+        },
+        "regime_tags": [],
+        "evidence_ids": [
+          "ev_psi25_fixture02"
+        ],
+        "quality_notes": [
+          "[FIXTURE] Давление не сообщено в источнике: value=null, status=not_reported. Нормальное давление не подставляется."
+        ]
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.1.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

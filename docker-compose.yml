@@ -1,0 +1,25 @@
+# Стенд Fire Atlas (BE-13). Секреты - в .env (не коммитится), см. .env.example.
+# Не проверялся в среде разработки (нет docker-демона).
+services:
+  api:
+    build: .
+    env_file: .env
+    environment:
+      FA_ENV: production
+      FA_RELEASE_DIR: ${FA_RELEASE_DIR:-}
+      FA_FORWARDED_ALLOW_IPS: "*"   # API доступен только nginx; nginx перезаписывает X-Forwarded-For
+    volumes:
+      - fa-data:/var/lib/fire-atlas
+    expose: ["8000"]
+    restart: unless-stopped
+  web:
+    image: nginx:1.27-alpine
+    depends_on: [api]
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./apps/web/dist:/srv/fire-atlas/web:ro
+      - ./deploy/certs:/etc/ssl/fire-atlas:ro
+    restart: unless-stopped
+volumes:
+  fa-data:
