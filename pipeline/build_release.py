@@ -13,6 +13,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import bass2  # noqa: E402
+import claims  # noqa: E402
 import flex  # noqa: E402
 import samer  # noqa: E402
 from common import (ID_RE, RAW, ROOT, SCHEMA_VERSION, check_quantity,  # noqa: E402
@@ -47,6 +48,18 @@ def validate(data, revision):
             errors.append(f"{ev['id']}: unverified evidence in release")
         if ev["kind"] == "table_row" and not (ev["locator"]["row_key"] and ev["table_values"]):
             errors.append(f"{ev['id']}: table_row without row_key/table_values")
+    for c in data["claims"]:
+        for e in c["supporting_evidence_ids"] + c["contradicting_evidence_ids"]:
+            ref(c["id"], e, "evidence")
+        for r in c["applicable_run_ids"]:
+            ref(c["id"], r, "runs")
+        for i in c["investigation_ids"]:
+            ref(c["id"], i, "investigations")
+        need = 1 if c["kind"] == "observation" else 2 if c["kind"] == "synthesis" else 0
+        if len(set(c["supporting_evidence_ids"])) < need:
+            errors.append(f"{c['id']}: {c['kind']} needs at least {need} supporting evidence")
+        if not c["limitations"]:
+            errors.append(f"{c['id']}: no limitations")
     for src in data["sources"]:
         if not src["canonical_url"].startswith("https://"):
             errors.append(f"{src['id']}: canonical_url is not HTTPS")
@@ -108,6 +121,9 @@ def main():
         for k in data:
             data[k].extend(part[k])
 
+    extra = claims.build(revision, retrieved["PSI-101"], data)
+    for k in extra:
+        data[k].extend(extra[k])
     errors, warnings = validate(data, revision)
     errors += control_check(data)
     out = ROOT / "data" / "releases" / revision

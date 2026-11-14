@@ -88,5 +88,32 @@
     "bytes": 4578437,
     "sha256": "65381e2715eb7379113dd1b9c550baaa5fa5a247dba00419123143aa98ef80d6",
     "retrieved_at": "2026-11-14T14:36:58+00:00"
+  },
+  "data/raw/PSI-25/BASS-II Summary Report.pdf": {
+    "source": "PSI-25",
+    "file": "BASS-II Summary Report.pdf",
+    "landing_page": "https://doi.org/10.60555/4qc4-de67",
+    "download_method": "manual browser download",
+    "bytes": 48972416,
+    "sha256": "5ffa911fd9b6356f204646003fb9342e341810dcdfdf5cb15756e7f01ec5f770",
+    "retrieved_at": "2026-11-14T15:09:45+00:00"
+  },
+  "data/raw/NTRS/20130000422.pdf": {
+    "source": "20130000422",
+    "file": "20130000422.pdf",
+    "landing_page": "https://ntrs.nasa.gov/citations/20130000422",
+    "download_method": "manual browser download",
+    "bytes": 757824,
+    "sha256": "bdc5e7e0d65f569c2c4a0b8899870d2d47e8f0d644cfe033a450d9fd892375aa",
+    "retrieved_at": "2026-11-14T15:18:27+00:00"
+  },
+  "data/raw/NTRS/20160000593.pdf": {
+    "source": "20160000593",
+    "file": "20160000593.pdf",
+    "landing_page": "https://ntrs.nasa.gov/citations/20160000593",
+    "download_method": "manual browser download",
+    "bytes": 2690087,
+    "sha256": "9f2c89db9e1954c3c44409364ed6764f7e7466250264c28ff2d425350287546c",
+    "retrieved_at": "2026-11-14T14:48:20+00:00"
   }
 }

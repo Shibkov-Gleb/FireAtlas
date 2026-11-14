@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0.0",
   "data_revision": "psi-20261114-r1",
-  "created_at": "2026-11-14T15:11:37+00:00",
+  "created_at": "2026-11-14T15:23:37+00:00",
   "producer": "fire-atlas pipeline (AI 1)",
   "files": [
     {
       "path": "investigations.jsonl",
       "entity_type": "investigations",
-      "sha256": "a7acb4854f1fc07da7f254be74247be32fe54534248676b30395234d178b78ef",
+      "sha256": "89504da527308eeccef494091579ad5716b1ba477cd6eff1da1e0c37f2e10d1e",
       "record_count": 3
     },
     {
@@ -25,24 +25,24 @@
     {
       "path": "sources.jsonl",
       "entity_type": "sources",
-      "sha256": "65713320bbe3581a5b9d5707e0b8f096298a1364a07bc1aa2cc13380ff27c86c",
-      "record_count": 10
+      "sha256": "b3bd3bc04fc780a2eafa49f519694a4c9578304c6e9ec294710501ec709edf4e",
+      "record_count": 11
     },
     {
       "path": "evidence.jsonl",
       "entity_type": "evidence",
-      "sha256": "0b529a1f2050e056cba80fb89d62cec703908908e1bc86921f04253385c61a3b",
-      "record_count": 624
+      "sha256": "ee6e9e1a75275432febca058b57dd1557a0a11c0089145894557ba8843c25d01",
+      "record_count": 634
     },
     {
       "path": "claims.jsonl",
       "entity_type": "claims",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "record_count": 0
+      "sha256": "9d1ad36730e9f2d867b26d8d988f02eeb7cc30b7655b6e31e2d0b9237664c387",
+      "record_count": 12
     }
   ],
   "quality_summary": {
-    "checked_records": 1162,
+    "checked_records": 1185,
     "quarantined_records": 4,
     "blocking_errors": 0,
     "warning_count": 1900
