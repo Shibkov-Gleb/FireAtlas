@@ -1,0 +1,4 @@
+.DS_Store
+__pycache__/
+# temporary third-party copy, replaced by the PSI originals in data/raw
+data/mirror_provisional/

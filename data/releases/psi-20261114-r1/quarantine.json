@@ -1,0 +1,97 @@
+[
+  {
+    "investigation": "PSI-69",
+    "row_key": "FLEX Test # 70",
+    "source_test_id": "193F001",
+    "reasons": [
+      "source identifier 193F001 occurs 2 times with different values"
+    ],
+    "raw": {
+      "FLEX Test #": "70",
+      "FLEX Identifier": "193F001",
+      "Test Date": "3/23/2010",
+      "Test GMT": "7:25:43",
+      "Fuel": "Heptane",
+      "Ambient pressure; mmHg": "761",
+      "O initial ambient composition; mole fraction": "0.15",
+      "N initial ambient composition; mole fraction": "0.84",
+      "CO initial ambient composition; mole fraction": "0",
+      "He initial ambient composition; mole fraction": "0",
+      "Droplet initial diameter; mm": "4.67",
+      "Visible flame extinction diameter; mm": "4.6",
+      "Burning rate; mm": "0.41",
+      "Burn time; s": "1.6",
+      "Test end": "Extinction"
+    }
+  },
+  {
+    "investigation": "PSI-69",
+    "row_key": "FLEX Test # 73",
+    "source_test_id": "193F001",
+    "reasons": [
+      "source identifier 193F001 occurs 2 times with different values"
+    ],
+    "raw": {
+      "FLEX Test #": "73",
+      "FLEX Identifier": "193F001",
+      "Test Date": "3/23/2010",
+      "Test GMT": "7:25:43",
+      "Fuel": "Heptane",
+      "Ambient pressure; mmHg": "761",
+      "O initial ambient composition; mole fraction": "0.15",
+      "N initial ambient composition; mole fraction": "0.84",
+      "CO initial ambient composition; mole fraction": "0",
+      "He initial ambient composition; mole fraction": "0",
+      "Droplet initial diameter; mm": "4.64",
+      "Visible flame extinction diameter; mm": "4.58",
+      "Burning rate; mm": "0.56",
+      "Burn time; s": "1.5",
+      "Test end": "Extinction"
+    }
+  },
+  {
+    "investigation": "PSI-69",
+    "row_key": "FLEX Test # 114",
+    "source_test_id": "C11M201",
+    "reasons": [
+      "ambient pressure 0 mmHg is not physical"
+    ],
+    "raw": {
+      "FLEX Test #": "114",
+      "FLEX Identifier": "C11M201",
+      "Test Date": "9/6/2010",
+      "Test GMT": "19:14:22",
+      "Fuel": "Methanol",
+      "Ambient pressure; mmHg": "0",
+      "O initial ambient composition; mole fraction": "0.2",
+      "N initial ambient composition; mole fraction": "0.45",
+      "CO initial ambient composition; mole fraction": "0.35",
+      "He initial ambient composition; mole fraction": "0",
+      "Droplet initial diameter; mm": "3.23",
+      "Visible flame extinction diameter; mm": "1.68",
+      "Burning rate; mm": "0.42",
+      "Burn time; s": "18.9",
+      "Test end": "Extinction"
+    }
+  },
+  {
+    "investigation": "PSI-101",
+    "row_key": "Teflon test 57",
+    "source_test_id": "57",
+    "reasons": [
+      "test number 57 is listed for more than one sample type and this row has no match in the analysed results; its identity is unclear"
+    ],
+    "raw": {
+      "Sample Type": "Teflon",
+      "SAME Test #": "57",
+      "Description": "High RT/R0 reburn sample",
+      "Date": "29-Jul",
+      "Inlet velocity (cm/s)": "8.1",
+      "Rt/R0": "1.253",
+      "Duration (sec)": "60",
+      "Primary aging time (sec)": "11",
+      "Primary mixing time (sec)": "8",
+      "Net aging time (sec)": "n/a"
+    }
+  }
+]
