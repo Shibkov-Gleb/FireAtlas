@@ -11,8 +11,8 @@ import { ErrorState } from './ErrorState';
 import s from './JobStatus.module.css';
 
 const stageLabels:Record<string,string>={retrieving:'Ищем основания',reasoning:'Готовим объяснение',validating:'Проверяем ссылки и числа',exporting:'Готовим PDF'};
-export function JobStatus({id,onEvidence,onNewAction}:{id:string;onEvidence?:(id:string)=>void;onNewAction?:()=>void}){
-  const query=useJob(id);const client=useQueryClient();const {workspace}=useWorkspace();const [clock,setClock]=useState(Date.now());const job=query.data?.data;
+export function JobStatus({id,query,onEvidence,onNewAction}:{id:string;query:ReturnType<typeof useJob>;onEvidence?:(id:string)=>void;onNewAction?:()=>void}){
+  const client=useQueryClient();const {workspace}=useWorkspace();const [clock,setClock]=useState(Date.now());const job=query.data?.data;
   useEffect(()=>{if(!job||isTerminal(job.state))return;const timer=setInterval(()=>setClock(Date.now()),1000);return()=>clearInterval(timer);},[job?.id,job?.state]);
   const cancel=useMutation({mutationFn:()=>api.cancelJob(id),onSuccess:()=>client.invalidateQueries({queryKey:['job',id]}),onError:error=>{if(error instanceof ApiError&&error.status===409)void client.invalidateQueries({queryKey:['job',id]});}});
   if(!job&&query.isPending)return <Loading>Восстанавливаем задачу…</Loading>;
