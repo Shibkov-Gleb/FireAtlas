@@ -5,6 +5,7 @@ import { Overview } from './pages/Overview';
 import { Catalog } from './pages/Catalog';
 import { InvestigationPage } from './pages/Investigation';
 import { Measurements } from './pages/Measurements';
+import { Compare } from './pages/Compare';
 
 export function App() {
   return <Routes><Route element={<Shell />}>
@@ -12,7 +13,7 @@ export function App() {
     <Route path="investigations" element={<Catalog />} />
     <Route path="investigations/:id" element={<InvestigationPage />} />
     <Route path="measurements" element={<Measurements />} />
-    <Route path="compare" element={<Placeholder title="Сравнение" />} />
+    <Route path="compare" element={<Compare />} />
     <Route path="ask" element={<Placeholder title="Спросить AI" />} />
     <Route path="missions" element={<Placeholder title="Сценарии миссий" />} />
     <Route path="reports" element={<Placeholder title="Отчёты" />} />
