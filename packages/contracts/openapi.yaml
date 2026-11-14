@@ -1,0 +1,2073 @@
+openapi: 3.1.0
+info:
+  title: Fire Atlas Public API
+  version: 1.0.0
+  description: Предварительный контракт фронтенда по ТЗ 04.11.2026. Не является реализацией сервера. SearchRequest.sort —
+    явное расширение для FE-05; перед интеграцией согласовать с BE. Cookie и CSRF определяются серверной реализацией;
+    клиент поддерживает double-submit csrf_token → X-CSRF-Token.
+servers:
+  - url: /api/v1
+security:
+  - guestSession: []
+paths:
+  /config:
+    get:
+      operationId: getConfig
+      summary: getConfig
+      parameters: []
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Config"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        default: &a2
+          description: Безопасная ошибка CT-12
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEnvelope"
+  /workspaces:
+    post:
+      operationId: createWorkspace
+      summary: createWorkspace
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+              required: []
+              additionalProperties: false
+      responses:
+        "200": &a1
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Workspace"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        "201": *a1
+        default: *a2
+  /workspaces/current:
+    get:
+      operationId: getWorkspace
+      summary: getWorkspace
+      parameters: []
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Workspace"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        default: *a2
+    patch:
+      operationId: patchWorkspace
+      summary: patchWorkspace
+      parameters:
+        - name: If-Match
+          in: header
+          required: true
+          schema: &a3
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkspacePatch"
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Workspace"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        default: *a2
+  /search:
+    post:
+      operationId: search
+      summary: search
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchRequest"
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/SearchResult"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        default: *a2
+  /investigations/{id}:
+    get:
+      operationId: getInvestigation
+      summary: getInvestigation
+      parameters:
+        - &a4
+          name: id
+          in: path
+          required: true
+          schema: &a8
+            type: string
+            pattern: ^[A-Za-z0-9_-]{1,128}$
+        - &a5
+          name: data_revision
+          in: query
+          required: true
+          schema: *a3
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/InvestigationDetail"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        default: *a2
+  /investigations/{id}/runs:
+    get:
+      operationId: getRuns
+      summary: getRuns
+      parameters:
+        - *a4
+        - *a5
+        - name: cursor
+          in: query
+          required: false
+          schema: *a3
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 200
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/RunList"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        default: *a2
+  /runs/{id}:
+    get:
+      operationId: getRun
+      summary: getRun
+      parameters:
+        - *a4
+        - *a5
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/TestRun"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        default: *a2
+  /evidence/{id}:
+    get:
+      operationId: getEvidence
+      summary: getEvidence
+      parameters:
+        - *a4
+        - *a5
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/EvidenceDetail"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        default: *a2
+  /sources/{id}:
+    get:
+      operationId: getSource
+      summary: getSource
+      parameters:
+        - *a4
+        - *a5
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Source"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        default: *a2
+  /measurements/query:
+    post:
+      operationId: queryMeasurements
+      summary: queryMeasurements
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MeasurementRequest"
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/MeasurementResponse"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        default: *a2
+  /comparisons:
+    post:
+      operationId: compare
+      summary: compare
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ComparisonRequest"
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ComparisonResponse"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        default: *a2
+  /applicability:
+    post:
+      operationId: getApplicability
+      summary: getApplicability
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ApplicabilityRequest"
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ApplicabilityResult"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        default: *a2
+  /analyses:
+    post:
+      operationId: createAnalysis
+      summary: createAnalysis
+      parameters:
+        - &a6
+          name: Idempotency-Key
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnalysisRequest"
+      responses:
+        "202":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Job"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        default: *a2
+  /jobs/{id}:
+    get:
+      operationId: getJob
+      summary: getJob
+      parameters:
+        - *a4
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Job"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        default: *a2
+    delete:
+      operationId: cancelJob
+      summary: cancelJob
+      parameters:
+        - *a4
+      responses:
+        "204":
+          description: Успех
+        default: *a2
+  /answers/{id}:
+    get:
+      operationId: getAnswer
+      summary: getAnswer
+      parameters:
+        - *a4
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/AnalysisResult"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        default: *a2
+  /reports:
+    post:
+      operationId: createReport
+      summary: createReport
+      parameters:
+        - *a6
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReportRequest"
+      responses:
+        "202":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Job"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        default: *a2
+  /reports/{id}:
+    get:
+      operationId: getReport
+      summary: getReport
+      parameters:
+        - *a4
+      responses:
+        "200":
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Report"
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+                required:
+                  - data
+                  - meta
+                additionalProperties: false
+        default: *a2
+  /reports/{id}/download:
+    get:
+      operationId: downloadReport
+      parameters:
+        - *a4
+      responses:
+        "200":
+          description: PDF
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        default: *a2
+components:
+  securitySchemes:
+    guestSession:
+      type: apiKey
+      in: cookie
+      name: fire_atlas_session
+  schemas:
+    Unit:
+      type: string
+      enum:
+        - Pa
+        - m_s
+        - m
+        - s
+        - K
+        - fraction
+        - g_fraction
+        - count
+        - dimensionless
+    Scope:
+      type: string
+      enum:
+        - prevention
+        - detection
+        - suppression
+    Gravity:
+      type: string
+      enum:
+        - normal
+        - microgravity
+        - partial
+        - simulated_partial
+        - unknown
+    FuelState:
+      type: string
+      enum:
+        - solid
+        - liquid
+        - gas
+        - aerosol
+    Geometry:
+      type: string
+      enum:
+        - film
+        - sheet
+        - slab
+        - rod
+        - sphere
+        - droplet
+        - fabric
+        - other
+        - unknown
+    Quantity:
+      type: object
+      properties:
+        value: &a10
+          type:
+            - number
+            - "null"
+        unit:
+          $ref: "#/components/schemas/Unit"
+        status:
+          type: string
+          enum:
+            - measured
+            - reported
+            - derived
+            - not_reported
+            - not_applicable
+            - unusable
+        qualifier:
+          type:
+            - string
+            - "null"
+          enum:
+            - eq
+            - lt
+            - lte
+            - gt
+            - gte
+        raw_value: &a7
+          type:
+            - string
+            - "null"
+        raw_unit: *a7
+        uncertainty:
+          type:
+            - number
+            - "null"
+          minimum: 0
+        evidence_ids: &a9
+          type: array
+          items: *a8
+        derivation:
+          type:
+            - object
+            - "null"
+          properties:
+            formula_id: *a3
+            input_refs: *a9
+          required:
+            - formula_id
+            - input_refs
+          additionalProperties: false
+      required:
+        - value
+        - unit
+        - status
+        - qualifier
+        - raw_value
+        - raw_unit
+        - uncertainty
+        - evidence_ids
+        - derivation
+      additionalProperties: false
+    Source:
+      type: object
+      properties:
+        id: *a8
+        data_revision: *a3
+        title: *a3
+        kind:
+          type: string
+          enum:
+            - repository
+            - report
+            - publication
+            - experimental_table
+            - video
+            - image
+            - calibration
+        canonical_url:
+          type: string
+          format: uri
+          pattern: ^https://
+        doi: *a7
+        publication_date: *a7
+        retrieved_at: &a12
+          type: string
+          format: date-time
+        license: *a7
+        availability:
+          type: string
+          enum:
+            - available
+            - metadata_only
+            - unavailable
+        local_asset_id:
+          type:
+            - string
+            - "null"
+          pattern: ^[A-Za-z0-9_-]{1,128}$
+        sha256: *a7
+      required:
+        - id
+        - data_revision
+        - title
+        - kind
+        - canonical_url
+        - doi
+        - publication_date
+        - retrieved_at
+        - license
+        - availability
+        - local_asset_id
+        - sha256
+      additionalProperties: false
+    Locator:
+      type: object
+      properties:
+        page:
+          type:
+            - integer
+            - "null"
+        section: *a7
+        row_key: *a7
+        start_s: *a10
+        end_s: *a10
+      required:
+        - page
+        - section
+        - row_key
+        - start_s
+        - end_s
+      additionalProperties: false
+    Evidence:
+      type: object
+      properties:
+        id: *a8
+        data_revision: *a3
+        source_id: *a8
+        kind:
+          type: string
+          enum:
+            - text_excerpt
+            - table_row
+            - video_span
+            - metadata
+        locator:
+          $ref: "#/components/schemas/Locator"
+        excerpt: *a7
+        table_values:
+          type: array
+          items:
+            type: object
+            properties:
+              field: *a3
+              raw_value: *a3
+              raw_unit: *a7
+            required:
+              - field
+              - raw_value
+              - raw_unit
+            additionalProperties: false
+        verified: &a13
+          type: boolean
+        verification_note: *a7
+      required:
+        - id
+        - data_revision
+        - source_id
+        - kind
+        - locator
+        - excerpt
+        - table_values
+        - verified
+        - verification_note
+      additionalProperties: false
+    Material:
+      type: object
+      properties:
+        id: *a8
+        label: *a3
+        state:
+          $ref: "#/components/schemas/FuelState"
+        composition: *a7
+        aliases:
+          type: array
+          items: *a3
+      required:
+        - id
+        - label
+        - state
+        - composition
+        - aliases
+      additionalProperties: false
+    Investigation:
+      type: object
+      properties:
+        id: *a8
+        data_revision: *a3
+        psi_id: *a3
+        acronym: *a3
+        title: *a3
+        objectives:
+          type: array
+          items: *a3
+        setup_summary: *a3
+        scopes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Scope"
+        fuel_states:
+          type: array
+          items:
+            $ref: "#/components/schemas/FuelState"
+        gravity_regimes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Gravity"
+        material_ids: *a9
+        source_ids: *a9
+        claim_ids: *a9
+        conditions_coverage:
+          type: array
+          items:
+            type: object
+            properties:
+              field: *a3
+              min_value: *a10
+              max_value: *a10
+              unit:
+                $ref: "#/components/schemas/Unit"
+              known_count: &a11
+                type: integer
+              unknown_count: *a11
+              derivation_evidence_ids: *a9
+            required:
+              - field
+              - min_value
+              - max_value
+              - unit
+              - known_count
+              - unknown_count
+              - derivation_evidence_ids
+            additionalProperties: false
+        available_assets: *a9
+      required:
+        - id
+        - data_revision
+        - psi_id
+        - acronym
+        - title
+        - objectives
+        - setup_summary
+        - scopes
+        - fuel_states
+        - gravity_regimes
+        - material_ids
+        - source_ids
+        - claim_ids
+        - conditions_coverage
+        - available_assets
+      additionalProperties: false
+    TestRun:
+      type: object
+      properties:
+        id: *a8
+        data_revision: *a3
+        investigation_id: *a8
+        source_test_id: *a3
+        material_id:
+          type:
+            - string
+            - "null"
+          pattern: ^[A-Za-z0-9_-]{1,128}$
+        sample:
+          type: object
+          properties:
+            geometry:
+              $ref: "#/components/schemas/Geometry"
+            thickness:
+              $ref: "#/components/schemas/Quantity"
+            initial_diameter:
+              $ref: "#/components/schemas/Quantity"
+          required:
+            - geometry
+            - thickness
+            - initial_diameter
+          additionalProperties: false
+        conditions:
+          type: object
+          properties:
+            gravity_regime:
+              $ref: "#/components/schemas/Gravity"
+            gravity_level:
+              $ref: "#/components/schemas/Quantity"
+            oxygen_fraction:
+              $ref: "#/components/schemas/Quantity"
+            pressure:
+              $ref: "#/components/schemas/Quantity"
+            airflow_speed:
+              $ref: "#/components/schemas/Quantity"
+            flow_configuration:
+              type: string
+              enum:
+                - concurrent
+                - opposed
+                - quiescent
+                - other
+                - unknown
+            ambient_temperature:
+              $ref: "#/components/schemas/Quantity"
+          required:
+            - gravity_regime
+            - gravity_level
+            - oxygen_fraction
+            - pressure
+            - airflow_speed
+            - flow_configuration
+            - ambient_temperature
+          additionalProperties: false
+        metrics:
+          type: array
+          items:
+            type: object
+            properties:
+              metric_key:
+                type: string
+                enum:
+                  - burn_duration
+                  - visible_extinction_diameter
+                  - flame_spread_rate
+                  - particle_diameter
+              quantity:
+                $ref: "#/components/schemas/Quantity"
+            required:
+              - metric_key
+              - quantity
+            additionalProperties: false
+        terminal_outcome:
+          type: object
+          properties:
+            category:
+              type: string
+              enum:
+                - no_ignition
+                - extinction
+                - burn_to_completion
+                - disruption
+                - ongoing_at_stop
+                - smoke_measurement
+                - unknown
+            raw_label: *a3
+            interpretation_status:
+              type: string
+              enum:
+                - source_explicit
+                - reviewed_mapping
+                - unmapped
+            evidence_ids: *a9
+          required:
+            - category
+            - raw_label
+            - interpretation_status
+            - evidence_ids
+          additionalProperties: false
+        regime_tags:
+          type: array
+          items: *a3
+        evidence_ids: *a9
+        quality_notes:
+          type: array
+          items: *a3
+      required:
+        - id
+        - data_revision
+        - investigation_id
+        - source_test_id
+        - material_id
+        - sample
+        - conditions
+        - metrics
+        - terminal_outcome
+        - regime_tags
+        - evidence_ids
+        - quality_notes
+      additionalProperties: false
+    Claim:
+      type: object
+      properties:
+        id: *a8
+        data_revision: *a3
+        investigation_ids: *a9
+        kind:
+          type: string
+          enum:
+            - observation
+            - synthesis
+            - hypothesis
+        text: *a3
+        supporting_evidence_ids: *a9
+        contradicting_evidence_ids: *a9
+        applicable_run_ids: *a9
+        limitations:
+          type: array
+          items: *a3
+        review_status:
+          type: string
+          enum:
+            - reviewed
+            - pending
+            - rejected
+      required:
+        - id
+        - data_revision
+        - investigation_ids
+        - kind
+        - text
+        - supporting_evidence_ids
+        - contradicting_evidence_ids
+        - applicable_run_ids
+        - limitations
+        - review_status
+      additionalProperties: false
+    Scenario:
+      type: object
+      properties:
+        scenario_id: *a8
+        name: *a3
+        environment:
+          type: string
+          enum:
+            - orbital_habitat
+            - surface_habitat
+            - pressurized_rover
+            - custom
+        celestial_body:
+          type:
+            - string
+            - "null"
+          enum:
+            - earth
+            - moon
+            - mars
+            - other
+        safety_task:
+          $ref: "#/components/schemas/Scope"
+        material_ids: *a9
+        geometry:
+          anyOf:
+            - $ref: "#/components/schemas/Geometry"
+            - type: "null"
+        oxygen_fraction:
+          anyOf:
+            - $ref: "#/components/schemas/Quantity"
+            - type: "null"
+        pressure:
+          anyOf:
+            - $ref: "#/components/schemas/Quantity"
+            - type: "null"
+        airflow_speed:
+          anyOf:
+            - $ref: "#/components/schemas/Quantity"
+            - type: "null"
+        gravity_regime:
+          $ref: "#/components/schemas/Gravity"
+        assumptions:
+          type: array
+          items:
+            type: object
+            properties:
+              field: *a3
+              text: *a3
+              origin:
+                type: string
+                enum:
+                  - user
+                  - preset_source
+                  - derived
+              source_ids: *a9
+            required:
+              - field
+              - text
+              - origin
+              - source_ids
+            additionalProperties: false
+      required:
+        - scenario_id
+        - name
+        - environment
+        - celestial_body
+        - safety_task
+        - material_ids
+        - geometry
+        - oxygen_fraction
+        - pressure
+        - airflow_speed
+        - gravity_regime
+        - assumptions
+      additionalProperties: false
+    Workspace:
+      type: object
+      properties:
+        id: *a8
+        revision:
+          type: integer
+          minimum: 1
+        scenario:
+          $ref: "#/components/schemas/Scenario"
+        selected_investigation_ids:
+          type: array
+          items: *a8
+          maxItems: 3
+        saved_investigation_ids:
+          type: array
+          items: *a8
+          maxItems: 100
+        saved_answer_ids:
+          type: array
+          items: *a8
+          maxItems: 30
+        data_revision: *a3
+        created_at: *a12
+        updated_at: *a12
+        expires_at: *a12
+      required:
+        - id
+        - revision
+        - scenario
+        - selected_investigation_ids
+        - saved_investigation_ids
+        - saved_answer_ids
+        - data_revision
+        - created_at
+        - updated_at
+        - expires_at
+      additionalProperties: false
+    WorkspacePatch:
+      type: object
+      properties:
+        scenario:
+          $ref: "#/components/schemas/Scenario"
+        selected_investigation_ids:
+          type: array
+          items: *a8
+          maxItems: 3
+        saved_investigation_ids:
+          type: array
+          items: *a8
+          maxItems: 100
+        saved_answer_ids:
+          type: array
+          items: *a8
+          maxItems: 30
+      required: []
+      additionalProperties: false
+    Range:
+      type: object
+      properties:
+        min: *a10
+        max: *a10
+        unit:
+          $ref: "#/components/schemas/Unit"
+      required:
+        - min
+        - max
+        - unit
+      additionalProperties: false
+    Filters:
+      type: object
+      properties:
+        scopes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Scope"
+        investigation_ids: *a9
+        material_ids: *a9
+        fuel_states:
+          type: array
+          items:
+            $ref: "#/components/schemas/FuelState"
+        gravity_regimes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Gravity"
+        oxygen_range:
+          anyOf:
+            - $ref: "#/components/schemas/Range"
+            - type: "null"
+        pressure_range:
+          anyOf:
+            - $ref: "#/components/schemas/Range"
+            - type: "null"
+        airflow_range:
+          anyOf:
+            - $ref: "#/components/schemas/Range"
+            - type: "null"
+        has_measurements:
+          type:
+            - boolean
+            - "null"
+        include_unknown: *a13
+      required:
+        - scopes
+        - investigation_ids
+        - material_ids
+        - fuel_states
+        - gravity_regimes
+        - oxygen_range
+        - pressure_range
+        - airflow_range
+        - has_measurements
+        - include_unknown
+      additionalProperties: false
+    SearchRequest:
+      type: object
+      properties:
+        query:
+          type: string
+          maxLength: 2000
+        locale:
+          type: string
+          enum:
+            - ru
+        data_revision: *a3
+        filters:
+          $ref: "#/components/schemas/Filters"
+        scenario:
+          anyOf:
+            - $ref: "#/components/schemas/Scenario"
+            - type: "null"
+        include_related: *a13
+        cursor: *a7
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 100
+        sort:
+          type: string
+          enum:
+            - relevance
+            - title
+      required:
+        - query
+        - locale
+        - data_revision
+        - filters
+        - scenario
+        - include_related
+        - cursor
+        - limit
+      additionalProperties: false
+    SearchItem:
+      type: object
+      properties:
+        investigation:
+          $ref: "#/components/schemas/Investigation"
+        relevance_category:
+          type: string
+          enum:
+            - direct
+            - related
+            - contextual
+        match_reasons:
+          type: array
+          items: *a3
+        differences:
+          type: array
+          items: *a3
+        missing_fields:
+          type: array
+          items: *a3
+        matching_run_ids: *a9
+        related: *a13
+        evidence_ids: *a9
+      required:
+        - investigation
+        - relevance_category
+        - match_reasons
+        - differences
+        - missing_fields
+        - matching_run_ids
+        - related
+        - evidence_ids
+      additionalProperties: false
+    SearchResult:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/SearchItem"
+        next_cursor: *a7
+        total:
+          type:
+            - integer
+            - "null"
+        retrieval_mode:
+          type: string
+          enum:
+            - lexical
+            - semantic
+            - hybrid
+        applied_filters:
+          $ref: "#/components/schemas/Filters"
+      required:
+        - items
+        - next_cursor
+        - total
+        - retrieval_mode
+        - applied_filters
+      additionalProperties: false
+    InvestigationDetail:
+      type: object
+      properties:
+        investigation:
+          $ref: "#/components/schemas/Investigation"
+        claims:
+          type: array
+          items:
+            $ref: "#/components/schemas/Claim"
+        sources:
+          type: array
+          items:
+            $ref: "#/components/schemas/Source"
+        run_summary:
+          type: object
+          properties:
+            total: *a11
+            verified_count: *a11
+            excluded_count: *a11
+          required:
+            - total
+            - verified_count
+            - excluded_count
+          additionalProperties: false
+      required:
+        - investigation
+        - claims
+        - sources
+        - run_summary
+      additionalProperties: false
+    RunList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/TestRun"
+        next_cursor: *a7
+        total:
+          type:
+            - integer
+            - "null"
+      required:
+        - items
+        - next_cursor
+        - total
+      additionalProperties: false
+    EvidenceDetail:
+      type: object
+      properties:
+        evidence:
+          $ref: "#/components/schemas/Evidence"
+        source:
+          $ref: "#/components/schemas/Source"
+      required:
+        - evidence
+        - source
+      additionalProperties: false
+    MeasurementRequest:
+      type: object
+      properties:
+        investigation_id: *a8
+        data_revision: *a3
+        run_ids: *a9
+        x_metric: *a3
+        y_metric: *a3
+        filters:
+          $ref: "#/components/schemas/Filters"
+        cursor: *a7
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 1000
+      required:
+        - investigation_id
+        - data_revision
+        - run_ids
+        - x_metric
+        - y_metric
+        - filters
+        - cursor
+        - limit
+      additionalProperties: false
+    MeasurementResponse:
+      type: object
+      properties:
+        x_axis:
+          type: object
+          properties:
+            key: *a3
+            label: *a3
+            unit:
+              $ref: "#/components/schemas/Unit"
+          required:
+            - key
+            - label
+            - unit
+          additionalProperties: false
+        y_axis:
+          type: object
+          properties:
+            key: *a3
+            label: *a3
+            unit:
+              $ref: "#/components/schemas/Unit"
+          required:
+            - key
+            - label
+            - unit
+          additionalProperties: false
+        points:
+          type: array
+          items:
+            type: object
+            properties:
+              run_id: *a8
+              x: &a14
+                type: number
+              y: *a14
+              outcome: *a3
+              evidence_ids: *a9
+            required:
+              - run_id
+              - x
+              - y
+              - outcome
+              - evidence_ids
+            additionalProperties: false
+        excluded_count: *a11
+        exclusions_by_reason:
+          type: array
+          items:
+            type: object
+            properties:
+              reason:
+                type: string
+                enum:
+                  - missing_x
+                  - missing_y
+                  - unusable_unit
+                  - unverified_record
+                  - filtered_out
+              count: *a11
+            required:
+              - reason
+              - count
+            additionalProperties: false
+        truncated: *a13
+        next_cursor: *a7
+      required:
+        - x_axis
+        - y_axis
+        - points
+        - excluded_count
+        - exclusions_by_reason
+        - truncated
+        - next_cursor
+      additionalProperties: false
+    ApplicabilityRequest:
+      type: object
+      properties:
+        scenario:
+          $ref: "#/components/schemas/Scenario"
+        investigation_ids: *a9
+        data_revision: *a3
+      required:
+        - scenario
+        - investigation_ids
+        - data_revision
+      additionalProperties: false
+    ApplicabilityResult:
+      type: object
+      properties:
+        overall:
+          type: string
+          enum:
+            - direct_evidence
+            - related_evidence
+            - insufficient_evidence
+        factors:
+          type: array
+          items:
+            type: object
+            properties:
+              field: *a3
+              status:
+                type: string
+                enum:
+                  - match
+                  - mismatch
+                  - unknown
+                  - not_covered
+              explanation: *a3
+              evidence_ids: *a9
+            required:
+              - field
+              - status
+              - explanation
+              - evidence_ids
+            additionalProperties: false
+        gaps:
+          type: array
+          items:
+            type: object
+            properties:
+              field: *a3
+              description: *a3
+              suggested_next_step: *a3
+            required:
+              - field
+              - description
+              - suggested_next_step
+            additionalProperties: false
+        basis:
+          type: object
+          properties:
+            reviewed_rules_version: *a3
+            data_revision: *a3
+          required:
+            - reviewed_rules_version
+            - data_revision
+          additionalProperties: false
+      required:
+        - overall
+        - factors
+        - gaps
+        - basis
+      additionalProperties: false
+    ComparisonRequest:
+      type: object
+      properties:
+        investigation_ids:
+          type: array
+          items: *a8
+          minItems: 2
+          maxItems: 3
+          uniqueItems: true
+        data_revision: *a3
+        scenario:
+          anyOf:
+            - $ref: "#/components/schemas/Scenario"
+            - type: "null"
+      required:
+        - investigation_ids
+        - data_revision
+        - scenario
+      additionalProperties: false
+    ComparisonResponse:
+      type: object
+      properties:
+        investigations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Investigation"
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              field: *a3
+              label: *a3
+              cells:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    investigation_id: *a8
+                    value_text: *a3
+                    status:
+                      type: string
+                      enum:
+                        - known
+                        - not_reported
+                        - not_applicable
+                    evidence_ids: *a9
+                  required:
+                    - investigation_id
+                    - value_text
+                    - status
+                    - evidence_ids
+                  additionalProperties: false
+            required:
+              - field
+              - label
+              - cells
+            additionalProperties: false
+        comparability:
+          type: object
+          properties:
+            status:
+              type: string
+              enum:
+                - compatible
+                - partially_compatible
+                - incompatible
+            reasons:
+              type: array
+              items: *a3
+          required:
+            - status
+            - reasons
+          additionalProperties: false
+        applicability:
+          $ref: "#/components/schemas/ApplicabilityResult"
+        limitations:
+          type: array
+          items: *a3
+      required:
+        - investigations
+        - rows
+        - comparability
+        - applicability
+        - limitations
+      additionalProperties: false
+    ErrorDetail:
+      type: object
+      properties:
+        field: *a7
+        reason: *a7
+        current_revision:
+          type:
+            - integer
+            - "null"
+      required:
+        - field
+        - reason
+        - current_revision
+      additionalProperties: false
+    ApiError:
+      type: object
+      properties:
+        code: *a3
+        message: *a3
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ErrorDetail"
+        retryable: *a13
+      required:
+        - code
+        - message
+        - details
+        - retryable
+      additionalProperties: false
+    Meta:
+      type: object
+      properties:
+        request_id: *a3
+        contract_version: *a3
+        data_revision: *a7
+        warnings:
+          type: array
+          items:
+            type: object
+            properties:
+              code: *a3
+              message: *a3
+              field: *a7
+            required:
+              - code
+              - message
+              - field
+            additionalProperties: false
+      required:
+        - request_id
+        - contract_version
+        - data_revision
+        - warnings
+      additionalProperties: false
+    ErrorEnvelope:
+      type: object
+      properties:
+        error:
+          $ref: "#/components/schemas/ApiError"
+        meta:
+          $ref: "#/components/schemas/Meta"
+      required:
+        - error
+        - meta
+      additionalProperties: false
+    AnalysisRequest:
+      type: object
+      properties:
+        question:
+          type: string
+          minLength: 3
+          maxLength: 2000
+        locale:
+          type: string
+          enum:
+            - ru
+        workspace_revision: *a11
+        data_revision: *a3
+        selected_investigation_ids:
+          type: array
+          items: *a8
+          maxItems: 3
+        mode:
+          type: string
+          enum:
+            - evidence_answer
+      required:
+        - question
+        - locale
+        - workspace_revision
+        - data_revision
+        - selected_investigation_ids
+        - mode
+      additionalProperties: false
+    Job:
+      type: object
+      properties:
+        id: *a8
+        type:
+          type: string
+          enum:
+            - analysis
+            - report
+        state:
+          type: string
+          enum:
+            - queued
+            - running
+            - succeeded
+            - failed
+            - cancelled
+            - expired
+        stage:
+          type:
+            - string
+            - "null"
+          enum:
+            - retrieving
+            - reasoning
+            - validating
+            - exporting
+        created_at: *a12
+        updated_at: *a12
+        deadline_at: *a12
+        result_kind:
+          type: string
+          enum:
+            - answer
+            - report
+        result_id:
+          type:
+            - string
+            - "null"
+          pattern: ^[A-Za-z0-9_-]{1,128}$
+        error:
+          anyOf:
+            - $ref: "#/components/schemas/ApiError"
+            - type: "null"
+        input_context:
+          type: object
+          properties:
+            workspace_revision: *a11
+            data_revision: *a3
+            scenario_id: *a8
+          required:
+            - workspace_revision
+            - data_revision
+            - scenario_id
+          additionalProperties: false
+        fallback_evidence_ids: *a9
+      required:
+        - id
+        - type
+        - state
+        - stage
+        - created_at
+        - updated_at
+        - deadline_at
+        - result_kind
+        - result_id
+        - error
+        - input_context
+        - fallback_evidence_ids
+      additionalProperties: false
+    AnswerBlock:
+      type: object
+      properties:
+        id: *a8
+        kind:
+          type: string
+          enum:
+            - summary
+            - observation
+            - synthesis
+            - limitation
+        text:
+          type: string
+          maxLength: 1500
+        evidence_ids: *a9
+        quantities:
+          type: array
+          items:
+            type: object
+            properties:
+              name: *a3
+              quantity:
+                $ref: "#/components/schemas/Quantity"
+              evidence_ids: *a9
+            required:
+              - name
+              - quantity
+              - evidence_ids
+            additionalProperties: false
+      required:
+        - id
+        - kind
+        - text
+        - evidence_ids
+        - quantities
+      additionalProperties: false
+    AnalysisResult:
+      type: object
+      properties:
+        id: *a8
+        data_revision: *a3
+        workspace_revision: *a11
+        scenario_snapshot:
+          $ref: "#/components/schemas/Scenario"
+        question: *a3
+        status:
+          type: string
+          enum:
+            - answered
+            - insufficient_evidence
+            - conflicting_evidence
+        answer_blocks:
+          type: array
+          items:
+            $ref: "#/components/schemas/AnswerBlock"
+        applicability:
+          $ref: "#/components/schemas/ApplicabilityResult"
+        citations:
+          type: array
+          items:
+            type: object
+            properties:
+              evidence_id: *a8
+              source_id: *a8
+              label: *a3
+              locator:
+                $ref: "#/components/schemas/Locator"
+            required:
+              - evidence_id
+              - source_id
+              - label
+              - locator
+            additionalProperties: false
+        limitations:
+          type: array
+          items: *a3
+        follow_up_questions:
+          type: array
+          items: *a3
+        retrieval_mode:
+          type: string
+          enum:
+            - lexical
+            - semantic
+            - hybrid
+        reasoning_revision: *a3
+        validation_summary:
+          type: object
+          properties:
+            schema_valid: *a13
+            references_valid: *a13
+            quantities_valid: *a13
+            scope_valid: *a13
+          required:
+            - schema_valid
+            - references_valid
+            - quantities_valid
+            - scope_valid
+          additionalProperties: false
+        created_at: *a12
+      required:
+        - id
+        - data_revision
+        - workspace_revision
+        - scenario_snapshot
+        - question
+        - status
+        - answer_blocks
+        - applicability
+        - citations
+        - limitations
+        - follow_up_questions
+        - retrieval_mode
+        - reasoning_revision
+        - validation_summary
+        - created_at
+      additionalProperties: false
+    ReportRequest:
+      type: object
+      properties:
+        workspace_revision: *a11
+        title:
+          type: string
+          minLength: 3
+          maxLength: 120
+        answer_ids:
+          type: array
+          items: *a8
+          maxItems: 30
+        investigation_ids:
+          type: array
+          items: *a8
+          maxItems: 100
+        include_comparison: *a13
+        locale:
+          type: string
+          enum:
+            - ru
+      required:
+        - workspace_revision
+        - title
+        - answer_ids
+        - investigation_ids
+        - include_comparison
+        - locale
+      additionalProperties: false
+    Report:
+      type: object
+      properties:
+        id: *a8
+        state:
+          type: string
+          enum:
+            - preparing
+            - ready
+            - failed
+            - expired
+        title: *a3
+        source_workspace_revision: *a11
+        data_revision: *a3
+        created_at: *a12
+        expires_at: *a12
+        download_path: *a7
+        sha256: *a7
+        error:
+          anyOf:
+            - $ref: "#/components/schemas/ApiError"
+            - type: "null"
+      required:
+        - id
+        - state
+        - title
+        - source_workspace_revision
+        - data_revision
+        - created_at
+        - expires_at
+        - download_path
+        - sha256
+        - error
+      additionalProperties: false
+    Config:
+      type: object
+      properties:
+        contract_version: *a3
+        active_data_revision: *a3
+        feature_flags:
+          type: object
+          properties:
+            analysis: *a13
+            reports: *a13
+            semantic_search: *a13
+            video_preview: *a13
+          required:
+            - analysis
+            - reports
+            - semantic_search
+            - video_preview
+          additionalProperties: false
+        limits:
+          type: object
+          properties:
+            search_limit_max: *a11
+            run_limit_max: *a11
+            measurement_limit_max: *a11
+            question_chars_max: *a11
+            comparison_max: *a11
+            analysis_deadline_s: *a11
+            report_deadline_s: *a11
+          required:
+            - search_limit_max
+            - run_limit_max
+            - measurement_limit_max
+            - question_chars_max
+            - comparison_max
+            - analysis_deadline_s
+            - report_deadline_s
+          additionalProperties: false
+        dictionaries:
+          type: object
+          properties:
+            scopes:
+              type: array
+              items:
+                type: object
+                properties:
+                  value:
+                    $ref: "#/components/schemas/Scope"
+                  label: *a3
+                required:
+                  - value
+                  - label
+                additionalProperties: false
+            fuel_states:
+              type: array
+              items:
+                type: object
+                properties:
+                  value:
+                    $ref: "#/components/schemas/FuelState"
+                  label: *a3
+                required:
+                  - value
+                  - label
+                additionalProperties: false
+            gravity_regimes:
+              type: array
+              items:
+                type: object
+                properties:
+                  value:
+                    $ref: "#/components/schemas/Gravity"
+                  label: *a3
+                required:
+                  - value
+                  - label
+                additionalProperties: false
+            materials:
+              type: array
+              items:
+                $ref: "#/components/schemas/Material"
+          required:
+            - scopes
+            - fuel_states
+            - gravity_regimes
+            - materials
+          additionalProperties: false
+        measurement_axes:
+          type: array
+          items:
+            type: object
+            properties:
+              x_key: *a3
+              y_key: *a3
+              investigation_ids: *a9
+            required:
+              - x_key
+              - y_key
+              - investigation_ids
+            additionalProperties: false
+        retention:
+          type: object
+          properties:
+            workspace_days: *a11
+            report_hours: *a11
+          required:
+            - workspace_days
+            - report_hours
+          additionalProperties: false
+      required:
+        - contract_version
+        - active_data_revision
+        - feature_flags
+        - limits
+        - dictionaries
+        - measurement_axes
+        - retention
+      additionalProperties: false

@@ -1,0 +1,18 @@
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { ApiError, request, retryDelay, safeDownloadPath, safeSourceUrl } from './client';
+
+afterEach(()=>vi.unstubAllGlobals());
+describe('API transport',()=>{
+  it('preserves backend diagnostic information',async()=>{
+    vi.stubGlobal('fetch',vi.fn().mockResolvedValue(new Response(JSON.stringify({error:{code:'WORKSPACE_CONFLICT',message:'Контекст изменился',retryable:false,details:[{field:'workspace_revision',reason:'stale_revision',current_revision:4}]},meta:{request_id:'req_test'}}),{status:409})));
+    await expect(request('/workspaces/current')).rejects.toMatchObject({code:'WORKSPACE_CONFLICT',requestId:'req_test',details:[{current_revision:4,field:'workspace_revision',reason:'stale_revision'}]});
+  });
+  it('does not turn an aborted reading into a network error',async()=>{
+    vi.stubGlobal('fetch',vi.fn((_url,options)=>new Promise((_resolve,reject)=>options.signal.addEventListener('abort',()=>reject(options.signal.reason)))));
+    const controller=new AbortController();const result=request('/search',{signal:controller.signal});controller.abort();await expect(result).rejects.toMatchObject({name:'AbortError'});
+  });
+  it('handles empty successful cancellation',async()=>{vi.stubGlobal('fetch',vi.fn().mockResolvedValue(new Response(null,{status:204})));expect((await request<void>('/jobs/test',{method:'DELETE'})).data).toBeUndefined();});
+  it('reports malformed responses without leaking the body',async()=>{vi.stubGlobal('fetch',vi.fn().mockResolvedValue(new Response('<html>internal details</html>',{status:502})));await expect(request('/config')).rejects.toBeInstanceOf(ApiError);});
+});
+it('supports seconds and HTTP dates for Retry-After',()=>{expect(retryDelay('2')).toBe(2000);expect(retryDelay('Thu, 01 Jan 1970 00:00:03 GMT',1000)).toBe(2000);});
+it('accepts only registered-source HTTPS links and internal report paths',()=>{expect(safeSourceUrl('javascript:alert(1)')).toBeNull();expect(safeSourceUrl('https://ntrs.nasa.gov/citations/20160000593')).toContain('ntrs.nasa.gov');expect(safeDownloadPath('//evil.example/report')).toBeNull();expect(safeDownloadPath('/api/v1/reports/rpt_1/download')).toBe('/api/v1/reports/rpt_1/download');});
