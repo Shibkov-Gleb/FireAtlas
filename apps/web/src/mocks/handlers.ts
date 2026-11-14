@@ -49,7 +49,7 @@ async function createJob(request:Request,type:Job['type']){
     if(type==='analysis'&&(input as Schema['AnalysisRequest']).data_revision!==REVISION)return revisionError();
     const mock=mockMode(request);const id=`job_${crypto.randomUUID().replaceAll('-','')}`;const timestamp=now();
     const job:Job={id,type,state:'queued',stage:null,created_at:timestamp,updated_at:timestamp,deadline_at:new Date(Date.now()+(mock==='timeout'?2500:type==='analysis'?45000:30000)).toISOString(),result_kind:type==='analysis'?'answer':'report',result_id:null,error:null,input_context:{workspace_revision:workspace.revision,data_revision:REVISION,scenario_id:workspace.scenario.scenario_id},fallback_evidence_ids:[]};
-    state.jobs[id]={job,input,snapshot:structuredClone(workspace.scenario),created:Date.now(),mock};state.idempotency[scope]={jobId:id,fingerprint:fingerprint(input),created:Date.now()};return success(job,202);
+    state.jobs[id]={job,input,snapshot:structuredClone(workspace.scenario),created:Date.now(),mock};state.idempotency[scope]={jobId:id,fingerprint:fingerprint(input),created:Date.now()};return mock==='lost_response'?HttpResponse.error():success(job,202);
   });
 }
 export const handlers=[
