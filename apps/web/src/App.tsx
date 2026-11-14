@@ -8,6 +8,7 @@ import { Measurements } from './pages/Measurements';
 import { Compare } from './pages/Compare';
 import { Missions } from './pages/Missions';
 import { Ask } from './pages/Ask';
+import { Reports } from './pages/Reports';
 
 export function App() {
   return <Routes><Route element={<Shell />}>
@@ -18,7 +19,7 @@ export function App() {
     <Route path="compare" element={<Compare />} />
     <Route path="ask" element={<Ask />} />
     <Route path="missions" element={<Missions />} />
-    <Route path="reports" element={<Placeholder title="Отчёты" />} />
+    <Route path="reports" element={<Reports />} />
     <Route path="*" element={<Placeholder title="Страница не найдена" />} />
   </Route></Routes>;
 }

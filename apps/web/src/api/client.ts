@@ -9,14 +9,14 @@ export function retryDelay(value: string | null, now = Date.now()) {
   const seconds = Number(value);
   return Number.isFinite(seconds) ? Math.max(0, seconds * 1000) : Math.max(0, Date.parse(value) - now) || 0;
 }
-export async function request<T>(path: string, options: RequestInit = {}, timeoutMs = 15000): Promise<Envelope<T>> {
+export async function request<T>(path: string, options: RequestInit = {}, timeoutMs = 15000, responseType: 'json' | 'blob' = 'json'): Promise<Envelope<T>> {
   const controller = new AbortController();
   const abort = () => controller.abort(options.signal?.reason);
   if (options.signal?.aborted) abort();
   else options.signal?.addEventListener('abort', abort, { once: true });
   const timer = setTimeout(() => controller.abort(new DOMException('Request timed out', 'TimeoutError')), timeoutMs);
   const headers = new Headers(options.headers);
-  headers.set('Accept', 'application/json');
+  if (!headers.has('Accept')) headers.set('Accept', 'application/json');
   if (options.body) headers.set('Content-Type', 'application/json');
   if (options.method && !['GET','HEAD'].includes(options.method)) {
     const token = document.cookie.split('; ').find(c => c.startsWith('csrf_token='))?.slice('csrf_token='.length);
@@ -29,6 +29,10 @@ export async function request<T>(path: string, options: RequestInit = {}, timeou
   try {
     const response = await fetch(baseUrl + path, { ...options, headers, credentials: 'include', signal: controller.signal });
     if (response.status === 204) return { data: undefined as T, meta: { request_id: response.headers.get('X-Request-ID') || '', contract_version: '1.0.0', data_revision: null, warnings: [] } };
+    if (response.ok && responseType === 'blob') {
+      if (!response.headers.get('Content-Type')?.startsWith('application/pdf')) throw new ApiError('INVALID_RESPONSE', 'Сервер не вернул PDF.', response.status);
+      return { data: await response.blob() as T, meta: { request_id: response.headers.get('X-Request-ID') || '', contract_version: '1.0.0', data_revision: null, warnings: [] } };
+    }
     let body: Envelope<T> & Partial<Schema['ErrorEnvelope']>;
     try { body = await response.json(); } catch { throw new ApiError('INVALID_RESPONSE', 'Сервер вернул ответ в неизвестном формате.', response.status, response.headers.get('X-Request-ID')); }
     if (!response.ok) throw new ApiError(body.error?.code || 'HTTP_ERROR', body.error?.message || 'Не удалось выполнить запрос.', response.status, body.meta?.request_id || null, body.error?.retryable || false, body.error?.details || [], retryDelay(response.headers.get('Retry-After')));
@@ -65,6 +69,7 @@ export const api = {
   answer: (id: string, signal?: AbortSignal) => request<Schema['AnalysisResult']>(`/answers/${encodeURIComponent(id)}`, { signal }),
   createReport: (body: Schema['ReportRequest'], key: string) => request<Schema['Job']>('/reports', { method: 'POST', headers: { 'Idempotency-Key': key }, body: json(body) }),
   report: (id: string, signal?: AbortSignal) => request<Schema['Report']>(`/reports/${encodeURIComponent(id)}`, { signal }),
+  downloadReport: (path: string) => { if (!safeDownloadPath(path)) return Promise.reject(new ApiError('INVALID_DOWNLOAD_PATH', 'Ссылка на скачивание недопустима.')); return request<Blob>(path.slice('/api/v1'.length), { headers: { Accept: 'application/pdf' } }, 15000, 'blob'); },
 };
 export function safeSourceUrl(url: string) { try { const parsed = new URL(url); return parsed.protocol === 'https:' ? parsed.href : null; } catch { return null; } }
 export function safeDownloadPath(path: string) { return /^\/api\/v1\/reports\/[A-Za-z0-9_-]+\/download$/.test(path) ? path : null; }
