@@ -4,13 +4,14 @@ import { Placeholder } from './pages/Placeholder';
 import { Overview } from './pages/Overview';
 import { Catalog } from './pages/Catalog';
 import { InvestigationPage } from './pages/Investigation';
+import { Measurements } from './pages/Measurements';
 
 export function App() {
   return <Routes><Route element={<Shell />}>
     <Route index element={<Overview />} />
     <Route path="investigations" element={<Catalog />} />
     <Route path="investigations/:id" element={<InvestigationPage />} />
-    <Route path="measurements" element={<Placeholder title="Измерения" />} />
+    <Route path="measurements" element={<Measurements />} />
     <Route path="compare" element={<Placeholder title="Сравнение" />} />
     <Route path="ask" element={<Placeholder title="Спросить AI" />} />
     <Route path="missions" element={<Placeholder title="Сценарии миссий" />} />
