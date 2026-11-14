@@ -1,2 +1,136 @@
-.selection{padding:24px;margin-bottom:25px}.selection h2{font-size:13px;font-weight:600;margin:0}.options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:20px}.option{display:flex;justify-content:space-between;align-items:center;gap:15px;text-align:left;padding:17px 18px;background:#0d182a;border:1px solid #ffffff14;border-radius:7px}.option strong{font-size:13px;font-weight:600;display:block}.option small{font-family:var(--mono);font-size:8px;color:var(--muted);display:block;margin-top:7px}.option:hover{border-color:#78d4fc50}.selected{background:#78d4fc08;border-color:#78d4fc60}.selected svg{color:var(--cyan)}.option:disabled{opacity:.6}.plus{font-size:20px;color:var(--muted);font-weight:400}.matrix table{min-width:720px;table-layout:fixed}.matrix th:first-child{width:170px;position:sticky;left:0;background:#0e192a;z-index:1}.matrix thead th{position:sticky;top:0;vertical-align:middle;font-size:13px;padding-block:21px;background:#142138;color:var(--text)}.matrix thead th:first-child{background:#111e31;z-index:2;font-size:10px;color:var(--muted)}.matrix thead small{display:block;font-family:var(--mono);font-size:8px;color:var(--muted);margin-top:6px;font-weight:400}.matrix thead a{color:var(--cyan);text-decoration:none}.matrix tbody th{font-size:10px;font-weight:500;color:#b2c2da}.matrix td{padding-block:22px}.matrix td p{font-size:11px;line-height:1.9;margin:0 0 12px}.matrix td button{font-size:9px;display:block;margin-top:5px}
-@media(max-width:767px){.selection{padding:20px 16px}.selection>div:first-child{gap:9px}.options{grid-template-columns:1fr}.option{padding:14px 16px}.matrix table{min-width:680px}.matrix th:first-child{width:135px}.matrix td,.matrix th{padding-inline:13px}}
+.selection {
+  padding: 24px;
+  margin-bottom: 25px;
+}
+.selection h2 {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+}
+.options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+.option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  text-align: left;
+  padding: 17px 18px;
+  background: #0d182a;
+  border: 1px solid #ffffff14;
+  border-radius: 7px;
+}
+.option strong {
+  font-size: 13px;
+  font-weight: 600;
+  display: block;
+}
+.option small {
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--muted);
+  display: block;
+  margin-top: 7px;
+}
+.option:hover {
+  border-color: #78d4fc50;
+}
+.selected {
+  background: #78d4fc08;
+  border-color: #78d4fc60;
+}
+.selected svg {
+  color: var(--cyan);
+}
+.option:disabled {
+  opacity: 0.6;
+}
+.plus {
+  font-size: 20px;
+  color: var(--muted);
+  font-weight: 400;
+}
+.matrix table {
+  min-width: 720px;
+  table-layout: fixed;
+}
+.matrix th:first-child {
+  width: 170px;
+  position: sticky;
+  left: 0;
+  background: #0e192a;
+  z-index: 1;
+}
+.matrix thead th {
+  position: sticky;
+  top: 0;
+  vertical-align: middle;
+  font-size: 13px;
+  padding-block: 21px;
+  background: #142138;
+  color: var(--text);
+}
+.matrix thead th:first-child {
+  background: #111e31;
+  z-index: 2;
+  font-size: 10px;
+  color: var(--muted);
+}
+.matrix thead small {
+  display: block;
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--muted);
+  margin-top: 6px;
+  font-weight: 400;
+}
+.matrix thead a {
+  color: var(--cyan);
+  text-decoration: none;
+}
+.matrix tbody th {
+  font-size: 10px;
+  font-weight: 500;
+  color: #b2c2da;
+}
+.matrix td {
+  padding-block: 22px;
+}
+.matrix td p {
+  font-size: 11px;
+  line-height: 1.9;
+  margin: 0 0 12px;
+}
+.matrix td button {
+  font-size: 9px;
+  display: block;
+  margin-top: 5px;
+}
+@media (max-width: 767px) {
+  .selection {
+    padding: 20px 16px;
+  }
+  .selection > div:first-child {
+    gap: 9px;
+  }
+  .options {
+    grid-template-columns: 1fr;
+  }
+  .option {
+    padding: 14px 16px;
+  }
+  .matrix table {
+    min-width: 680px;
+  }
+  .matrix th:first-child {
+    width: 135px;
+  }
+  .matrix td,
+  .matrix th {
+    padding-inline: 13px;
+  }
+}

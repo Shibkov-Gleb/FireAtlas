@@ -1,1 +1,46 @@
-.section{min-width:0}.section>div:first-child{margin-bottom:18px}.section h2{margin-bottom:0}.section table{min-width:580px}.section td{font-size:11px;line-height:1.9}.section th:first-child{min-width:150px}.gaps{margin-top:23px;border:1px solid #ff945a25;border-radius:8px;padding:20px;background:#ff945a05}.gaps h3{font-size:12px;color:#e4c4ab;margin-bottom:16px}.gaps>div+div{border-top:1px solid var(--line);padding-top:15px;margin-top:15px}.gaps p{font-size:11px;line-height:1.8;margin:0 0 8px}.gaps span{font-size:10px;color:var(--muted);line-height:1.8}
+.section {
+  min-width: 0;
+}
+.section > div:first-child {
+  margin-bottom: 18px;
+}
+.section h2 {
+  margin-bottom: 0;
+}
+.section table {
+  min-width: 580px;
+}
+.section td {
+  font-size: 11px;
+  line-height: 1.9;
+}
+.section th:first-child {
+  min-width: 150px;
+}
+.gaps {
+  margin-top: 23px;
+  border: 1px solid #ff945a25;
+  border-radius: 8px;
+  padding: 20px;
+  background: #ff945a05;
+}
+.gaps h3 {
+  font-size: 12px;
+  color: #e4c4ab;
+  margin-bottom: 16px;
+}
+.gaps > div + div {
+  border-top: 1px solid var(--line);
+  padding-top: 15px;
+  margin-top: 15px;
+}
+.gaps p {
+  font-size: 11px;
+  line-height: 1.8;
+  margin: 0 0 8px;
+}
+.gaps span {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.8;
+}

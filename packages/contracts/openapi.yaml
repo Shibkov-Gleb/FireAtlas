@@ -2,9 +2,10 @@ openapi: 3.1.0
 info:
   title: Fire Atlas Public API
   version: 1.0.0
-  description: Предварительный контракт фронтенда по ТЗ 04.11.2026. Не является реализацией сервера. SearchRequest.sort —
-    явное расширение для FE-05; перед интеграцией согласовать с BE. Cookie и CSRF определяются серверной реализацией;
-    клиент поддерживает double-submit csrf_token → X-CSRF-Token.
+  description: Предварительный контракт фронтенда по ТЗ 04.11.2026. Не является реализацией сервера.
+    SearchRequest.sort — явное расширение для FE-05; перед интеграцией согласовать с BE. Cookie и
+    CSRF определяются серверной реализацией; клиент поддерживает double-submit csrf_token →
+    X-CSRF-Token.
 servers:
   - url: /api/v1
 security:
@@ -16,7 +17,7 @@ paths:
       summary: getConfig
       parameters: []
       responses:
-        "200":
+        '200':
           description: Успех
           content:
             application/json:
@@ -24,9 +25,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/Config"
+                    $ref: '#/components/schemas/Config'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
@@ -36,7 +37,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorEnvelope"
+                $ref: '#/components/schemas/ErrorEnvelope'
   /workspaces:
     post:
       operationId: createWorkspace
@@ -52,7 +53,7 @@ paths:
               required: []
               additionalProperties: false
       responses:
-        "200": &a1
+        '200': &a1
           description: Успех
           content:
             application/json:
@@ -60,14 +61,14 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/Workspace"
+                    $ref: '#/components/schemas/Workspace'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
                 additionalProperties: false
-        "201": *a1
+        '201': *a1
         default: *a2
   /workspaces/current:
     get:
@@ -75,7 +76,7 @@ paths:
       summary: getWorkspace
       parameters: []
       responses:
-        "200":
+        '200':
           description: Успех
           content:
             application/json:
@@ -83,9 +84,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/Workspace"
+                    $ref: '#/components/schemas/Workspace'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
@@ -105,9 +106,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/WorkspacePatch"
+              $ref: '#/components/schemas/WorkspacePatch'
       responses:
-        "200":
+        '200':
           description: Успех
           content:
             application/json:
@@ -115,9 +116,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/Workspace"
+                    $ref: '#/components/schemas/Workspace'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
@@ -133,9 +134,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SearchRequest"
+              $ref: '#/components/schemas/SearchRequest'
       responses:
-        "200":
+        '200':
           description: Успех
           content:
             application/json:
@@ -143,9 +144,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/SearchResult"
+                    $ref: '#/components/schemas/SearchResult'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
@@ -169,7 +170,7 @@ paths:
           required: true
           schema: *a3
       responses:
-        "200":
+        '200':
           description: Успех
           content:
             application/json:
@@ -177,9 +178,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/InvestigationDetail"
+                    $ref: '#/components/schemas/InvestigationDetail'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
@@ -204,7 +205,7 @@ paths:
             minimum: 1
             maximum: 200
       responses:
-        "200":
+        '200':
           description: Успех
           content:
             application/json:
@@ -212,9 +213,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/RunList"
+                    $ref: '#/components/schemas/RunList'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
@@ -228,7 +229,7 @@ paths:
         - *a4
         - *a5
       responses:
-        "200":
+        '200':
           description: Успех
           content:
             application/json:
@@ -236,9 +237,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/TestRun"
+                    $ref: '#/components/schemas/TestRun'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
@@ -252,7 +253,7 @@ paths:
         - *a4
         - *a5
       responses:
-        "200":
+        '200':
           description: Успех
           content:
             application/json:
@@ -260,9 +261,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/EvidenceDetail"
+                    $ref: '#/components/schemas/EvidenceDetail'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
@@ -276,7 +277,7 @@ paths:
         - *a4
         - *a5
       responses:
-        "200":
+        '200':
           description: Успех
           content:
             application/json:
@@ -284,9 +285,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/Source"
+                    $ref: '#/components/schemas/Source'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
@@ -302,9 +303,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/MeasurementRequest"
+              $ref: '#/components/schemas/MeasurementRequest'
       responses:
-        "200":
+        '200':
           description: Успех
           content:
             application/json:
@@ -312,9 +313,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/MeasurementResponse"
+                    $ref: '#/components/schemas/MeasurementResponse'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
@@ -330,9 +331,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ComparisonRequest"
+              $ref: '#/components/schemas/ComparisonRequest'
       responses:
-        "200":
+        '200':
           description: Успех
           content:
             application/json:
@@ -340,9 +341,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/ComparisonResponse"
+                    $ref: '#/components/schemas/ComparisonResponse'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
@@ -358,9 +359,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ApplicabilityRequest"
+              $ref: '#/components/schemas/ApplicabilityRequest'
       responses:
-        "200":
+        '200':
           description: Успех
           content:
             application/json:
@@ -368,9 +369,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/ApplicabilityResult"
+                    $ref: '#/components/schemas/ApplicabilityResult'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
@@ -393,9 +394,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AnalysisRequest"
+              $ref: '#/components/schemas/AnalysisRequest'
       responses:
-        "202":
+        '202':
           description: Успех
           content:
             application/json:
@@ -403,9 +404,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/Job"
+                    $ref: '#/components/schemas/Job'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
@@ -418,7 +419,7 @@ paths:
       parameters:
         - *a4
       responses:
-        "200":
+        '200':
           description: Успех
           content:
             application/json:
@@ -426,9 +427,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/Job"
+                    $ref: '#/components/schemas/Job'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
@@ -440,7 +441,7 @@ paths:
       parameters:
         - *a4
       responses:
-        "204":
+        '204':
           description: Успех
         default: *a2
   /answers/{id}:
@@ -450,7 +451,7 @@ paths:
       parameters:
         - *a4
       responses:
-        "200":
+        '200':
           description: Успех
           content:
             application/json:
@@ -458,9 +459,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/AnalysisResult"
+                    $ref: '#/components/schemas/AnalysisResult'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
@@ -477,9 +478,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReportRequest"
+              $ref: '#/components/schemas/ReportRequest'
       responses:
-        "202":
+        '202':
           description: Успех
           content:
             application/json:
@@ -487,9 +488,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/Job"
+                    $ref: '#/components/schemas/Job'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
@@ -502,7 +503,7 @@ paths:
       parameters:
         - *a4
       responses:
-        "200":
+        '200':
           description: Успех
           content:
             application/json:
@@ -510,9 +511,9 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/Report"
+                    $ref: '#/components/schemas/Report'
                   meta:
-                    $ref: "#/components/schemas/Meta"
+                    $ref: '#/components/schemas/Meta'
                 required:
                   - data
                   - meta
@@ -524,7 +525,7 @@ paths:
       parameters:
         - *a4
       responses:
-        "200":
+        '200':
           description: PDF
           content:
             application/pdf:
@@ -590,9 +591,9 @@ components:
         value: &a10
           type:
             - number
-            - "null"
+            - 'null'
         unit:
-          $ref: "#/components/schemas/Unit"
+          $ref: '#/components/schemas/Unit'
         status:
           type: string
           enum:
@@ -605,22 +606,23 @@ components:
         qualifier:
           type:
             - string
-            - "null"
+            - 'null'
           enum:
             - eq
             - lt
             - lte
             - gt
             - gte
+            - null
         raw_value: &a7
           type:
             - string
-            - "null"
+            - 'null'
         raw_unit: *a7
         uncertainty:
           type:
             - number
-            - "null"
+            - 'null'
           minimum: 0
         evidence_ids: &a9
           type: array
@@ -628,7 +630,7 @@ components:
         derivation:
           type:
             - object
-            - "null"
+            - 'null'
           properties:
             formula_id: *a3
             input_refs: *a9
@@ -647,6 +649,59 @@ components:
         - evidence_ids
         - derivation
       additionalProperties: false
+      allOf:
+        - &a17
+          if:
+            properties:
+              status:
+                enum:
+                  - measured
+                  - reported
+                  - derived
+          then:
+            properties:
+              value:
+                type: number
+        - &a18
+          if:
+            properties:
+              status:
+                enum:
+                  - not_reported
+                  - not_applicable
+                  - unusable
+          then:
+            properties:
+              value:
+                type: 'null'
+              qualifier:
+                type: 'null'
+              uncertainty:
+                type: 'null'
+        - &a19
+          if:
+            properties:
+              status:
+                const: derived
+          then:
+            properties:
+              derivation:
+                type: object
+          else:
+            properties:
+              derivation:
+                type: 'null'
+        - if:
+            properties:
+              status:
+                enum:
+                  - measured
+                  - reported
+                  - derived
+          then:
+            properties:
+              evidence_ids:
+                minItems: 1
     Source:
       type: object
       properties:
@@ -682,7 +737,7 @@ components:
         local_asset_id:
           type:
             - string
-            - "null"
+            - 'null'
           pattern: ^[A-Za-z0-9_-]{1,128}$
         sha256: *a7
       required:
@@ -705,7 +760,7 @@ components:
         page:
           type:
             - integer
-            - "null"
+            - 'null'
         section: *a7
         row_key: *a7
         start_s: *a10
@@ -731,7 +786,7 @@ components:
             - video_span
             - metadata
         locator:
-          $ref: "#/components/schemas/Locator"
+          $ref: '#/components/schemas/Locator'
         excerpt: *a7
         table_values:
           type: array
@@ -766,7 +821,7 @@ components:
         id: *a8
         label: *a3
         state:
-          $ref: "#/components/schemas/FuelState"
+          $ref: '#/components/schemas/FuelState'
         composition: *a7
         aliases:
           type: array
@@ -793,15 +848,15 @@ components:
         scopes:
           type: array
           items:
-            $ref: "#/components/schemas/Scope"
+            $ref: '#/components/schemas/Scope'
         fuel_states:
           type: array
           items:
-            $ref: "#/components/schemas/FuelState"
+            $ref: '#/components/schemas/FuelState'
         gravity_regimes:
           type: array
           items:
-            $ref: "#/components/schemas/Gravity"
+            $ref: '#/components/schemas/Gravity'
         material_ids: *a9
         source_ids: *a9
         claim_ids: *a9
@@ -814,7 +869,7 @@ components:
               min_value: *a10
               max_value: *a10
               unit:
-                $ref: "#/components/schemas/Unit"
+                $ref: '#/components/schemas/Unit'
               known_count: &a11
                 type: integer
               unknown_count: *a11
@@ -856,17 +911,17 @@ components:
         material_id:
           type:
             - string
-            - "null"
+            - 'null'
           pattern: ^[A-Za-z0-9_-]{1,128}$
         sample:
           type: object
           properties:
             geometry:
-              $ref: "#/components/schemas/Geometry"
+              $ref: '#/components/schemas/Geometry'
             thickness:
-              $ref: "#/components/schemas/Quantity"
+              $ref: '#/components/schemas/Quantity'
             initial_diameter:
-              $ref: "#/components/schemas/Quantity"
+              $ref: '#/components/schemas/Quantity'
           required:
             - geometry
             - thickness
@@ -876,15 +931,15 @@ components:
           type: object
           properties:
             gravity_regime:
-              $ref: "#/components/schemas/Gravity"
+              $ref: '#/components/schemas/Gravity'
             gravity_level:
-              $ref: "#/components/schemas/Quantity"
+              $ref: '#/components/schemas/Quantity'
             oxygen_fraction:
-              $ref: "#/components/schemas/Quantity"
+              $ref: '#/components/schemas/Quantity'
             pressure:
-              $ref: "#/components/schemas/Quantity"
+              $ref: '#/components/schemas/Quantity'
             airflow_speed:
-              $ref: "#/components/schemas/Quantity"
+              $ref: '#/components/schemas/Quantity'
             flow_configuration:
               type: string
               enum:
@@ -894,7 +949,7 @@ components:
                 - other
                 - unknown
             ambient_temperature:
-              $ref: "#/components/schemas/Quantity"
+              $ref: '#/components/schemas/Quantity'
           required:
             - gravity_regime
             - gravity_level
@@ -917,7 +972,7 @@ components:
                   - flame_spread_rate
                   - particle_diameter
               quantity:
-                $ref: "#/components/schemas/Quantity"
+                $ref: '#/components/schemas/Quantity'
             required:
               - metric_key
               - quantity
@@ -1022,33 +1077,34 @@ components:
         celestial_body:
           type:
             - string
-            - "null"
+            - 'null'
           enum:
             - earth
             - moon
             - mars
             - other
+            - null
         safety_task:
-          $ref: "#/components/schemas/Scope"
+          $ref: '#/components/schemas/Scope'
         material_ids: *a9
         geometry:
           anyOf:
-            - $ref: "#/components/schemas/Geometry"
-            - type: "null"
+            - $ref: '#/components/schemas/Geometry'
+            - type: 'null'
         oxygen_fraction:
           anyOf:
-            - $ref: "#/components/schemas/Quantity"
-            - type: "null"
+            - $ref: '#/components/schemas/ScenarioQuantity'
+            - type: 'null'
         pressure:
           anyOf:
-            - $ref: "#/components/schemas/Quantity"
-            - type: "null"
+            - $ref: '#/components/schemas/ScenarioQuantity'
+            - type: 'null'
         airflow_speed:
           anyOf:
-            - $ref: "#/components/schemas/Quantity"
-            - type: "null"
+            - $ref: '#/components/schemas/ScenarioQuantity'
+            - type: 'null'
         gravity_regime:
-          $ref: "#/components/schemas/Gravity"
+          $ref: '#/components/schemas/Gravity'
         assumptions:
           type: array
           items:
@@ -1091,7 +1147,7 @@ components:
           type: integer
           minimum: 1
         scenario:
-          $ref: "#/components/schemas/Scenario"
+          $ref: '#/components/schemas/Scenario'
         selected_investigation_ids:
           type: array
           items: *a8
@@ -1124,7 +1180,7 @@ components:
       type: object
       properties:
         scenario:
-          $ref: "#/components/schemas/Scenario"
+          $ref: '#/components/schemas/Scenario'
         selected_investigation_ids:
           type: array
           items: *a8
@@ -1145,7 +1201,7 @@ components:
         min: *a10
         max: *a10
         unit:
-          $ref: "#/components/schemas/Unit"
+          $ref: '#/components/schemas/Unit'
       required:
         - min
         - max
@@ -1157,33 +1213,33 @@ components:
         scopes:
           type: array
           items:
-            $ref: "#/components/schemas/Scope"
+            $ref: '#/components/schemas/Scope'
         investigation_ids: *a9
         material_ids: *a9
         fuel_states:
           type: array
           items:
-            $ref: "#/components/schemas/FuelState"
+            $ref: '#/components/schemas/FuelState'
         gravity_regimes:
           type: array
           items:
-            $ref: "#/components/schemas/Gravity"
+            $ref: '#/components/schemas/Gravity'
         oxygen_range:
           anyOf:
-            - $ref: "#/components/schemas/Range"
-            - type: "null"
+            - $ref: '#/components/schemas/Range'
+            - type: 'null'
         pressure_range:
           anyOf:
-            - $ref: "#/components/schemas/Range"
-            - type: "null"
+            - $ref: '#/components/schemas/Range'
+            - type: 'null'
         airflow_range:
           anyOf:
-            - $ref: "#/components/schemas/Range"
-            - type: "null"
+            - $ref: '#/components/schemas/Range'
+            - type: 'null'
         has_measurements:
           type:
             - boolean
-            - "null"
+            - 'null'
         include_unknown: *a13
       required:
         - scopes
@@ -1209,11 +1265,11 @@ components:
             - ru
         data_revision: *a3
         filters:
-          $ref: "#/components/schemas/Filters"
+          $ref: '#/components/schemas/Filters'
         scenario:
           anyOf:
-            - $ref: "#/components/schemas/Scenario"
-            - type: "null"
+            - $ref: '#/components/schemas/Scenario'
+            - type: 'null'
         include_related: *a13
         cursor: *a7
         limit:
@@ -1239,7 +1295,7 @@ components:
       type: object
       properties:
         investigation:
-          $ref: "#/components/schemas/Investigation"
+          $ref: '#/components/schemas/Investigation'
         relevance_category:
           type: string
           enum:
@@ -1274,12 +1330,12 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/SearchItem"
+            $ref: '#/components/schemas/SearchItem'
         next_cursor: *a7
         total:
           type:
             - integer
-            - "null"
+            - 'null'
         retrieval_mode:
           type: string
           enum:
@@ -1287,7 +1343,7 @@ components:
             - semantic
             - hybrid
         applied_filters:
-          $ref: "#/components/schemas/Filters"
+          $ref: '#/components/schemas/Filters'
       required:
         - items
         - next_cursor
@@ -1299,15 +1355,15 @@ components:
       type: object
       properties:
         investigation:
-          $ref: "#/components/schemas/Investigation"
+          $ref: '#/components/schemas/Investigation'
         claims:
           type: array
           items:
-            $ref: "#/components/schemas/Claim"
+            $ref: '#/components/schemas/Claim'
         sources:
           type: array
           items:
-            $ref: "#/components/schemas/Source"
+            $ref: '#/components/schemas/Source'
         run_summary:
           type: object
           properties:
@@ -1331,12 +1387,12 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/TestRun"
+            $ref: '#/components/schemas/TestRun'
         next_cursor: *a7
         total:
           type:
             - integer
-            - "null"
+            - 'null'
       required:
         - items
         - next_cursor
@@ -1346,9 +1402,9 @@ components:
       type: object
       properties:
         evidence:
-          $ref: "#/components/schemas/Evidence"
+          $ref: '#/components/schemas/Evidence'
         source:
-          $ref: "#/components/schemas/Source"
+          $ref: '#/components/schemas/Source'
       required:
         - evidence
         - source
@@ -1362,7 +1418,7 @@ components:
         x_metric: *a3
         y_metric: *a3
         filters:
-          $ref: "#/components/schemas/Filters"
+          $ref: '#/components/schemas/Filters'
         cursor: *a7
         limit:
           type: integer
@@ -1387,7 +1443,7 @@ components:
             key: *a3
             label: *a3
             unit:
-              $ref: "#/components/schemas/Unit"
+              $ref: '#/components/schemas/Unit'
           required:
             - key
             - label
@@ -1399,7 +1455,7 @@ components:
             key: *a3
             label: *a3
             unit:
-              $ref: "#/components/schemas/Unit"
+              $ref: '#/components/schemas/Unit'
           required:
             - key
             - label
@@ -1457,7 +1513,7 @@ components:
       type: object
       properties:
         scenario:
-          $ref: "#/components/schemas/Scenario"
+          $ref: '#/components/schemas/Scenario'
         investigation_ids: *a9
         data_revision: *a3
       required:
@@ -1535,8 +1591,8 @@ components:
         data_revision: *a3
         scenario:
           anyOf:
-            - $ref: "#/components/schemas/Scenario"
-            - type: "null"
+            - $ref: '#/components/schemas/Scenario'
+            - type: 'null'
       required:
         - investigation_ids
         - data_revision
@@ -1548,7 +1604,7 @@ components:
         investigations:
           type: array
           items:
-            $ref: "#/components/schemas/Investigation"
+            $ref: '#/components/schemas/Investigation'
         rows:
           type: array
           items:
@@ -1598,7 +1654,7 @@ components:
             - reasons
           additionalProperties: false
         applicability:
-          $ref: "#/components/schemas/ApplicabilityResult"
+          $ref: '#/components/schemas/ApplicabilityResult'
         limitations:
           type: array
           items: *a3
@@ -1617,7 +1673,7 @@ components:
         current_revision:
           type:
             - integer
-            - "null"
+            - 'null'
       required:
         - field
         - reason
@@ -1631,7 +1687,7 @@ components:
         details:
           type: array
           items:
-            $ref: "#/components/schemas/ErrorDetail"
+            $ref: '#/components/schemas/ErrorDetail'
         retryable: *a13
       required:
         - code
@@ -1668,9 +1724,9 @@ components:
       type: object
       properties:
         error:
-          $ref: "#/components/schemas/ApiError"
+          $ref: '#/components/schemas/ApiError'
         meta:
-          $ref: "#/components/schemas/Meta"
+          $ref: '#/components/schemas/Meta'
       required:
         - error
         - meta
@@ -1725,12 +1781,13 @@ components:
         stage:
           type:
             - string
-            - "null"
+            - 'null'
           enum:
             - retrieving
             - reasoning
             - validating
             - exporting
+            - null
         created_at: *a12
         updated_at: *a12
         deadline_at: *a12
@@ -1742,12 +1799,12 @@ components:
         result_id:
           type:
             - string
-            - "null"
+            - 'null'
           pattern: ^[A-Za-z0-9_-]{1,128}$
         error:
           anyOf:
-            - $ref: "#/components/schemas/ApiError"
-            - type: "null"
+            - $ref: '#/components/schemas/ApiError'
+            - type: 'null'
         input_context:
           type: object
           properties:
@@ -1796,7 +1853,7 @@ components:
             properties:
               name: *a3
               quantity:
-                $ref: "#/components/schemas/Quantity"
+                $ref: '#/components/schemas/Quantity'
               evidence_ids: *a9
             required:
               - name
@@ -1817,7 +1874,7 @@ components:
         data_revision: *a3
         workspace_revision: *a11
         scenario_snapshot:
-          $ref: "#/components/schemas/Scenario"
+          $ref: '#/components/schemas/Scenario'
         question: *a3
         status:
           type: string
@@ -1828,9 +1885,9 @@ components:
         answer_blocks:
           type: array
           items:
-            $ref: "#/components/schemas/AnswerBlock"
+            $ref: '#/components/schemas/AnswerBlock'
         applicability:
-          $ref: "#/components/schemas/ApplicabilityResult"
+          $ref: '#/components/schemas/ApplicabilityResult'
         citations:
           type: array
           items:
@@ -1840,7 +1897,7 @@ components:
               source_id: *a8
               label: *a3
               locator:
-                $ref: "#/components/schemas/Locator"
+                $ref: '#/components/schemas/Locator'
             required:
               - evidence_id
               - source_id
@@ -1920,6 +1977,15 @@ components:
         - include_comparison
         - locale
       additionalProperties: false
+      allOf:
+        - if:
+            properties:
+              answer_ids:
+                maxItems: 0
+          then:
+            properties:
+              investigation_ids:
+                minItems: 1
     Report:
       type: object
       properties:
@@ -1940,8 +2006,8 @@ components:
         sha256: *a7
         error:
           anyOf:
-            - $ref: "#/components/schemas/ApiError"
-            - type: "null"
+            - $ref: '#/components/schemas/ApiError'
+            - type: 'null'
       required:
         - id
         - state
@@ -2000,7 +2066,7 @@ components:
                 type: object
                 properties:
                   value:
-                    $ref: "#/components/schemas/Scope"
+                    $ref: '#/components/schemas/Scope'
                   label: *a3
                 required:
                   - value
@@ -2012,7 +2078,7 @@ components:
                 type: object
                 properties:
                   value:
-                    $ref: "#/components/schemas/FuelState"
+                    $ref: '#/components/schemas/FuelState'
                   label: *a3
                 required:
                   - value
@@ -2024,7 +2090,7 @@ components:
                 type: object
                 properties:
                   value:
-                    $ref: "#/components/schemas/Gravity"
+                    $ref: '#/components/schemas/Gravity'
                   label: *a3
                 required:
                   - value
@@ -2033,7 +2099,7 @@ components:
             materials:
               type: array
               items:
-                $ref: "#/components/schemas/Material"
+                $ref: '#/components/schemas/Material'
           required:
             - scopes
             - fuel_states
@@ -2071,3 +2137,76 @@ components:
         - measurement_axes
         - retention
       additionalProperties: false
+    ScenarioQuantity:
+      type: object
+      properties:
+        value:
+          type:
+            - number
+            - 'null'
+        unit:
+          $ref: '#/components/schemas/Unit'
+        status:
+          type: string
+          enum:
+            - measured
+            - reported
+            - derived
+            - not_reported
+            - not_applicable
+            - unusable
+        qualifier:
+          type:
+            - string
+            - 'null'
+          enum:
+            - eq
+            - lt
+            - lte
+            - gt
+            - gte
+            - null
+        raw_value: &a15
+          type:
+            - string
+            - 'null'
+        raw_unit: *a15
+        uncertainty:
+          type:
+            - number
+            - 'null'
+          minimum: 0
+        evidence_ids: &a16
+          type: array
+          items:
+            type: string
+            pattern: ^[A-Za-z0-9_-]{1,128}$
+        derivation:
+          type:
+            - object
+            - 'null'
+          properties:
+            formula_id:
+              type: string
+            input_refs: *a16
+          required:
+            - formula_id
+            - input_refs
+          additionalProperties: false
+      required:
+        - value
+        - unit
+        - status
+        - qualifier
+        - raw_value
+        - raw_unit
+        - uncertainty
+        - evidence_ids
+        - derivation
+      additionalProperties: false
+      description: Известное условие, введённое пользователем. При evidence_ids=[] происхождение
+        фиксируется в Scenario.assumptions с origin=user; это не измерение NASA.
+      allOf:
+        - *a17
+        - *a18
+        - *a19

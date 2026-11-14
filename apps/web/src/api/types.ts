@@ -12,5 +12,17 @@ export type Job = Schema['Job'];
 export type AnalysisResult = Schema['AnalysisResult'];
 export type Report = Schema['Report'];
 export type Envelope<T> = { data: T; meta: Schema['Meta'] };
-export const emptyFilters = (): Filters => ({ scopes: [], investigation_ids: [], material_ids: [], fuel_states: [], gravity_regimes: [], oxygen_range: null, pressure_range: null, airflow_range: null, has_measurements: null, include_unknown: false });
-export const isTerminal = (state: Job['state']) => ['succeeded', 'failed', 'cancelled', 'expired'].includes(state);
+export const emptyFilters = (): Filters => ({
+  scopes: [],
+  investigation_ids: [],
+  material_ids: [],
+  fuel_states: [],
+  gravity_regimes: [],
+  oxygen_range: null,
+  pressure_range: null,
+  airflow_range: null,
+  has_measurements: null,
+  include_unknown: false,
+});
+export const isTerminal = (state: Job['state']) =>
+  ['succeeded', 'failed', 'cancelled', 'expired'].includes(state);

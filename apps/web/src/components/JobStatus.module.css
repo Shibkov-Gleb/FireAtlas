@@ -1,1 +1,96 @@
-.panel{padding:25px;margin-top:24px}.title{display:flex;align-items:center;gap:12px;color:var(--cyan)}.title h2{font-size:15px;font-weight:600;color:var(--text);margin:0}.context{font-family:var(--mono);font-size:9px;line-height:1.9;color:var(--muted);margin:18px 0 22px}.stages{display:flex;gap:20px;flex-wrap:wrap;border-block:1px solid var(--line);padding-block:18px;margin-bottom:20px;font-size:10px;color:#7388a5}.current{color:var(--cyan)}.stages span{display:flex;align-items:center;gap:7px}.stages span::before{content:'';height:5px;width:5px;border-radius:50%;background:currentColor}.details{font-size:9px;color:var(--muted);line-height:2;margin-top:22px}.details summary{cursor:pointer;margin-bottom:9px}.fallback{margin:22px 0;padding-top:20px;border-top:1px solid var(--line)}.fallback h3{font-size:12px}.fallback p{font-size:11px;line-height:1.8;color:var(--muted)}.spin{animation:spin 1.2s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}@media(max-width:767px){.panel{padding:21px 17px}.title h2{font-size:13px}.context{font-size:8px}.stages{gap:14px}.details{font-size:9px}}
+.panel {
+  padding: 25px;
+  margin-top: 24px;
+}
+.title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--cyan);
+}
+.title h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+.context {
+  font-family: var(--mono);
+  font-size: 9px;
+  line-height: 1.9;
+  color: var(--muted);
+  margin: 18px 0 22px;
+}
+.stages {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  border-block: 1px solid var(--line);
+  padding-block: 18px;
+  margin-bottom: 20px;
+  font-size: 10px;
+  color: #7388a5;
+}
+.current {
+  color: var(--cyan);
+}
+.stages span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.stages span::before {
+  content: '';
+  height: 5px;
+  width: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.details {
+  font-size: 9px;
+  color: var(--muted);
+  line-height: 2;
+  margin-top: 22px;
+}
+.details summary {
+  cursor: pointer;
+  margin-bottom: 9px;
+}
+.fallback {
+  margin: 22px 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.fallback h3 {
+  font-size: 12px;
+}
+.fallback p {
+  font-size: 11px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+.spin {
+  animation: spin 1.2s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (max-width: 767px) {
+  .panel {
+    padding: 21px 17px;
+  }
+  .title h2 {
+    font-size: 13px;
+  }
+  .context {
+    font-size: 8px;
+  }
+  .stages {
+    gap: 14px;
+  }
+  .details {
+    font-size: 9px;
+  }
+}

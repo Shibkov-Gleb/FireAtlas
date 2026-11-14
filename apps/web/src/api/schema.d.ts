@@ -340,7 +340,7 @@ export interface components {
                 formula_id: string;
                 input_refs: string[];
             } | null;
-        };
+        } & (unknown & unknown & unknown & unknown);
         Source: {
             id: string;
             data_revision: string;
@@ -476,9 +476,9 @@ export interface components {
             safety_task: components["schemas"]["Scope"];
             material_ids: string[];
             geometry: components["schemas"]["Geometry"] | null;
-            oxygen_fraction: components["schemas"]["Quantity"] | null;
-            pressure: components["schemas"]["Quantity"] | null;
-            airflow_speed: components["schemas"]["Quantity"] | null;
+            oxygen_fraction: components["schemas"]["ScenarioQuantity"] | null;
+            pressure: components["schemas"]["ScenarioQuantity"] | null;
+            airflow_speed: components["schemas"]["ScenarioQuantity"] | null;
             gravity_regime: components["schemas"]["Gravity"];
             assumptions: {
                 field: string;
@@ -775,7 +775,7 @@ export interface components {
             include_comparison: boolean;
             /** @enum {string} */
             locale: "ru";
-        };
+        } & unknown;
         Report: {
             id: string;
             /** @enum {string} */
@@ -834,6 +834,23 @@ export interface components {
                 report_hours: number;
             };
         };
+        /** @description Известное условие, введённое пользователем. При evidence_ids=[] происхождение фиксируется в Scenario.assumptions с origin=user; это не измерение NASA. */
+        ScenarioQuantity: {
+            value: number | null;
+            unit: components["schemas"]["Unit"];
+            /** @enum {string} */
+            status: "measured" | "reported" | "derived" | "not_reported" | "not_applicable" | "unusable";
+            /** @enum {string|null} */
+            qualifier: "eq" | "lt" | "lte" | "gt" | "gte" | null;
+            raw_value: string | null;
+            raw_unit: string | null;
+            uncertainty: number | null;
+            evidence_ids: string[];
+            derivation: {
+                formula_id: string;
+                input_refs: string[];
+            } | null;
+        } & (unknown & unknown & unknown);
     };
     responses: never;
     parameters: never;
