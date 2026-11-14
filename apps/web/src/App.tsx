@@ -6,6 +6,7 @@ import { Catalog } from './pages/Catalog';
 import { InvestigationPage } from './pages/Investigation';
 import { Measurements } from './pages/Measurements';
 import { Compare } from './pages/Compare';
+import { Missions } from './pages/Missions';
 
 export function App() {
   return <Routes><Route element={<Shell />}>
@@ -15,7 +16,7 @@ export function App() {
     <Route path="measurements" element={<Measurements />} />
     <Route path="compare" element={<Compare />} />
     <Route path="ask" element={<Placeholder title="Спросить AI" />} />
-    <Route path="missions" element={<Placeholder title="Сценарии миссий" />} />
+    <Route path="missions" element={<Missions />} />
     <Route path="reports" element={<Placeholder title="Отчёты" />} />
     <Route path="*" element={<Placeholder title="Страница не найдена" />} />
   </Route></Routes>;
