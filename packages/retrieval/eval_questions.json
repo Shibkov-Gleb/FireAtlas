@@ -1,0 +1,14 @@
+[
+ {"id": "q01", "question": "влияние вентиляции на твердые материалы", "relevant": ["inv_psi25_bass2"], "lunar": false},
+ {"id": "q02", "question": "горючесть пластика при низком кислороде", "relevant": ["inv_psi25_bass2"], "lunar": false},
+ {"id": "q03", "question": "при какой скорости потока гаснет пламя на ткани", "relevant": ["inv_psi25_bass2"], "lunar": false},
+ {"id": "q04", "question": "чем тушить пожар на станции", "relevant": ["inv_psi69_flex"], "lunar": false},
+ {"id": "q05", "question": "эффективность CO2 и гелия для тушения капель топлива", "relevant": ["inv_psi69_flex"], "lunar": false},
+ {"id": "q06", "question": "холодное пламя гептана", "relevant": ["inv_psi69_flex"], "lunar": false},
+ {"id": "q07", "question": "датчики дыма для Kapton", "relevant": ["inv_psi101_samer"], "lunar": false},
+ {"id": "q08", "question": "размер частиц дыма в невесомости", "relevant": ["inv_psi101_samer"], "lunar": false},
+ {"id": "q09", "question": "как обнаружить тление изоляции проводов", "relevant": ["inv_psi101_samer"], "lunar": false},
+ {"id": "q10", "question": "опасность пожара на лунной базе при 30% кислорода", "relevant": ["inv_psi69_flex", "inv_psi25_bass2"], "lunar": true},
+ {"id": "q11", "question": "горение материалов в лунном ровере", "relevant": ["inv_psi25_bass2"], "lunar": true},
+ {"id": "q12", "question": "датчики дыма для базы на Марсе", "relevant": ["inv_psi101_samer"], "lunar": true}
+]
