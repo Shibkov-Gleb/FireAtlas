@@ -1,10 +1,11 @@
 import { Route, Routes } from 'react-router-dom';
 import { Shell } from './components/Shell';
 import { Placeholder } from './pages/Placeholder';
+import { Overview } from './pages/Overview';
 
 export function App() {
   return <Routes><Route element={<Shell />}>
-    <Route index element={<Placeholder title="Обзор" />} />
+    <Route index element={<Overview />} />
     <Route path="investigations" element={<Placeholder title="Исследования" />} />
     <Route path="investigations/:id" element={<Placeholder title="Карточка исследования" />} />
     <Route path="measurements" element={<Placeholder title="Измерения" />} />
