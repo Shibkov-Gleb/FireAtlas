@@ -215,7 +215,14 @@ class Database:
             return {r["id"]: json.loads(r["body"]) for r in rows}
 
     def existing_ids(self, rev: str, etype: str, ids: list[str]) -> set[str]:
-        return set(self.get_entities(rev, etype, ids).keys())
+        if not ids:
+            return set()
+        with self.read() as conn:
+            qmarks = ",".join("?" * len(ids))
+            return {row[0] for row in conn.execute(
+                f"SELECT id FROM entities WHERE data_revision = ? AND entity_type = ? AND id IN ({qmarks})",
+                (rev, etype, *ids),
+            )}
 
     def runs_for(self, rev: str, inv_ids: list[str]) -> dict[str, list[dict]]:
         out: dict[str, list[dict]] = {i: [] for i in inv_ids}

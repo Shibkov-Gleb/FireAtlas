@@ -77,6 +77,8 @@ def main() -> int:
         if status not in ok:
             errors[kind] += 1
 
+    run_tag = uuid.uuid4().hex[:8]
+
     def user(n):
         s = Session(a.base, a.origin)
         st, ws, ms = s.call("POST", "/api/v1/workspaces", {})
@@ -94,7 +96,7 @@ def main() -> int:
             st, _, ms = s.call("GET", "/api/v1/workspaces/current")
             record("workspace_read", st, ms)
             # уникальный текст - каждый раз настоящий вызов retrieve, без кэша выдачи
-            st, _, ms = s.call("POST", "/api/v1/search", {"query": f"горение в потоке воздуха {n}-{i}", "locale": "ru",
+            st, _, ms = s.call("POST", "/api/v1/search", {"query": f"горение в потоке воздуха {run_tag}-{n}-{i}", "locale": "ru",
                                                          "data_revision": rev, "filters": {"gravity_regimes": ["microgravity"]}})
             record("search", st, ms)
             if a.analysis and i < 5:
