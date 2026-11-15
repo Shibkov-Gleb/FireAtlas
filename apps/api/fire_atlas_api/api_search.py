@@ -217,10 +217,8 @@ def load_presets(path: Path) -> list[dict]:
     return presets
 
 
-async def list_presets(request: Request):
-    rev = require_revision(request, query_param(request, "data_revision", "DataRevision"))
-    db = request.app.state.db
-    presets: list[dict] = request.app.state.presets
+def available_presets(db, presets: list[dict], rev: str) -> tuple[list[dict], list[dict]]:
+    """Пресеты, источники и материалы которых есть в ревизии, и предупреждения о скрытых."""
     src = sorted({x for p in presets for a in p["scenario"]["assumptions"] for x in a["source_ids"]})
     mats = sorted({m for p in presets for m in p["scenario"]["material_ids"]})
     have_src, have_mat = db.existing_ids(rev, "source", src), db.existing_ids(rev, "material", mats)
@@ -234,4 +232,21 @@ async def list_presets(request: Request):
             # Без источника происхождение условий не подтверждено (FR-15); PATCH такого сценария тоже вернет 422.
             warnings.append({"code": "PRESET_SOURCE_MISSING", "field": f"presets.{p['preset_id']}",
                              "message": f"Пресет «{p['label']}» скрыт: в этой версии данных нет его источника."})
+    return items, warnings
+
+
+DEFAULT_PRESET_ID = "orbital_habitat"
+
+
+def default_scenario(db, presets: list[dict], rev: str) -> dict | None:
+    """D-039: сценарий нового гостя - пресет орбитальной станции (рабочий контекст по умолчанию в продуктовом
+    видении). null, если пресет недоступен в ревизии; схема по-прежнему допускает null (D-016)."""
+    items, _ = available_presets(db, presets, rev)
+    p = next((p for p in items if p["preset_id"] == DEFAULT_PRESET_ID), None)
+    return json.loads(json.dumps(p["scenario"])) if p else None
+
+
+async def list_presets(request: Request):
+    rev = require_revision(request, query_param(request, "data_revision", "DataRevision"))
+    items, warnings = available_presets(request.app.state.db, request.app.state.presets, rev)
     return ok(request, {"items": items}, "ScenarioPresetListEnvelope", data_revision=rev, warnings=warnings)

@@ -14,6 +14,7 @@ import secrets
 
 from starlette.requests import Request
 
+from .api_search import default_scenario
 from .db import dumps, iso, plus, utcnow
 from .errors import ApiError, validation_error
 from .http import dedupe, ok, read_json
@@ -84,11 +85,12 @@ async def create_workspace(request: Request):
     token = secrets.token_urlsafe(32)
     now = utcnow()
     ws_id = "ws_" + secrets.token_hex(12)
+    state = {**EMPTY_STATE, "scenario": default_scenario(db, request.app.state.presets, active)}  # D-039
     with db.write() as conn:
         conn.execute(
             "INSERT INTO workspaces (id, session_hash, revision, data_revision, state, created_at, updated_at, expires_at) "
             "VALUES (?, ?, 1, ?, ?, ?, ?, ?)",
-            (ws_id, _hash(token), active, dumps(EMPTY_STATE), iso(now), iso(now), iso(plus(now, days=s.workspace_days))),
+            (ws_id, _hash(token), active, dumps(state), iso(now), iso(now), iso(plus(now, days=s.workspace_days))),
         )
         row = conn.execute("SELECT * FROM workspaces WHERE id = ?", (ws_id,)).fetchone()
     ws = _to_api(row)

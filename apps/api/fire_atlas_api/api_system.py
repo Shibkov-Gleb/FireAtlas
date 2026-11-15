@@ -18,6 +18,17 @@ def load_dictionaries() -> dict:
     return json.loads(DICTIONARIES_PATH.read_text(encoding="utf-8"))
 
 
+def material_dictionary(db, rev: str | None) -> list[dict]:
+    """D-040: подписи материалов ревизии (value = material_id). Других публичных источников подписей нет."""
+    if not rev:
+        return []
+    with db.read() as conn:
+        rows = conn.execute("SELECT id, body FROM entities WHERE data_revision = ? AND entity_type = 'material'",
+                            (rev,)).fetchall()
+    entries = [{"value": r["id"], "label": json.loads(r["body"])["label"]} for r in rows]
+    return sorted(entries, key=lambda e: (e["label"].casefold(), e["value"]))
+
+
 async def get_config(request: Request):
     s = request.app.state.settings
     db = request.app.state.db
@@ -46,7 +57,7 @@ async def get_config(request: Request):
             "analysis_deadline_s": s.analysis_deadline_s,
             "report_deadline_s": s.report_deadline_s,
         },
-        "dictionaries": request.app.state.dictionaries,
+        "dictionaries": {**request.app.state.dictionaries, "materials": material_dictionary(db, active)},
         "measurement_axes": axes,
         "retention": {"workspace_days": s.workspace_days, "report_hours": s.report_hours},
     }

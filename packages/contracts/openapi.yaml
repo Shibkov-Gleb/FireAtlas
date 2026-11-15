@@ -2,7 +2,7 @@ openapi: 3.1.0
 jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
 info:
   title: Fire Atlas API
-  version: 1.1.0
+  version: 1.2.0
   description: |
     Нормативный контракт Fire Atlas (ТЗ v1, разделы 10-18, CT-01..CT-16).
     Владелец: Backend Engineer. Научные поля: AI 1. Ответ и применимость: AI 2.
@@ -1179,8 +1179,11 @@ components:
         dictionaries:
           type: object
           additionalProperties: false
-          required: [unit, quantity_status, scope, fuel_state, gravity_regime, geometry, flow_configuration, metric_key, outcome_category, interpretation_status, source_kind, source_availability, claim_kind, environment, celestial_body, relevance_category, retrieval_mode, cell_status, comparability_status, applicability_overall, factor_status, answer_status, answer_block_kind, exclusion_reason]
+          required: [unit, quantity_status, scope, fuel_state, gravity_regime, geometry, flow_configuration, metric_key, outcome_category, interpretation_status, source_kind, source_availability, claim_kind, environment, celestial_body, relevance_category, retrieval_mode, cell_status, comparability_status, applicability_overall, factor_status, answer_status, answer_block_kind, exclusion_reason, materials]
           properties:
+            materials:
+              $ref: '#/components/schemas/Dictionary'
+              description: 'D-040 (1.2.0): материалы активной ревизии, value = material_id, label = Material.label. Единственный публичный источник подписей материалов.'
             unit: {$ref: '#/components/schemas/Dictionary'}
             quantity_status: {$ref: '#/components/schemas/Dictionary'}
             scope: {$ref: '#/components/schemas/Dictionary'}

@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "examples"
 
 REV = "psi-20261115-r1"
-CV = "1.1.0"
+CV = "1.2.0"
 T0 = "2026-11-15T09:00:00Z"
 MMHG = 133.322387
 
@@ -412,7 +412,8 @@ CONFIG = {
     "feature_flags": {"analysis": True, "reports": True, "semantic_search": False, "video_preview": False},
     "limits": {"search_limit_max": 100, "run_limit_max": 200, "measurement_limit_max": 1000, "question_chars_max": 2000,
                "comparison_max": 3, "analysis_deadline_s": 45, "report_deadline_s": 30},
-    "dictionaries": DICTIONARIES,
+    "dictionaries": {**DICTIONARIES, "materials": sorted(({"value": m["id"], "label": m["label"]} for m in MATERIALS.values()),
+                                                       key=lambda e: e["label"])},  # D-040
     "measurement_axes": [{"x_key": "sample.initial_diameter", "y_key": "metrics.burn_duration", "investigation_ids": ["inv_psi69"]}],
     "retention": {"workspace_days": 7, "report_hours": 24},
 }
@@ -448,8 +449,8 @@ ex("getConfig", "data_not_ready", "Корпус еще не импортиров
    err("DATA_NOT_READY", "Данные еще не опубликованы. Попробуйте позже.", retryable=True, rev=None))
 
 # --- workspace ------------------------------------------------------------
-ex("createWorkspace", "created", "Новый гость", {"body": {}}, 201,
-   env(workspace(rev=1, scenario=None, selected=())), headers={"Set-Cookie": COOKIE, "ETag": '"1"'}, default=True)
+ex("createWorkspace", "created", "Новый гость: сценарий орбитальной станции по умолчанию (D-039)", {"body": {}}, 201,
+   env(workspace(rev=1, selected=())), headers={"Set-Cookie": COOKIE, "ETag": '"1"'}, default=True)  # D-039
 ex("createWorkspace", "existing_session", "Сессия уже действует - выбор не очищается", {"body": {}}, 200,
    env(workspace()), headers={"ETag": '"3"'})
 ex("getCurrentWorkspace", "ok", "Текущее пространство", {}, 200, env(workspace()), headers={"ETag": '"3"'}, default=True)
