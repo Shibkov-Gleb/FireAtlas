@@ -75,12 +75,42 @@ def _registry() -> Registry:
     return Registry().with_resource(BASE_URI, resource)
 
 
+_SCHEMA_PREFIX = "#/components/schemas/"
+
+
+def _inline(node: Any, schemas: dict, stack: tuple[str, ...]) -> Any:
+    """Подставляет $ref на components/schemas. В 2020-12 $ref рядом с другими ключами равен allOf - семантика та же.
+    Без подстановки каждая проверка тысячи раз ищет ссылки в документе контракта (bundle поиска: 180 мс против 100)."""
+    if isinstance(node, list):
+        return [_inline(x, schemas, stack) for x in node]
+    if not isinstance(node, dict):
+        return node
+    ref = node.get("$ref")
+    target = None
+    if isinstance(ref, str) and ref.startswith(_SCHEMA_PREFIX):
+        name = ref[len(_SCHEMA_PREFIX):]
+        if name in stack:
+            raise RecursionError(name)
+        target = _inline(schemas[name], schemas, stack + (name,))
+        if len(node) == 1:
+            return target
+    out = {k: _inline(v, schemas, stack) for k, v in node.items() if not (k == "$ref" and target is not None)}
+    if target is not None:
+        out["allOf"] = [*out.get("allOf", []), target]
+    return out
+
+
 @functools.lru_cache(maxsize=None)
 def validator(schema_name: str) -> Draft202012Validator:
-    if schema_name not in openapi()["components"]["schemas"]:
+    schemas = openapi()["components"]["schemas"]
+    if schema_name not in schemas:
         raise KeyError(f"unknown schema {schema_name}")
-    ref = {"$ref": f"{BASE_URI}#/components/schemas/{schema_name}"}
-    return Draft202012Validator(ref, registry=_registry(), format_checker=FormatChecker())
+    try:
+        schema = _inline(schemas[schema_name], schemas, (schema_name,))
+        return Draft202012Validator(schema, registry=_registry(), format_checker=FormatChecker())
+    except RecursionError:  # рекурсивная схема: проверка через ссылки, как раньше
+        ref = {"$ref": f"{BASE_URI}#/components/schemas/{schema_name}"}
+        return Draft202012Validator(ref, registry=_registry(), format_checker=FormatChecker())
 
 
 def _path(err) -> str:

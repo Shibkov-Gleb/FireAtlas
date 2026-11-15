@@ -77,12 +77,29 @@ class TTLCache:
                 self._d.popitem(last=False)
 
 
+_CORPUS_CACHE: dict[tuple[str, str], tuple[dict[str, dict], dict[str, list[dict]]]] = {}
+_CORPUS_LOCK = threading.Lock()
+
+
 def _corpus(db, rev: str) -> tuple[dict[str, dict], dict[str, list[dict]]]:
+    """Исследования и опыты ревизии для жестких фильтров. Опубликованная ревизия неизменяема (CT-01), поэтому
+    разбор кэшируется: раньше каждый поиск заново читал и разбирал все опыты (508 на psi-20261115-r2, ~55 мс).
+    Объекты только читаются; кэш держит не больше двух ревизий."""
+    key = (str(db.path.resolve()), rev)
+    with _CORPUS_LOCK:
+        hit = _CORPUS_CACHE.get(key)
+    if hit is not None:
+        return hit
     with db.read() as conn:
         rows = conn.execute("SELECT id, body FROM entities WHERE data_revision = ? AND entity_type = 'investigation' "
                             "ORDER BY id", (rev,)).fetchall()
     invs = {r["id"]: json.loads(r["body"]) for r in rows}
-    return invs, db.runs_for(rev, list(invs))
+    value = (invs, db.runs_for(rev, list(invs)))
+    with _CORPUS_LOCK:
+        if len(_CORPUS_CACHE) >= 2:
+            _CORPUS_CACHE.pop(next(iter(_CORPUS_CACHE)))
+        _CORPUS_CACHE[key] = value
+    return value
 
 
 async def _retrieve(request: Request, rreq: dict, invs: dict, runs_by: dict) -> dict:
@@ -101,9 +118,11 @@ async def _retrieve(request: Request, rreq: dict, invs: dict, runs_by: dict) -> 
         raise RetrievalUnavailable(repr(e)[:300])
     finally:
         request.app.state.metrics.stage("search", "retrieving", (time.perf_counter() - t0) * 1000)
-    bundle = check_retrieval(res, rreq, db)
+    # Проверка выхода модуля - CPU-работа на сотни мс: в пуле потоков, чтобы не останавливать остальные запросы.
+    bundle = await run_in_threadpool(check_retrieval, res, rreq, db)
     ev_ref = sorted({e for it in res["ranked_items"] for r in it["match_reasons"] + it["differences"] for e in r["evidence_ids"]})
-    check_ranked(res["ranked_items"], invs, runs_by, db.existing_ids(rreq["data_revision"], "evidence", ev_ref))
+    await run_in_threadpool(check_ranked, res["ranked_items"], invs, runs_by,
+                            db.existing_ids(rreq["data_revision"], "evidence", ev_ref))
     ev_by_inv: dict[str, list[str]] = {}
     for item in bundle["items"]:
         for iid in item["investigation_ids"]:
@@ -114,7 +133,7 @@ async def _retrieve(request: Request, rreq: dict, invs: dict, runs_by: dict) -> 
 async def _compute(request: Request, rev: str, body: dict, af: dict) -> dict:
     s = request.app.state.settings
     db = request.app.state.db
-    invs, runs_by = _corpus(db, rev)
+    invs, runs_by = await run_in_threadpool(_corpus, db, rev)
     mat_ids = sorted({m for i in invs.values() for m in i["material_ids"]} | set(af["material_ids"]))
     materials = db.get_entities(rev, "material", mat_ids)
     dicts = request.app.state.dictionaries
