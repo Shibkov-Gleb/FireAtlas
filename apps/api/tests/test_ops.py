@@ -48,6 +48,7 @@ def test_backup_and_restore_roundtrip(tmp_path, release_dir):
 
 def test_production_refuses_stub_analysis():
     env = {**os.environ, "FA_ENV": "production", "FA_CURSOR_SECRET": "x" * 32, "FA_FEATURE_ANALYSIS": "true",
+           "FA_RETRIEVER": "stub", "FA_REASONER": "stub", "FA_APPLICABILITY": "stub",
            "PYTHONIOENCODING": "utf-8"}  # сообщение на русском читается одинаково на любой консоли (Windows: cp1251)
     code = "import fire_atlas_api.settings as s; s.Settings.from_env()"
     r = subprocess.run([sys.executable, "-c", code], env={**env, "PYTHONPATH": str(ROOT / "apps" / "api")},

@@ -16,10 +16,17 @@
     "test": "vitest run --config apps/web/vitest.config.ts",
     "test:e2e": "playwright test",
     "contracts:generate": "openapi-typescript packages/contracts/openapi.yaml -o apps/web/src/api/schema.d.ts",
-    "format:check": "prettier --check apps/web/src apps/web/*.ts packages/contracts/openapi.yaml tests scripts playwright.config.ts package.json apps/web/package.json docs README.md",
+    "format:check": "prettier --check apps/web/src apps/web/*.ts tests/e2e tests/live scripts/*.mjs playwright*.ts package.json apps/web/package.json docs/frontend*.md docs/service*.md README.md",
     "contracts:check": "vitest run --config apps/web/vitest.config.ts apps/web/src/api/contract.test.ts",
     "build:check": "node scripts/check-build.mjs production",
-    "build:demo:check": "node scripts/check-build.mjs demo"
+    "build:demo:check": "node scripts/check-build.mjs demo",
+    "start": "node scripts/service.mjs start",
+    "stop": "node scripts/service.mjs stop",
+    "logs": "node scripts/service.mjs logs",
+    "status": "node scripts/service.mjs status",
+    "setup:env": "node scripts/service.mjs setup",
+    "test:live": "playwright test --config playwright.live.config.ts",
+    "test:restart": "node scripts/check-restart.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",

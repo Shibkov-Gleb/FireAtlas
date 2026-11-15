@@ -19,3 +19,5 @@ test-results/
 coverage/
 .sites-runtime/
 *.tsbuildinfo
+work-*.log
+var-*.log
