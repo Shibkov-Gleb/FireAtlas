@@ -1,5 +1,7 @@
 # Статус задач бэкенда
 
+> Дополнение интеграции 15.11.2026: фронтенд подключён к API 1.2; Docker-сервис и серверный PDF проверены. Актуальные общие результаты: [service-acceptance.md](service-acceptance.md), запуск: [service-integration.md](service-integration.md). Таблица ниже сохранена как журнал передачи отдельных задач.
+
 Обновлено: 15.11.2026 (вечер: интеграция с модулями AI и фронтендом, `docs/handoff-integration.md`).
 
 Состояния (раздел 9): planned, in_progress, ready_for_integration, accepted, blocked.
