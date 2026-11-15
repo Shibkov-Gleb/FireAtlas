@@ -86,7 +86,7 @@ export function Ask() {
               <h2>Your question</h2>
               <Badge tone="cyan">{workspace.scenario?.name ?? 'No scenario'}</Badge>
             </div>
-            <form onSubmit={(event) => void submit(event)}>
+            <form noValidate onSubmit={(event) => void submit(event)}>
               <label className="srOnly" htmlFor="analysis-question">
                 Question for AI
               </label>

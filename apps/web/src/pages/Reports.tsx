@@ -188,7 +188,7 @@ export function Reports() {
           </div>
         </>
       ) : (
-        <form onSubmit={(event) => void submit(event)}>
+        <form noValidate onSubmit={(event) => void submit(event)}>
           <div className={s.layout}>
             <div className="stack">
               <Panel className={s.composition}>

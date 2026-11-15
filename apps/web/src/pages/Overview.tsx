@@ -131,7 +131,7 @@ export function Overview() {
           <span className={s.crossTwo}>+</span>
         </div>
       </section>
-      <form className={s.questionPanel} onSubmit={submit}>
+      <form noValidate className={s.questionPanel} onSubmit={submit}>
         <div className="spaceBetween">
           <h2 className="sectionTitle">What do you want to explore?</h2>
           <span className={s.stepLabel}>01 / DEFINE THE QUESTION</span>

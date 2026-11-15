@@ -249,7 +249,7 @@ export function Catalog() {
           </Link>
         }
       />
-      <form className={s.search} onSubmit={submit}>
+      <form noValidate className={s.search} onSubmit={submit}>
         <Search size={19} />
         <label className="srOnly" htmlFor="catalog-query">
           Research query

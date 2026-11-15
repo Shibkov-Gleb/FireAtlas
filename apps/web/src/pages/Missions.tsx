@@ -134,7 +134,7 @@ export function Missions() {
           <h2>Known scenario conditions</h2>
           <span className="tiny muted">Leave unknown fields blank</span>
         </div>
-        <form onSubmit={(event) => void submit(event)} className={s.form}>
+        <form noValidate onSubmit={(event) => void submit(event)} className={s.form}>
           <label className="field">
             Mission name
             <input
