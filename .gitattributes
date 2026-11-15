@@ -1,0 +1,7 @@
+# Пакеты данных проверяются по sha256 побайтно (CT-09): git не должен менять в них переводы строк
+# (на Windows core.autocrlf=true превращает LF в CRLF, и импорт отклоняет пакет с SHA256_MISMATCH).
+data/** -text
+# Скрипты и файлы сборки запускаются в Linux-контейнере: только LF.
+*.sh text eol=lf
+Dockerfile text eol=lf
+Makefile text eol=lf
