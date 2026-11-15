@@ -2,7 +2,8 @@ PY ?= python3
 # Модули AI 1 (packages/retrieval) и AI 2 (packages/reasoning) подключаются через FA_RETRIEVER/FA_REASONER (D-025)
 export PYTHONPATH := apps/api:packages/contracts:packages/retrieval:packages/reasoning
 
-.PHONY: check examples test mock fixture-release dev validate-release start backup loadtest
+.PHONY: check examples test mock fixture-release dev validate-release start backup loadtest e2e
+FA_BASE ?= http://127.0.0.1:8000
 
 ## Полная проверка: примеры против контракта + тесты бэкенда
 check: examples test
@@ -42,3 +43,7 @@ backup:
 ## Замер 24.3 против запущенного сервера (сервер с FA_SEARCH_PER_MINUTE=0, см. tools/loadtest.py)
 loadtest:
 	$(PY) tools/loadtest.py --base http://127.0.0.1:8000 --sessions 10 --rounds 12 --analysis
+
+## BE-14: маршрут демонстрации (ТЗ 27) против запущенного стенда с модулями AI. Без вызова модели: make e2e E2E_ARGS=--skip-ai
+e2e:
+	$(PY) tools/e2e_demo.py --base $(FA_BASE) $(E2E_ARGS)
