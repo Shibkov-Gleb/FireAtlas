@@ -79,7 +79,9 @@ def _report(cl, answer_ids=(), inv_ids=("inv_psi25", "inv_psi69"), title="Вен
 def _pdf_text(raw: bytes, tmp_path) -> str:
     p = tmp_path / "r.pdf"
     p.write_bytes(raw)
-    return subprocess.run(["pdftotext", "-layout", str(p), "-"], capture_output=True, text=True, check=True).stdout
+    # UTF-8 явно: иначе на Windows вывод читается в cp1251 и кириллица теряется
+    return subprocess.run(["pdftotext", "-enc", "UTF-8", "-layout", str(p), "-"], capture_output=True, text=True,
+                          encoding="utf-8", check=True).stdout
 
 
 def _answer(cl, sc_name="orbital", selected=("inv_psi69",)):

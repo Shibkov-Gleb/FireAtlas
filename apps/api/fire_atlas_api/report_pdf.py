@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from xml.sax.saxutils import escape
 
@@ -45,14 +46,37 @@ FIELD_LABELS = {
 
 _FONTS_READY = False
 
+# Шрифты с кириллицей: (обычный, жирный, курсив). Первым ищется набор в FA_FONT_DIR, затем системные каталоги:
+# в Docker это DejaVu (fonts-dejavu-core), на рабочих машинах Windows и macOS - Arial.
+_FONT_SETS = [
+    ("DejaVuSans.ttf", "DejaVuSans-Bold.ttf", "DejaVuSans-Oblique.ttf"),
+    ("LiberationSans-Regular.ttf", "LiberationSans-Bold.ttf", "LiberationSans-Italic.ttf"),
+    ("arial.ttf", "arialbd.ttf", "ariali.ttf"),
+    ("Arial.ttf", "Arial Bold.ttf", "Arial Italic.ttf"),
+]
+_FONT_DIRS = [Path("/usr/share/fonts/truetype/dejavu"), Path("/usr/share/fonts/dejavu"),
+              Path("/usr/share/fonts/truetype/liberation"), Path("/usr/share/fonts/liberation-sans"),
+              Path(os.environ.get("WINDIR", r"C:\Windows")) / "Fonts", Path("/Library/Fonts"),
+              Path("/System/Library/Fonts/Supplemental")]
+
+
+def find_fonts(font_dir: Path) -> tuple[Path, Path, Path]:
+    for d in [font_dir, *_FONT_DIRS]:
+        for names in _FONT_SETS:
+            paths = tuple(d / n for n in names)
+            if all(p.is_file() for p in paths):
+                return paths  # type: ignore[return-value]
+    raise FileNotFoundError(f"Нет шрифта с кириллицей: задайте FA_FONT_DIR (сейчас {font_dir})")
+
 
 def _fonts(font_dir: Path) -> None:
     global _FONTS_READY
     if _FONTS_READY:
         return
-    pdfmetrics.registerFont(TTFont("FA", str(font_dir / "DejaVuSans.ttf")))
-    pdfmetrics.registerFont(TTFont("FA-Bold", str(font_dir / "DejaVuSans-Bold.ttf")))
-    pdfmetrics.registerFont(TTFont("FA-Italic", str(font_dir / "DejaVuSans-Oblique.ttf")))
+    regular, bold, italic = find_fonts(font_dir)
+    pdfmetrics.registerFont(TTFont("FA", str(regular)))
+    pdfmetrics.registerFont(TTFont("FA-Bold", str(bold)))
+    pdfmetrics.registerFont(TTFont("FA-Italic", str(italic)))
     pdfmetrics.registerFontFamily("FA", normal="FA", bold="FA-Bold", italic="FA-Italic", boldItalic="FA-Bold")
     _FONTS_READY = True
 
