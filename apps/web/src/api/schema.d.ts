@@ -856,8 +856,11 @@ export interface components {
         SearchRequest: {
             /** @description Пустая строка допустима только при наличии хотя бы одного фильтра */
             query: string;
-            /** @constant */
-            locale: "ru";
+            /**
+             * @default en
+             * @enum {string}
+             */
+            locale: "en" | "ru";
             data_revision: components["schemas"]["DataRevision"];
             filters?: components["schemas"]["SearchFilters"];
             /** @default null */
@@ -1024,8 +1027,11 @@ export interface components {
         };
         AnalysisRequest: {
             question: string;
-            /** @constant */
-            locale: "ru";
+            /**
+             * @default en
+             * @enum {string}
+             */
+            locale: "en" | "ru";
             workspace_revision: number;
             data_revision: components["schemas"]["DataRevision"];
             selected_investigation_ids: components["schemas"]["InvestigationId"][];
@@ -1109,8 +1115,11 @@ export interface components {
             answer_ids: components["schemas"]["AnswerId"][];
             investigation_ids: components["schemas"]["InvestigationId"][];
             include_comparison: boolean;
-            /** @constant */
-            locale: "ru";
+            /**
+             * @default en
+             * @enum {string}
+             */
+            locale: "en" | "ru";
         } & ({
             answer_ids?: unknown;
         } | {
@@ -1230,8 +1239,11 @@ export interface components {
         InternalRetrievalRequest: {
             request_id: components["schemas"]["RequestId"];
             question: string;
-            /** @constant */
-            locale: "ru";
+            /**
+             * @default en
+             * @enum {string}
+             */
+            locale: "en" | "ru";
             scenario: components["schemas"]["Scenario"] | null;
             filters: components["schemas"]["AppliedFilters"];
             selected_investigation_ids: components["schemas"]["InvestigationId"][];
@@ -1303,8 +1315,11 @@ export interface components {
         InternalReasoningRequest: {
             request_id: components["schemas"]["RequestId"];
             evidence_bundle: components["schemas"]["InternalEvidenceBundle"];
-            /** @constant */
-            locale: "ru";
+            /**
+             * @default en
+             * @enum {string}
+             */
+            locale: "en" | "ru";
             output_limits: {
                 /** @constant */
                 max_blocks: 8;

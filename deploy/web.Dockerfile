@@ -5,7 +5,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/web/package.json apps/web/package.json
 RUN --mount=type=cache,id=fire-atlas-pnpm,target=/pnpm/store pnpm install --frozen-lockfile --store-dir /pnpm/store
 COPY apps/web apps/web
-COPY packages/contracts/dictionaries.ru.json packages/contracts/dictionaries.ru.json
+COPY packages/contracts/dictionaries.en.json packages/contracts/english-messages.json packages/contracts/
 COPY scripts/check-build.mjs scripts/check-build.mjs
 RUN pnpm build && pnpm build:check
 

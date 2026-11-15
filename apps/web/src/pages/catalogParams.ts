@@ -2,7 +2,7 @@ import { emptyFilters, type Filters, type Schema } from '../api/types';
 
 export const rangeKeys = [
   {
-    name: 'Кислород',
+    name: 'Oxygen',
     prefix: 'o2',
     field: 'oxygen_range',
     unit: 'fraction',
@@ -11,21 +11,21 @@ export const rangeKeys = [
     max: 100,
   },
   {
-    name: 'Давление',
+    name: 'Pressure',
     prefix: 'pressure',
     field: 'pressure_range',
     unit: 'Pa',
     factor: 0.001,
-    label: 'кПа',
+    label: 'kPa',
     max: undefined,
   },
   {
-    name: 'Скорость воздуха',
+    name: 'Airflow speed',
     prefix: 'airflow',
     field: 'airflow_range',
     unit: 'm_s',
     factor: 100,
-    label: 'см/с',
+    label: 'cm/s',
     max: undefined,
   },
 ] as const;
@@ -70,7 +70,7 @@ export function parseCatalog(
         (min !== null && max !== null && min > max) ||
         (unit === 'fraction' && ((min !== null && min > 1) || (max !== null && max > 1)))
       )
-        error = `${name}: проверьте границы диапазона.`;
+        error = `${name}: check the range boundaries.`;
       if (field === 'oxygen_range') filters.oxygen_range = { min, max, unit: 'fraction' };
       else if (field === 'pressure_range') filters.pressure_range = { min, max, unit: 'Pa' };
       else filters.airflow_range = { min, max, unit: 'm_s' };
@@ -90,11 +90,11 @@ export function parseCatalog(
     filters.has_measurements === null
   )
     filters.scopes = ['prevention', 'detection', 'suppression'];
-  if (query.length > 2000) error = 'Вопрос должен содержать не более 2000 символов.';
+  if (query.length > 2000) error = 'The question must contain no more than 2,000 characters.';
   return {
     request: {
       query,
-      locale: 'ru',
+      locale: 'en',
       data_revision: revision,
       filters,
       scenario,

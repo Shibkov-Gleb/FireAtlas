@@ -11,7 +11,7 @@ describe('API transport', () => {
           JSON.stringify({
             error: {
               code: 'WORKSPACE_CONFLICT',
-              message: 'Контекст изменился',
+              message: 'Context changed',
               retryable: false,
               details: [
                 { field: 'workspace_revision', reason: 'stale_revision', current_revision: 4 },
@@ -76,7 +76,7 @@ describe('API transport', () => {
           JSON.stringify({
             error: {
               code: 'RESOURCE_EXPIRED',
-              message: 'Срок истёк',
+              message: 'Expired',
               retryable: false,
               details: [],
             },

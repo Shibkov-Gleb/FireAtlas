@@ -77,7 +77,7 @@ export function EmptyState({
     </div>
   );
 }
-export function Loading({ children = 'Загружаем данные…' }: { children?: ReactNode }) {
+export function Loading({ children = 'Loading data…' }: { children?: ReactNode }) {
   return (
     <div className={s.loading} role="status">
       <LoaderCircle size={20} className={s.spin} />

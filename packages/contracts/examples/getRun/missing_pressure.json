@@ -1,7 +1,7 @@
 {
   "operation_id": "getRun",
   "case": "missing_pressure",
-  "description": "Неизвестное давление: null и причина (AT-05)",
+  "description": "Unknownе pressure: null и причина (AT-05)",
   "fixture": true,
   "default": false,
   "request": {
@@ -157,12 +157,12 @@
           "ev_psi25_fixture02"
         ],
         "quality_notes": [
-          "[FIXTURE] Давление не сообщено в источнике: value=null, status=not_reported. Нормальное давление не подставляется."
+          "[FIXTURE] Pressure not reported by the source: value=null, status=not_reported. Нормальное pressure не подставляется."
         ]
       },
       "meta": {
         "request_id": "req_demo01",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

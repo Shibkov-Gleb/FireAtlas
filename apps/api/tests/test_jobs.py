@@ -43,7 +43,7 @@ def test_at11_success_answer_is_valid_and_bound_to_context(guest):
     used = {e for b in ans["answer_blocks"] for e in b["evidence_ids"]}
     assert used <= {ci["evidence_id"] for ci in ans["citations"]}  # каждая ссылка блока имеет citation
     cit = next(ci for ci in ans["citations"] if ci["evidence_id"] == "ev_psi69_30cal03")
-    assert cit["label"] == "FLEX (PSI-69) - Experimental Table, версия 5, строка 30CAL03"  # строит бэкенд из реестра
+    assert cit["label"] == "FLEX (PSI-69) - Experimental Table, version 5, row 30CAL03"  # строит бэкенд из реестра
     assert ans["applicability"]["overall"] != "direct_evidence"  # заглушка A2-04 консервативна
     # ответ можно сохранить в пространстве
     rev = guest.get("/api/v1/workspaces/current").data["revision"]

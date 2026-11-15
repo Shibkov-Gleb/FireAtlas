@@ -37,22 +37,22 @@ CRITICAL_FIELDS: dict[str, tuple[str, ...]] = {
 
 # Поле сценария -> (каноническая единица, подпись, путь в conditions_coverage)
 NUMERIC_FIELDS: dict[str, tuple[str, str, str]] = {
-    "oxygen_fraction": ("fraction", "доля кислорода", "conditions.oxygen_fraction"),
-    "pressure": ("Pa", "давление", "conditions.pressure"),
-    "airflow_speed": ("m_s", "скорость потока", "conditions.airflow_speed"),
+    "oxygen_fraction": ("fraction", "oxygen fraction", "conditions.oxygen_fraction"),
+    "pressure": ("Pa", "pressure", "conditions.pressure"),
+    "airflow_speed": ("m_s", "airflow speed", "conditions.airflow_speed"),
 }
 
-TASK_LABELS = {"prevention": "предотвращение", "detection": "обнаружение", "suppression": "подавление"}
+TASK_LABELS = {"prevention": "prevention", "detection": "detection", "suppression": "suppression"}
 GRAVITY_LABELS = {
-    "normal": "земная гравитация",
-    "microgravity": "микрогравитация",
-    "partial": "частичная гравитация",
-    "simulated_partial": "имитация частичной гравитации",
-    "unknown": "режим не указан",
+    "normal": "earth gravity",
+    "microgravity": "microgravity",
+    "partial": "partial gravity",
+    "simulated_partial": "simulated partial gravity",
+    "unknown": "regime not specified",
 }
 GEOMETRY_LABELS = {
-    "film": "пленка", "sheet": "лист", "slab": "пластина", "rod": "стержень", "sphere": "сфера",
-    "droplet": "капля", "fabric": "ткань", "other": "другая", "unknown": "не указана",
+    "film": "film", "sheet": "sheet", "slab": "slab", "rod": "rod", "sphere": "sphere",
+    "droplet": "droplet", "fabric": "fabric", "other": "other", "unknown": "not specified",
 }
 PARTIAL = frozenset({"partial", "simulated_partial"})
 
@@ -65,9 +65,9 @@ def _fmt(value: float, unit: str) -> str:
     if unit == "fraction":
         return f"{value * 100:.4g} %"
     if unit == "Pa":
-        return f"{value / 1000:.4g} кПа"
+        return f"{value / 1000:.4g} kPa"
     if unit == "m_s":
-        return f"{value * 100:.4g} см/с"
+        return f"{value * 100:.4g} cm/s"
     return f"{value:.4g}"
 
 
@@ -170,19 +170,19 @@ def _check_task(scenario, investigations, runs, ev):
     scopes = sorted({s for i in investigations for s in i.get("scopes", [])})
     factors, gaps = [], []
     if not investigations:
-        factors.append(_factor("safety_task", "unknown", "Исследования не выбраны.", []))
+        factors.append(_factor("safety_task", "unknown", "No investigations selected.", []))
         return factors, gaps, False
     if task in scopes:
         factors.append(_factor("safety_task", "match",
-                               f"Направление исследований совпадает с задачей сценария: {TASK_LABELS[task]}.", []))
+                               f"The research area matches the scenario task: {TASK_LABELS[task]}.", []))
         ok = True
     else:
-        have = ", ".join(TASK_LABELS.get(s, s) for s in scopes) or "не указано"
+        have = ", ".join(TASK_LABELS.get(s, s) for s in scopes) or "not specified"
         factors.append(_factor("safety_task", "mismatch",
-                               f"Задача сценария - {TASK_LABELS[task]}, а исследования относятся к направлению: {have}. "
-                               "Их результаты не отвечают на вопрос сценария напрямую.", []))
-        gaps.append(_gap("safety_task", f"Нет исследований по направлению «{TASK_LABELS[task]}» среди выбранных.",
-                         "Выбрать исследования с нужным направлением."))
+                               f"Scenario task: {TASK_LABELS[task]}; research areas: {have}. "
+                               "Their results do not directly answer the scenario question.", []))
+        gaps.append(_gap("safety_task", f"No investigations in the area “{TASK_LABELS[task]}” among the selected studies.",
+                         "Select investigations in the required research area."))
         ok = False
 
     if task == "detection":
@@ -191,14 +191,14 @@ def _check_task(scenario, investigations, runs, ev):
                       or any(m["metric_key"] == "particle_diameter" and _is_set(m["quantity"]) for m in r.get("metrics", []))]
         if smoke_runs:
             factors.append(_factor("smoke_measurement", "match",
-                                   f"Есть измерения дыма: {len(smoke_runs)} опыт(ов).",
+                                   f"Smoke measurements are available: {len(smoke_runs)} test run(s).",
                                    ev.pick(e for r in smoke_runs for e in r["evidence_ids"])))
         else:
             factors.append(_factor("smoke_measurement", "mismatch",
-                                   "В выбранных опытах нет измерений дыма. Данные о пламени не заменяют "
-                                   "измерения дыма для оценки обнаружения.", []))
-            gaps.append(_gap("smoke_measurement", "Нет измерений дыма в выбранных опытах.",
-                             "Добавить исследования с измерениями частиц дыма (например, SAME-R)."))
+                                   "The selected test runs contain no smoke measurements. Flame data cannot replace "
+                                   "smoke measurements when assessing detection.", []))
+            gaps.append(_gap("smoke_measurement", "The selected test runs contain no smoke measurements.",
+                             "Add investigations with smoke particle measurements (such as SAME-R)."))
             ok = False
     return factors, gaps, ok
 
@@ -207,73 +207,73 @@ def _check_gravity(scenario, investigations, runs, ev):
     target = scenario["gravity_regime"]
     present = sorted({r["conditions"]["gravity_regime"] for r in runs}
                      or {g for i in investigations for g in i.get("gravity_regimes", [])})
-    have = ", ".join(GRAVITY_LABELS.get(g, g) for g in present) or "нет данных"
+    have = ", ".join(GRAVITY_LABELS.get(g, g) for g in present) or "no data"
     if target == "unknown":
-        return (_factor("gravity_regime", "unknown", "Режим гравитации сценария не указан.", []),
-                _gap("gravity_regime", "Не указан режим гравитации сценария.", "Указать среду миссии."))
+        return (_factor("gravity_regime", "unknown", "The scenario gravity regime is not specified.", []),
+                _gap("gravity_regime", "The scenario gravity regime is not specified.", "Specify the mission environment."))
     same = [r for r in runs if r["conditions"]["gravity_regime"] == target]
     if same:
         return (_factor("gravity_regime", "match",
-                        f"Есть опыты в режиме «{GRAVITY_LABELS[target]}»: {len(same)}.",
+                        f"Test runs are available in the regime “{GRAVITY_LABELS[target]}»: {len(same)}.",
                         ev.pick(e for r in same for e in r["evidence_ids"])), None)
     if target in PARTIAL:
         extra = ""
         if "simulated_partial" in present or "partial" in present:
-            extra = " Имитация частичной гравитации и частичная гравитация - разные режимы и не подменяют друг друга."
+            extra = " Simulated partial gravity and partial gravity are different regimes and are not interchangeable."
         return (_factor("gravity_regime", "not_covered",
-                        f"Целевой режим - {GRAVITY_LABELS[target]}; в выбранных опытах: {have}. "
-                        f"Перенос результатов требует обоснования.{extra}", []),
-                _gap("gravity_regime", f"Нет прямых опытов в режиме «{GRAVITY_LABELS[target]}».",
-                     "Изучить связанные исследования с явной оговоркой; сохранить пробел в отчете."))
+                        f"Target regime: {GRAVITY_LABELS[target]}; selected test runs: {have}. "
+                        f"Transferring findings requires justification.{extra}", []),
+                _gap("gravity_regime", f"No direct test runs in the regime “{GRAVITY_LABELS[target]}».",
+                     "Explore related studies with an explicit caveat; keep the evidence gap in the report."))
     return (_factor("gravity_regime", "mismatch",
-                    f"Режим сценария - {GRAVITY_LABELS.get(target, target)}; в выбранных опытах: {have}. "
-                    "Перенос результатов между режимами требует обоснования.", []),
-            _gap("gravity_regime", f"Нет опытов в режиме «{GRAVITY_LABELS.get(target, target)}».",
-                 "Сравнить с результатами в нужном режиме или сохранить пробел в отчете."))
+                    f"Scenario regime: {GRAVITY_LABELS.get(target, target)}; selected test runs: {have}. "
+                    "Transferring findings between regimes requires justification.", []),
+            _gap("gravity_regime", f"No test runs in the regime “{GRAVITY_LABELS.get(target, target)}».",
+                 "Compare with results in the target regime or keep the gap in the report."))
 
 
 def _check_material(scenario, runs, ev, critical):
     wanted = set(scenario.get("material_ids") or [])
     if not wanted:
-        gap = _gap("material_ids", "Материал сценария не выбран; без него прямое основание не заявляется.",
-                   "Выбрать материал в сценарии.") if critical else None
-        return _factor("material_ids", "unknown", "Материал не выбран.", []), gap
+        gap = _gap("material_ids", "No scenario material is selected; direct applicability is not claimed without it.",
+                   "Select a material in the scenario.") if critical else None
+        return _factor("material_ids", "unknown", "No material selected.", []), gap
     hit = [r for r in runs if r.get("material_id") in wanted]
     if hit:
         names = ", ".join(sorted({r["material_id"] for r in hit}))
         return (_factor("material_ids", "match",
-                        f"Есть опыты с выбранным материалом ({names}): {len(hit)}. Совпадение установлено по "
-                        "идентификатору материала; совпадение состава не заявляется.",
+                        f"Test runs with the selected material are available ({names}): {len(hit)}. Совпадение установлено по "
+                        "material identifier; matching composition is not claimed.",
                         ev.pick(e for r in hit for e in r["evidence_ids"])), None)
-    have = ", ".join(sorted({r["material_id"] for r in runs if r.get("material_id")})[:8]) or "не указаны"
+    have = ", ".join(sorted({r["material_id"] for r in runs if r.get("material_id")})[:8]) or "not specified"
     return (_factor("material_ids", "mismatch",
-                    f"Выбранных материалов нет в опытах. В опытах есть: {have}.", []),
-            _gap("material_ids", "Нет опытов с выбранным материалом.",
-                 "Выбрать близкий материал с явной оговоркой или сохранить пробел в отчете."))
+                    f"The selected materials are not present in the test runs. Available materials: {have}.", []),
+            _gap("material_ids", "There are no test runs with the selected material.",
+                 "Select a related material with an explicit caveat or keep the gap in the report."))
 
 
 def _check_geometry(scenario, runs, ev):
     target = scenario.get("geometry")
     if target in (None, "unknown"):
-        return _factor("geometry", "unknown", "Геометрия образца не задана.", []), None
+        return _factor("geometry", "unknown", "Sample geometry is not specified.", []), None
     hit = [r for r in runs if r["sample"]["geometry"] == target]
     if hit:
-        return (_factor("geometry", "match", f"Есть опыты с геометрией «{GEOMETRY_LABELS[target]}»: {len(hit)}.",
+        return (_factor("geometry", "match", f"Test runs with geometry “{GEOMETRY_LABELS[target]}»: {len(hit)}.",
                         ev.pick(e for r in hit for e in r["evidence_ids"])), None)
-    have = ", ".join(GEOMETRY_LABELS.get(g, g) for g in sorted({r["sample"]["geometry"] for r in runs})) or "нет данных"
+    have = ", ".join(GEOMETRY_LABELS.get(g, g) for g in sorted({r["sample"]["geometry"] for r in runs})) or "no data"
     return (_factor("geometry", "mismatch",
-                    f"Опытов с геометрией «{GEOMETRY_LABELS[target]}» нет; в опытах: {have}. "
-                    "Форма и толщина образца влияют на горение.", []),
-            _gap("geometry", f"Нет опытов с геометрией «{GEOMETRY_LABELS[target]}».", None))
+                    f"Test runs with geometry “{GEOMETRY_LABELS[target]}” are unavailable; test run geometries: {have}. "
+                    "Sample shape and thickness affect combustion.", []),
+            _gap("geometry", f"No test runs with geometry “{GEOMETRY_LABELS[target]}».", None))
 
 
 def _check_numeric(field, scenario, investigations, runs, ev, critical):
     unit, label, cov_path = NUMERIC_FIELDS[field]
     target = scenario.get(field)
     if not _is_set(target):
-        gap = _gap(field, f"В сценарии не задано условие: {label}. Без него прямое основание не заявляется.",
-                   f"Указать {label} в сценарии.") if critical else None
-        return _factor(field, "unknown", f"Условие сценария не задано: {label}.", []), gap
+        gap = _gap(field, f"Scenario condition not specified: {label}. Direct applicability is not claimed without it.",
+                   f"Specify {label} in the scenario.") if critical else None
+        return _factor(field, "unknown", f"Scenario condition not specified: {label}.", []), gap
 
     getter = (lambda r: r["conditions"].get(field))
     checked = [(r, _satisfies(getter(r), target, unit)) for r in runs]
@@ -283,27 +283,27 @@ def _check_numeric(field, scenario, investigations, runs, ev, critical):
         cov_ev = [e for i in investigations for c in i.get("conditions_coverage", [])
                   if c["field"] == cov_path for e in c.get("derivation_evidence_ids", [])]
         return (_factor(field, "unknown",
-                        f"В выбранных опытах {label} не сообщается, поэтому совпадение с {want} проверить нельзя.",
+                        f"In the selected test runs, {label} is not reported, so a match with {want} cannot be verified.",
                         ev.pick(cov_ev)),
-                _gap(field, f"В источниках выбранных исследований не сообщается: {label}.",
-                     "Найти исследование, где это условие измерено, или сохранить пробел в отчете."))
+                _gap(field, f"Not reported in the sources of the selected investigations: {label}.",
+                     "Find an investigation measuring this condition or keep the gap in the report."))
 
     matched = [r for r, ok in known if ok]
     if matched:
         return (_factor(field, "match",
-                        f"Есть опыты, где {label} = {want} в пределах точности источника: {len(matched)} из {len(known)} "
-                        "с известным значением.",
+                        f"Test runs are available where {label} = {want} within source precision: {len(matched)} of {len(known)} "
+                        "with a known value.",
                         ev.pick(_quantity_evidence(matched, getter))), None)
 
     values = [getter(r)["value"] for r, _ in known]
     nearest = min((r for r, _ in known), key=lambda r: (abs(getter(r)["value"] - target["value"]), r["id"]))
     return (_factor(field, "mismatch",
-                    f"Опытов, где {label} = {want}, нет. Наблюдаемый диапазон: {_fmt(min(values), unit)} - "
-                    f"{_fmt(max(values), unit)}; ближайшее значение {_fmt(getter(nearest)['value'], unit)}. "
-                    "Перенос результатов требует обоснования.",
+                    f"Test runs where {label} = {want}are unavailable. Observed range: {_fmt(min(values), unit)} - "
+                    f"{_fmt(max(values), unit)}; nearest value {_fmt(getter(nearest)['value'], unit)}. "
+                    "Transferring findings requires justification.",
                     ev.pick(_quantity_evidence([nearest], getter))),
-            _gap(field, f"Нет опытов при условии сценария: {label} = {want}.",
-                 "Учитывать различие условий; сохранить пробел в отчете."))
+            _gap(field, f"No test runs at the scenario condition: {label} = {want}.",
+                 "Account for different conditions; keep the gap in the report."))
 
 
 def _joint_runs(scenario, runs) -> tuple[list[dict], int]:
@@ -371,14 +371,14 @@ def assess_applicability(scenario: dict, investigations: list[dict], runs: list[
     if n_set >= 2:
         if joint_cited:
             factors.append(_factor("joint_conditions", "match",
-                                   f"Есть опыты, где все заданные условия сценария выполнены одновременно: {len(joint_cited)}.",
+                                   f"Test runs meeting all specified scenario conditions simultaneously: {len(joint_cited)}.",
                                    ev.pick(e for r in joint_cited for e in r["evidence_ids"])))
         else:
             factors.append(_factor("joint_conditions", "mismatch",
-                                   "Нет опыта, где все заданные условия сценария выполнены одновременно. Совпадение "
-                                   "условий по отдельности не доказывает наличие опыта с таким сочетанием.", []))
-            gaps.append(_gap("joint_conditions", "Нет опыта с заданным сочетанием условий.",
-                             "Ослабить одно из условий или сохранить пробел в отчете."))
+                                   "No test run meets all specified scenario conditions simultaneously. Matching "
+                                   "conditions separately does not prove that a test with their combination exists.", []))
+            gaps.append(_gap("joint_conditions", "There is no test run with the specified combination of conditions.",
+                             "Relax one condition or keep the gap in the report."))
 
     by_field = {f["field"]: f["status"] for f in factors}
     critical_ok = all(by_field.get(f) == "match" for f in critical)

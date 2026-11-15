@@ -21,6 +21,7 @@ MAX_EVIDENCE, MAX_EXCERPT_CHARS = 20, 24000
 # Russian and English query words -> canonical index terms. Outcome words stay
 # distinct: extinction (погасание) is never merged with suppression (тушение).
 SYNONYMS = {
+    "ventilat": ["airflow", "flow"], "extinguish": ["extinction"], "suppress": ["suppression"],
     "вентиляц": ["airflow", "flow"], "поток": ["airflow", "flow"], "обдув": ["airflow", "flow"],
     "скорост": ["airflow", "speed"], "ventilation": ["airflow", "flow"], "air": ["airflow"],
     "кислород": ["oxygen"], "o2": ["oxygen"], "давлен": ["pressure"],
@@ -46,10 +47,10 @@ STOP = {"и", "в", "на", "по", "для", "с", "о", "об", "при", "к�
 PARTIAL_WORDS = {"moon", "mars"}
 # Topics the corpus has no experiments on. A query about them can still find
 # related investigations, but never as a direct match.
-UNSUPPORTED = {"туман": "водяной туман", "mist": "водяной туман", "аккумулят": "аккумуляторы",
-               "батаре": "аккумуляторы", "лити": "литий", "водород": "водород", "hydrogen": "водород",
-               "металл": "горение металлов", "алюмини": "горение металлов", "скафандр": "скафандры",
-               "spacesuit": "скафандры", "sf6": "SF6"}
+UNSUPPORTED = {"туман": "water mist", "mist": "water mist", "аккумулят": "batteries",
+               "батаре": "batteries", "лити": "lithium", "hydrogen": "hydrogen", "hydrogen": "hydrogen",
+               "металл": "metal combustion", "алюмини": "metal combustion", "скафандр": "spacesuits",
+               "spacesuit": "spacesuits", "sf6": "SF6"}
 O2_RE = re.compile(r"(\d+(?:[.,]\d+)?)\s*%")
 
 
@@ -165,20 +166,20 @@ def inv_filter(inv, f):
     return None
 
 
-RU_FIELD = {"oxygen_range": "кислород", "pressure_range": "давление", "airflow_range": "скорость потока",
-            "material_ids": "материал", "has_measurements": "наличие измерений", "scopes": "задача безопасности",
-            "fuel_states": "состояние топлива", "gravity_regimes": "режим гравитации",
-            "investigation_ids": "выбранные исследования"}
+RU_FIELD = {"oxygen_range": "oxygen", "pressure_range": "pressure", "airflow_range": "airflow speed",
+            "material_ids": "material", "has_measurements": "measurement availability", "scopes": "safety task",
+            "fuel_states": "fuel state", "gravity_regimes": "gravity regime",
+            "investigation_ids": "selected investigations"}
 FILTER_PATH = {"oxygen_range": "conditions.oxygen_fraction", "pressure_range": "conditions.pressure",
                "airflow_range": "conditions.airflow_speed", "co2_range": "conditions.co2_fraction",
                "helium_range": "conditions.helium_fraction", "material_ids": "material_id", "scopes": "scopes",
                "fuel_states": "fuel_states", "gravity_regimes": "gravity_regimes", "has_measurements": "metrics",
                "investigation_ids": None}
-RU_FIELD.update({"co2_range": "доля CO2", "helium_range": "доля гелия"})
-RU_SCOPE = {"prevention": "предотвращение", "detection": "обнаружение", "suppression": "тушение"}
-COND_FIELDS = [("oxygen_range", "oxygen_fraction", "кислород"), ("pressure_range", "pressure", "давление"),
-               ("airflow_range", "airflow_speed", "скорость потока"), ("co2_range", "co2_fraction", "доля CO2"),
-               ("helium_range", "helium_fraction", "доля гелия")]
+RU_FIELD.update({"co2_range": "доля CO2", "helium_range": "helium fraction"})
+RU_SCOPE = {"prevention": "prevention", "detection": "detection", "suppression": "suppression"}
+COND_FIELDS = [("oxygen_range", "oxygen_fraction", "oxygen"), ("pressure_range", "pressure", "pressure"),
+               ("airflow_range", "airflow_speed", "airflow speed"), ("co2_range", "co2_fraction", "доля CO2"),
+               ("helium_range", "helium_fraction", "helium fraction")]
 
 
 @lru_cache(maxsize=4)
@@ -241,25 +242,25 @@ def retrieve(request, release_dir=None):
 
         reasons, differences, missing = [], [], []
         if hit:
-            reasons.append(reason("term_match", "совпадение терминов: " + ", ".join(hit[:8])))
+            reasons.append(reason("term_match", "matching terms: " + ", ".join(hit[:8])))
         if scope_ok:
-            reasons.append(reason("safety_task_match", "задача безопасности: "
+            reasons.append(reason("safety_task_match", "safety task: "
                                   + ", ".join(RU_SCOPE[s] for s in inv["scopes"]), "scopes"))
         if matching:
-            reasons.append(reason("runs_match_filters", f"{len(matching)} из {len(runs)} опытов удовлетворяют фильтрам"))
+            reasons.append(reason("runs_match_filters", f"{len(matching)} of {len(runs)} test runs match the filters"))
         if unknown_used:
             reasons.append(reason("unknown_values_included",
-                                  f"{unknown_used} опытов включены с неизвестным значением параметра (include_unknown)"))
+                                  f"{unknown_used} test runs include unknown parameter values (include_unknown)"))
         for key, field, ru in COND_FIELDS:
             unknown = sum(1 for r in runs if r["conditions"][field]["value"] is None)
             if unknown and (f.get(key) or (scenario or {}).get(field)):
                 missing.append(f"conditions.{field}")
-                differences.append(reason("field_not_reported", f"{ru}: нет значения у {unknown} из {len(runs)} опытов",
+                differences.append(reason("field_not_reported", f"{ru}: missing in {unknown} of {len(runs)} test runs",
                                           f"conditions.{field}"))
         if target_partial:
-            differences.append(reason("gravity_not_covered", "гравитация: в исследовании только "
+            differences.append(reason("gravity_not_covered", "gravity: the investigation includes only "
                                       + ", ".join(inv["gravity_regimes"])
-                                      + "; данных частичной гравитации (Луна, Марс) в корпусе нет",
+                                      + "; the corpus has no partial-gravity data for the Moon or Mars",
                                       "conditions.gravity_regime"))
 
         o2cov = next((c for c in inv["conditions_coverage"] if c["field"] == "conditions.oxygen_fraction"), None)
@@ -267,16 +268,16 @@ def retrieve(request, release_dir=None):
                   and not (o2cov["min_value"] - 1e-9 <= v <= o2cov["max_value"] + 1e-9)]
         if o2_out:
             differences.append(reason("oxygen_outside_tested_range",
-                                      f"кислород {round(o2_out[0] * 100)} % вне диапазона опытов "
+                                      f"oxygen {round(o2_out[0] * 100)} % outside the tested range "
                                       f"({round(o2cov['min_value'] * 100, 1)}–{round(o2cov['max_value'] * 100, 1)} %)",
                                       "conditions.oxygen_fraction"))
         if off_topic:
-            differences.append(reason("topic_not_in_corpus", "в корпусе нет опытов по теме: " + ", ".join(off_topic)))
+            differences.append(reason("topic_not_in_corpus", "the corpus has no test runs for this topic: " + ", ".join(off_topic)))
         if failed is not None:
             if include_related:
                 related.append({"investigation_id": inv["id"], "rank_score": score, "relevance_category": "related",
                                 "match_reasons": reasons, "differences": differences
-                                + [reason("hard_filter_failed", f"не проходит фильтр: {RU_FIELD.get(failed, failed)}",
+                                + [reason("hard_filter_failed", f"does not pass filter: {RU_FIELD.get(failed, failed)}",
                                           FILTER_PATH.get(failed))],
                                 "missing_fields": missing, "matching_run_ids": []})
             continue
@@ -292,7 +293,7 @@ def retrieve(request, release_dir=None):
     ranked = sorted(items, key=order)[:top_k] + sorted(related, key=order)
     bundle, coverage = build_bundle(data, request, ranked, qterms, target_partial, idf)
     warnings = [{"code": "SEMANTIC_SEARCH_UNAVAILABLE",
-                 "message": "Семантический поиск не используется в P0; работает лексический поиск.", "field": None}]
+                 "message": "P0 uses lexical search; semantic search is not enabled.", "field": None}]
     return deepcopy({"request_id": request.get("request_id"), "data_revision": request["data_revision"],
             "retrieval_revision": RETRIEVAL_REVISION, "mode": "lexical", "ranked_items": ranked,
             "evidence_bundle": bundle, "coverage": coverage, "warnings": warnings})
@@ -369,14 +370,14 @@ def build_bundle(data, request, ranked, qterms, target_partial, idf):
     direct_available = any(x["relevance_category"] == "direct" for x in ranked)
     reasons = []
     if target_partial:
-        reasons.append(reason("target_gravity_not_covered", "Целевой режим — частичная гравитация (Луна/Марс); "
-                              "в корпусе только микрогравитация, прямых наблюдений нет.", "conditions.gravity_regime"))
+        reasons.append(reason("target_gravity_not_covered", "The target regime is partial gravity (Moon/Mars); "
+                              "the corpus contains only microgravity tests, with no direct observations.", "conditions.gravity_regime"))
     if not direct:
-        reasons.append(reason("no_matching_investigations", "Нет исследований, удовлетворяющих жёстким фильтрам."))
+        reasons.append(reason("no_matching_investigations", "No investigations pass the hard filters."))
     off = unsupported_topics(request.get("question") or request.get("query") or "")
     if off:
-        reasons.append(reason("topic_not_in_corpus", "В корпусе нет опытов по теме: " + ", ".join(off)
-                              + "; найденные исследования только связаны с вопросом."))
+        reasons.append(reason("topic_not_in_corpus", "The corpus has no test runs for this topic: " + ", ".join(off)
+                              + "; the retrieved investigations are only related to the question."))
     missing = sorted({m for x in direct for m in x["missing_fields"]})
     coverage = {"matching_investigation_ids": inv_ids, "matching_run_ids": matching_runs, "missing_fields": missing,
                 "target_gravity_covered": not target_partial, "direct_evidence_available": direct_available,
@@ -392,7 +393,7 @@ def build_bundle(data, request, ranked, qterms, target_partial, idf):
 
 
 if __name__ == "__main__":
-    q = sys.argv[1] if len(sys.argv) > 1 else "влияние вентиляции на твердые материалы"
+    q = sys.argv[1] if len(sys.argv) > 1 else "влияние вентиляции на твердые materials"
     rev = sorted(p.parent.name for p in (ROOT / "data" / "releases").glob("*/manifest.json"))[-1]
     res = retrieve({"request_id": "cli", "question": q, "locale": "ru", "data_revision": rev,
                     "filters": {}, "scenario": None, "include_related": True, "top_k": 12})

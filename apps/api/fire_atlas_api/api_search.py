@@ -112,7 +112,7 @@ async def _retrieve(request: Request, rreq: dict, invs: dict, runs_by: dict) -> 
     except AIError:
         raise
     except TimeoutError:
-        raise RetrievalUnavailable("retrieve: превышен дедлайн поиска")
+        raise RetrievalUnavailable("retrieve: search deadline exceeded")
     except Exception as e:  # noqa: BLE001 - дефект модуля AI не должен ронять поиск
         log.exception("retriever_crashed")
         raise RetrievalUnavailable(repr(e)[:300])
@@ -140,7 +140,7 @@ async def _compute(request: Request, rev: str, body: dict, af: dict) -> dict:
     evals = {iid: evaluate(inv, runs_by[iid], af, dicts, materials) for iid, inv in invs.items()}
     query = body["query"]
     include_related = body.get("include_related", False)
-    rreq = {"request_id": "req_s" + secrets.token_hex(8), "question": query, "locale": "ru",
+    rreq = {"request_id": "req_s" + secrets.token_hex(8), "question": query, "locale": body.get("locale", "en"),
             "scenario": body.get("scenario"), "filters": af, "selected_investigation_ids": [],
             "data_revision": rev, "top_k": 20, "deadline_at": iso(plus(utcnow(), seconds=s.search_deadline_s)),
             "include_related": include_related}
@@ -152,15 +152,15 @@ async def _compute(request: Request, rev: str, body: dict, af: dict) -> dict:
                                 "request_id": request.state.request_id}, ensure_ascii=False))
         if query:
             # Без ранжирования нельзя честно ответить на текстовый запрос (FR-05): каталог и фильтры работают.
-            raise ApiError("AI_UNAVAILABLE", "Поиск по тексту временно недоступен. Работают фильтры без текста, "
-                                             "каталог и источники.", data_revision=rev)
+            raise ApiError("AI_UNAVAILABLE", "Text search is temporarily unavailable. Filters without text, the "
+                                             "catalog and sources remain available.", data_revision=rev)
         r = {"ranked": None, "mode": "curated", "ev_by_inv": {},
              "warnings": [{"code": "RETRIEVAL_UNAVAILABLE", "field": None,
-                           "message": "Ранжирование недоступно; показаны исследования, прошедшие фильтры."}]}
+                           "message": "Ranking is unavailable; showing investigations that pass the filters."}]}
     warnings = list({w["code"]: w for w in r["warnings"]}.values())
     if s.feature_semantic_search and r["mode"] != "hybrid" and all(w["code"] != "SEMANTIC_SEARCH_UNAVAILABLE" for w in warnings):
         warnings.append({"code": "SEMANTIC_SEARCH_UNAVAILABLE", "field": None,
-                         "message": "Семантический поиск недоступен; используется поиск по тексту и фильтрам."})
+                         "message": "Semantic search is unavailable; text search and filters are being used."})
     items = build_items(invs, evals, r["ranked"], r["ev_by_inv"], query, include_related, body.get("sort", "relevance"))
     return {"items": items, "mode": r["mode"], "warnings": warnings}
 
@@ -169,7 +169,7 @@ async def search(request: Request):
     s = request.app.state.settings
     wait = request.app.state.search_limiter.hit(request.client.host if request.client else "-")
     if wait is not None:
-        raise ApiError("RATE_LIMITED", "Слишком много поисковых запросов. Повторите позже.",
+        raise ApiError("RATE_LIMITED", "Too many search requests. Try again later.",
                        [{"field": None, "reason": "per_minute_limit"}], headers={"Retry-After": str(wait)})
     body = await read_json(request, "SearchRequest")
     rev = require_revision(request, body["data_revision"])
@@ -213,7 +213,7 @@ def load_presets(path: Path) -> list[dict]:
         for f in ("gravity_regime", "oxygen_fraction", "pressure", "airflow_speed"):
             if f == "gravity_regime" or sc[f] is not None:
                 if not any(a["field"] == f and a["origin"] == "preset_source" for a in sc["assumptions"]):
-                    raise RuntimeError(f"{path}: у пресета {p['preset_id']} условие {f} без происхождения (FR-15)")
+                    raise RuntimeError(f"{path}: у пресета {p['preset_id']} condition {f} без происхождения (FR-15)")
     return presets
 
 
@@ -231,7 +231,7 @@ def available_presets(db, presets: list[dict], rev: str) -> tuple[list[dict], li
         else:
             # Без источника происхождение условий не подтверждено (FR-15); PATCH такого сценария тоже вернет 422.
             warnings.append({"code": "PRESET_SOURCE_MISSING", "field": f"presets.{p['preset_id']}",
-                             "message": f"Пресет «{p['label']}» скрыт: в этой версии данных нет его источника."})
+                             "message": f"Preset “{p['label']}” is hidden because this data revision does not contain its source."})
     return items, warnings
 
 

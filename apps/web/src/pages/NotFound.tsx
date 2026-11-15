@@ -4,16 +4,16 @@ import { EmptyState, PageHeader } from '../components/ui';
 export function NotFound() {
   return (
     <>
-      <PageHeader eyebrow="FIRE ATLAS / 404" title="Страница не найдена" />
+      <PageHeader eyebrow="FIRE ATLAS / 404" title="Page not found" />
       <EmptyState
-        title="Такого раздела нет"
+        title="This section does not exist"
         action={
           <Link className="textLink" to="/">
-            <ArrowLeft size={14} /> Открыть обзор
+            <ArrowLeft size={14} /> Open overview
           </Link>
         }
       >
-        Проверьте адрес или вернитесь к исследованиям.
+        Check the URL or return to investigations.
       </EmptyState>
     </>
   );

@@ -11,10 +11,10 @@ import { ErrorState } from './ErrorState';
 import s from './JobStatus.module.css';
 
 const stageLabels: Record<string, string> = {
-  retrieving: 'Ищем основания',
-  reasoning: 'Готовим объяснение',
-  validating: 'Проверяем ссылки и числа',
-  exporting: 'Готовим PDF',
+  retrieving: 'Retrieving evidence',
+  reasoning: 'Preparing explanation',
+  validating: 'Validating citations and numbers',
+  exporting: 'Preparing PDF',
 };
 export function JobStatus({
   id,
@@ -44,19 +44,19 @@ export function JobStatus({
         void client.invalidateQueries({ queryKey: ['job', id] });
     },
   });
-  if (!job && query.isPending) return <Loading>Восстанавливаем задачу…</Loading>;
+  if (!job && query.isPending) return <Loading>Restoring job…</Loading>;
   if (!job && query.isError)
     return <ErrorState error={query.error} onRetry={() => void query.refetch()} />;
   if (!job) return null;
   const active = !isTerminal(job.state),
     deadlineReached = clock >= Date.parse(job.deadline_at);
   const stateLabels: Record<Job['state'], string> = {
-    queued: 'В очереди',
-    running: 'Выполняется',
-    succeeded: 'Готово',
-    failed: 'Не удалось завершить',
-    cancelled: 'Отменено',
-    expired: 'Истёк срок',
+    queued: 'Queued',
+    running: 'Running',
+    succeeded: 'Completed',
+    failed: 'Failed',
+    cancelled: 'Cancelled',
+    expired: 'Expired',
   };
   return (
     <Panel className={s.panel}>
@@ -71,7 +71,7 @@ export function JobStatus({
           )}
           <h2>
             {active
-              ? (stageLabels[job.stage ?? ''] ?? 'Ожидаем начала задачи')
+              ? (stageLabels[job.stage ?? ''] ?? 'Waiting for the job to start')
               : stateLabels[job.state]}
           </h2>
         </div>
@@ -80,15 +80,15 @@ export function JobStatus({
         </Badge>
       </div>
       <p className={s.context}>
-        Контекст задачи: {job.input_context.scenario_id} · ревизия пространства{' '}
+        Job context: {job.input_context.scenario_id} · workspace revision{' '}
         {job.input_context.workspace_revision}
         <br />
-        Корпус: {job.input_context.data_revision}
+        Corpus: {job.input_context.data_revision}
       </p>
       {job.input_context.workspace_revision !== workspace.revision && (
         <Notice tone="warning">
-          Задача относится к предыдущему снимку пространства. Её результат сохранит исходные
-          условия.
+          This job uses an earlier workspace snapshot. Its result will preserve the original
+          conditions.
         </Notice>
       )}
       {active && (
@@ -104,20 +104,20 @@ export function JobStatus({
             ))}
           </div>
           <div className="spaceBetween">
-            <span className="tiny muted">Дедлайн: {formatDate(job.deadline_at)}</span>
+            <span className="tiny muted">Deadline: {formatDate(job.deadline_at)}</span>
             <Button variant="ghost" busy={cancel.isPending} onClick={() => cancel.mutate()}>
-              <X size={14} /> Отменить задачу
+              <X size={14} /> Cancel job
             </Button>
           </div>
         </>
       )}
       {active && deadlineReached && (
         <Notice tone="warning">
-          Дедлайн ожидания достигнут. Проверьте состояние сервера; новый анализ автоматически не
-          запускается.
+          The waiting deadline has been reached. Check the server status; a new analysis will not
+          start automatically.
           <div style={{ marginTop: 12 }}>
             <Button variant="secondary" onClick={() => void query.refetch()}>
-              Проверить состояние
+              Check status
             </Button>
           </div>
         </Notice>
@@ -144,14 +144,14 @@ export function JobStatus({
       )}{' '}
       {job.fallback_evidence_ids.length > 0 && (
         <div className={s.fallback}>
-          <h3>Найденные материалы остаются доступны</h3>
+          <h3>Retrieved materials remain available</h3>
           <p>
-            Непроверенный ответ не опубликован. Откройте основания для самостоятельного изучения.
+            An unverified answer has not been published. Open the evidence to explore it yourself.
           </p>
           <div className="inline">
             {job.fallback_evidence_ids.map((id, index) => (
               <Button key={id} variant="secondary" onClick={() => onEvidence?.(id)}>
-                Источник {index + 1}
+                Source {index + 1}
               </Button>
             ))}
           </div>
@@ -159,11 +159,11 @@ export function JobStatus({
       )}
       {!active && job.state !== 'succeeded' && onNewAction && (
         <Button variant="secondary" onClick={onNewAction}>
-          Вернуться к новому действию
+          Return to a new action
         </Button>
       )}
       <details className={s.details}>
-        <summary>Детали задачи</summary>
+        <summary>Job details</summary>
         <code className="wordBreak">{job.id}</code>
         <br />
         <span>{query.data?.meta.request_id}</span>

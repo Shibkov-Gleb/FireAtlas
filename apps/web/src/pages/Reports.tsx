@@ -22,7 +22,7 @@ export function Reports() {
   const [title, setTitle] = useState(
     params.get('title') ??
       action.pending?.body.title ??
-      'Исследования горения: источники и ограничения',
+      'Combustion research: sources and limitations',
   );
   const [selectedInv, setSelectedInv] = useState(workspace.saved_investigation_ids);
   const [selectedAnswers, setSelectedAnswers] = useState(workspace.saved_answer_ids);
@@ -88,11 +88,11 @@ export function Reports() {
   async function submit(event: FormEvent) {
     event.preventDefault();
     if (title.trim().length < 3 || title.length > 120) {
-      setValidation('Название должно содержать от 3 до 120 символов.');
+      setValidation('The title must contain 3 to 120 characters.');
       return;
     }
     if (!selectedInv.length && !selectedAnswers.length) {
-      setValidation('Выберите хотя бы одно исследование или сохранённый ответ.');
+      setValidation('Select at least one investigation or saved answer.');
       return;
     }
     setValidation('');
@@ -102,7 +102,7 @@ export function Reports() {
       answer_ids: selectedAnswers,
       investigation_ids: selectedInv,
       include_comparison: includeComparison,
-      locale: 'ru',
+      locale: 'en',
     });
     if (job) accepted(job.id, title.trim());
   }
@@ -128,9 +128,9 @@ export function Reports() {
   return (
     <>
       <PageHeader
-        eyebrow="ОТЧЁТЫ / СОХРАНЁННАЯ АРГУМЕНТАЦИЯ"
-        title="Исследовательский отчёт"
-        description="Сохраните выбранные исследования, ответы, условия и ограничения. Каждый ответ остаётся связан со своим исходным контекстом."
+        eyebrow="REPORTS / SAVED EVIDENCE"
+        title="Research report"
+        description="Save selected investigations, answers, conditions and limitations. Each answer retains its original context."
         action={
           <Badge tone="cyan">
             <FileText size={12} /> PDF
@@ -139,14 +139,14 @@ export function Reports() {
       />
       {!config.feature_flags.reports ? (
         <Notice tone="warning">
-          Экспорт временно недоступен. Сохранённые материалы остаются в рабочем пространстве.
+          Export is temporarily unavailable. Saved materials remain in your workspace.
         </Notice>
       ) : jobId ? (
         <>
           <JobStatus id={jobId} query={jobQuery} onNewAction={newReport} />
           {reportId &&
             (reportQuery.isPending ? (
-              <Loading>Открываем сведения об отчёте…</Loading>
+              <Loading>Opening report details…</Loading>
             ) : reportQuery.isError ? (
               <ErrorState error={reportQuery.error} onRetry={() => void reportQuery.refetch()} />
             ) : (
@@ -158,22 +158,22 @@ export function Reports() {
                   <div>
                     <Badge tone={reportQuery.data.state === 'ready' ? 'teal' : 'orange'}>
                       {reportQuery.data.state === 'ready'
-                        ? 'Готов к скачиванию'
+                        ? 'Ready to download'
                         : reportQuery.data.state}
                     </Badge>
                     <h2>{reportQuery.data.title}</h2>
                     <p>
-                      Снимок пространства: {reportQuery.data.source_workspace_revision} ·{' '}
+                      Workspace snapshot: {reportQuery.data.source_workspace_revision} ·{' '}
                       {reportQuery.data.data_revision}
                     </p>
-                    <p>Доступен до {formatDate(reportQuery.data.expires_at)}</p>
+                    <p>Available until {formatDate(reportQuery.data.expires_at)}</p>
                   </div>
                   <Button
                     busy={downloading}
                     disabled={reportQuery.data.state !== 'ready' || !reportQuery.data.download_path}
                     onClick={() => void download()}
                   >
-                    <Download size={15} /> Скачать PDF
+                    <Download size={15} /> Download PDF
                   </Button>
                 </Panel>
               )
@@ -183,18 +183,18 @@ export function Reports() {
           )}
           <div style={{ marginTop: 24 }}>
             <Button variant="secondary" onClick={newReport}>
-              Подготовить другой отчёт
+              Prepare another report
             </Button>
           </div>
         </>
       ) : (
-        <form onSubmit={(event) => void submit(event)}>
+        <form noValidate onSubmit={(event) => void submit(event)}>
           <div className={s.layout}>
             <div className="stack">
               <Panel className={s.composition}>
-                <h2>Состав отчёта</h2>
+                <h2>Report contents</h2>
                 <label className="field">
-                  Название отчёта
+                  Report title
                   <input
                     value={title}
                     onChange={(e) => {
@@ -205,7 +205,7 @@ export function Reports() {
                     maxLength={120}
                   />
                 </label>
-                <h3>Сохранённые исследования</h3>
+                <h3>Saved investigations</h3>
                 {workspace.saved_investigation_ids.length ? (
                   workspace.saved_investigation_ids.map((id) => (
                     <label className={s.savedItem} key={id}>
@@ -227,11 +227,11 @@ export function Reports() {
                     </label>
                   ))
                 ) : (
-                  <p className="tiny muted">Пока нет сохранённых исследований.</p>
+                  <p className="tiny muted">No saved investigations yet.</p>
                 )}
                 <details className={s.add}>
                   <summary>
-                    <Plus size={12} /> Добавить исследования
+                    <Plus size={12} /> Add investigations
                   </summary>
                   {options.isPending ? (
                     <Loading />
@@ -251,7 +251,7 @@ export function Reports() {
                     ))
                   )}
                 </details>
-                <h3>Сохранённые ответы</h3>
+                <h3>Saved answers</h3>
                 {answerQueries.some((query) => query.isPending) && <Loading />}
                 {answerQueries.map((query, index) =>
                   query.isError ? (
@@ -279,17 +279,17 @@ export function Reports() {
                       <span>
                         <strong>{answer.question}</strong>
                         <small>
-                          {answer.scenario_snapshot?.name ?? 'Без сценария'} ·{' '}
+                          {answer.scenario_snapshot?.name ?? 'No scenario'} ·{' '}
                           {formatDate(answer.created_at)}
                           <br />
-                          {answer.data_revision} · снимок {answer.workspace_revision}
+                          {answer.data_revision} · snapshot {answer.workspace_revision}
                         </small>
                       </span>
                     </label>
                   ))
                 ) : (
                   <p className="tiny muted">
-                    Сохраните ответ на экране «Спросить AI», чтобы включить его в отчёт.
+                    Save an answer on the Ask AI screen to include it in your report.
                   </p>
                 )}
                 <div className="divider" />
@@ -300,32 +300,32 @@ export function Reports() {
                     disabled={selectedInv.length < 2 || selectedInv.length > 3}
                     onChange={(e) => setIncludeComparison(e.target.checked)}
                   />
-                  Включить сравнение выбранных исследований
+                  Include a comparison of selected investigations
                 </label>
                 <p className="tiny muted" style={{ marginTop: 9 }}>
-                  Для сравнения выберите два или три исследования.
+                  Select two or three investigations for comparison.
                 </p>
               </Panel>
               <Notice>
-                Гостевое пространство хранится {config.retention.workspace_days} суток. Готовый
-                отчёт доступен {config.retention.report_hours} часа. Повтор скачивания не запускает
-                AI.
+                Your guest workspace is retained for {config.retention.workspace_days} days. A
+                completed report is available for {config.retention.report_hours} hours. Downloading
+                again does not run AI.
               </Notice>
             </div>
             <Panel className={s.preview}>
-              <span className={s.previewLabel}>ПРЕДПРОСМОТР СОСТАВА</span>
+              <span className={s.previewLabel}>CONTENTS PREVIEW</span>
               <div className={s.document}>
                 <div className={s.documentBrand}>
                   FIRE ATLAS <span>RESEARCH BRIEF</span>
                 </div>
-                <h2>{title || 'Название отчёта'}</h2>
+                <h2>{title || 'Report title'}</h2>
                 <p className={s.context}>
-                  Текущая миссия: {workspace.scenario?.name ?? 'Без сценария'}
+                  Current mission: {workspace.scenario?.name ?? 'No scenario'}
                   <br />
-                  Корпус: {workspace.data_revision}
+                  Corpus: {workspace.data_revision}
                 </p>
                 <div className={s.documentDivider} />
-                <h3>Исследования</h3>
+                <h3>Investigations</h3>
                 {selectedInv.length ? (
                   <ul>
                     {selectedInv.map((id) => (
@@ -333,31 +333,28 @@ export function Reports() {
                     ))}
                   </ul>
                 ) : (
-                  <p>Исследования не выбраны.</p>
+                  <p>No investigations selected.</p>
                 )}
-                <h3>Ответы и их контексты</h3>
+                <h3>Answers and their contexts</h3>
                 {answers
                   .filter((answer) => selectedAnswers.includes(answer.id))
                   .map((answer) => (
                     <div className={s.answerPreview} key={answer.id}>
-                      <strong>{answer.scenario_snapshot?.name ?? 'Без сценария'}</strong>
+                      <strong>{answer.scenario_snapshot?.name ?? 'No scenario'}</strong>
                       <p>{answer.question}</p>
                     </div>
                   ))}
-                {!selectedAnswers.length && <p>Ответы не выбраны.</p>}
-                <h3>Источники и ограничения</h3>
-                <p>
-                  Добавляются с сохранёнными материалами. Разные контексты остаются отдельными
-                  разделами.
-                </p>
-                {includeComparison && <Badge tone="cyan">Сравнение включено</Badge>}
+                {!selectedAnswers.length && <p>No answers selected.</p>}
+                <h3>Sources and limitations</h3>
+                <p>Included with saved materials. Different contexts remain separate sections.</p>
+                {includeComparison && <Badge tone="cyan">Comparison included</Badge>}
               </div>
             </Panel>
           </div>
           {contexts.size > 1 && (
             <Notice tone="warning">
-              Выбраны ответы из нескольких контекстов. Они будут включены отдельными разделами, без
-              общего вывода.
+              Answers from several contexts are selected. They will appear in separate sections
+              without a combined conclusion.
             </Notice>
           )}
           {validation && (
@@ -368,7 +365,8 @@ export function Reports() {
           {Boolean(action.error) && <ErrorState error={action.error} />}{' '}
           {action.pending && (
             <Notice tone="warning">
-              Запрос экспорта не подтверждён. Повтор сохраняет исходный состав и тот же ключ.
+              The export request is unconfirmed. A retry preserves the original contents and the
+              same key.
               <div className="inline" style={{ marginTop: 12 }}>
                 <Button
                   variant="secondary"
@@ -381,16 +379,16 @@ export function Reports() {
                     });
                   }}
                 >
-                  Повторить тот же экспорт
+                  Retry the same export
                 </Button>
                 <Button variant="ghost" onClick={newReport}>
-                  Явно начать новый экспорт
+                  Start a new export explicitly
                 </Button>
               </div>
             </Notice>
           )}
           <div className={s.export}>
-            <span>Экспорт использует сохранённые ответы и фиксирует снимок пространства.</span>
+            <span>Export uses saved answers and captures a workspace snapshot.</span>
             <Button
               type="submit"
               busy={action.submitting}
@@ -400,15 +398,16 @@ export function Reports() {
                 answerQueries.some((q) => q.isPending || q.isError)
               }
             >
-              <FileText size={15} /> Подготовить PDF <ArrowRight size={14} />
+              <FileText size={15} /> Prepare PDF <ArrowRight size={14} />
             </Button>
           </div>
         </form>
       )}
       {IS_DEMO && (
         <Notice tone="warning">
-          <strong>Демонстрационный экспорт.</strong> Скачивается маркированный PDF-пример. Он не
-          отражает текущий состав; сборка отчёта по снимку выполняется будущим сервером.
+          <strong>Demo export.</strong> A clearly labeled sample PDF is downloaded. It does not
+          reflect the current selection; a real report is generated from a workspace snapshot by the
+          server.
         </Notice>
       )}
     </>

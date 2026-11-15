@@ -61,11 +61,11 @@ describe('the same contract governs API fixtures and generated client types', ()
     expect(
       validator('ReportRequest')({
         workspace_revision: 1,
-        title: 'Отчёт',
+        title: 'Report',
         answer_ids: [],
         investigation_ids: [],
         include_comparison: false,
-        locale: 'ru',
+        locale: 'en',
       }),
     ).toBe(false);
   });

@@ -131,14 +131,14 @@ def _validate_refs(request: Request, ws: dict, patch: dict) -> None:
         problems += [{"field": "scenario.assumptions.source_ids", "reason": f"not_found_in_revision:{x}"}
                      for x in src_ids if x not in known_src]
     if problems:
-        raise validation_error(problems, "Изменение ссылается на объекты, которых нет в данных пространства.")
+        raise validation_error(problems, "The update references objects that are not in the workspace data.")
 
 
 async def patch_workspace(request: Request):
     if_match = request.headers.get("if-match")
     ws = session_workspace(request)
     if if_match is None:
-        raise validation_error([{"field": "If-Match", "reason": "required"}], "Нужен заголовок If-Match с ревизией пространства.")
+        raise validation_error([{"field": "If-Match", "reason": "required"}], "An If-Match header with the workspace revision is required.")
     m = ETAG_RE.match(if_match.strip())
     if not m:
         raise validation_error([{"field": "If-Match", "reason": "invalid_format"}])

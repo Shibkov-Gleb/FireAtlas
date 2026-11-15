@@ -16,13 +16,13 @@
     "body": {
       "error": {
         "code": "SESSION_REQUIRED",
-        "message": "Сессия не найдена. Создайте новое гостевое пространство.",
+        "message": "Сессия не найдена. Создайте новое guest workspace.",
         "details": [],
         "retryable": false
       },
       "meta": {
         "request_id": "req_demo02",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": null,
         "warnings": []
       }

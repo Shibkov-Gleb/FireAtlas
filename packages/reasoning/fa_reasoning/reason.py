@@ -43,22 +43,22 @@ KINDS = ("summary", "observation", "synthesis", "limitation")
 # Model: (messages, json_schema, timeout_s) -> (разобранный JSON, {"model", "model_version", ...})
 Model = Callable[[list[dict], dict, float], tuple[dict, dict]]
 
-LIM_PARTIAL = ("Прямых данных частичной гравитации в корпусе нет: результаты микрогравитации переносятся на Луну "
-               "или Марс только с обоснованием.")
-LIM_NO_SAFETY = "Отсутствие данных не означает безопасность."
-LIM_DISRUPTION = "Disruption (разрушение капли) и догорание - не погасание пламени."
-LIM_REJECTED = "Часть утверждений не подтвердилась доказательствами при проверке и не показана."
-LIM_NOT_ADVICE = "Ответ объясняет результаты исследований и не является оценкой безопасности или инструкцией."
-BLOCK_INSUFFICIENT = "Прямых доказательств для ответа на этот вопрос в корпусе недостаточно."
+LIM_PARTIAL = ("The corpus contains no direct partial-gravity data: transferring microgravity findings to the Moon "
+               "or Mars requires justification.")
+LIM_NO_SAFETY = "Missing data do not establish safety."
+LIM_DISRUPTION = "Droplet disruption and burn to completion are not flame extinction."
+LIM_REJECTED = "Some statements were not supported during evidence validation and are not shown."
+LIM_NOT_ADVICE = "This answer explains research findings and is not a safety assessment or operational instruction."
+BLOCK_INSUFFICIENT = "The corpus does not contain enough direct evidence to answer this question."
 
 FOLLOW_UPS = [
-    ("material", "Какой материал и какая форма образца рассматриваются?"),
-    ("oxygen", "Какие доля кислорода и давление атмосферы рассматриваются?"),
-    ("pressure", "Какие доля кислорода и давление атмосферы рассматриваются?"),
-    ("airflow", "Какая скорость потока воздуха рассматривается?"),
+    ("material", "Which material and sample geometry are being considered?"),
+    ("oxygen", "Which oxygen fraction and atmospheric pressure are being considered?"),
+    ("pressure", "Which oxygen fraction and atmospheric pressure are being considered?"),
+    ("airflow", "Which airflow speed is being considered?"),
 ]
-FOLLOW_UP_PARTIAL = "Показать связанные результаты микрогравитации с явной оговоркой о переносе на частичную гравитацию?"
-FOLLOW_UP_DEFAULT = "Уточните задачу (предотвращение, обнаружение или подавление), материал и условия атмосферы."
+FOLLOW_UP_PARTIAL = "Show related microgravity findings with an explicit caveat about transfer to partial gravity?"
+FOLLOW_UP_DEFAULT = "Specify the task (prevention, detection or suppression), material and atmosphere conditions."
 
 
 # -----------------------------------------------------------------------------
@@ -84,10 +84,10 @@ def reason(req: dict, *, model: Model | None = None, config: LLMConfig | None = 
     started = time.perf_counter()
     try:
         draft, meta = _ask(model, messages, deadline, clock)
-        blocks, rejections = _check_draft(draft, ctx)
+        blocks, rejections = _check_draft(draft, ctx, english_only=req.get("locale") == "en")
         problems = None
     except ModelOutputError as e:
-        draft, meta, blocks, rejections, problems = None, None, [], [], [f"Неверный формат ответа: {e}"]
+        draft, meta, blocks, rejections, problems = None, None, [], [], [f"Invalid response format: {e}"]
 
     first_call_s = time.perf_counter() - started
     need_repair = problems is not None or any(r["block_id"] is None or r["block_id"].startswith("blk_") for r in rejections)
@@ -98,15 +98,15 @@ def reason(req: dict, *, model: Model | None = None, config: LLMConfig | None = 
         try:
             draft2, meta2 = _ask(model, messages + [{"role": "assistant", "content": json.dumps(draft or {}, ensure_ascii=False)},
                                                    repair_message(fix)], deadline, clock)
-            blocks2, rejections2 = _check_draft(draft2, ctx)
+            blocks2, rejections2 = _check_draft(draft2, ctx, english_only=req.get("locale") == "en")
             if draft is None or _score(blocks2, rejections2) >= _score(blocks, rejections):
                 draft, meta, blocks = draft2, meta2, blocks2
                 rejections = rejections + [dict(r, rule="repair:" + r["rule"]) for r in rejections2]
         except ModelOutputError as e:
             if draft is None:
-                raise ContractViolation(f"модель дважды вернула неверный формат: {e}") from e
+                raise ContractViolation(f"the model returned an invalid format twice: {e}") from e
     elif draft is None:
-        raise ContractViolation(f"модель вернула неверный формат: {problems[0]}")
+        raise ContractViolation(f"the model returned an invalid format: {problems[0]}")
 
     draft = dict(draft, blocks=blocks)
     return _finish(ctx, limits, draft, rejections, meta=meta, t0=t0, checked=True)
@@ -118,7 +118,7 @@ def _default_model(ctx: Context, limits: dict, cfg: LLMConfig) -> Model:
             return offline_compose(ctx, limits), {"model": "offline-claims", "model_version": REASONING_REVISION}
         return offline
     if cfg.provider == "none":
-        raise ProviderError("модель не настроена: задайте OPENAI_API_KEY или FA_LLM_PROVIDER")
+        raise ProviderError("No model configured: set OPENAI_API_KEY or FA_LLM_PROVIDER")
     return ChatModel(cfg)
 
 
@@ -148,7 +148,7 @@ def _parse_draft(raw) -> dict:
         raise ModelOutputError("ответ не объект")
     status = raw.get("status")
     if status not in STATUSES:
-        raise ModelOutputError(f"неизвестный status {status!r}")
+        raise ModelOutputError(f"unknown status {status!r}")
     blocks = raw.get("blocks")
     if not isinstance(blocks, list):
         raise ModelOutputError("нет списка blocks")
@@ -158,15 +158,15 @@ def _parse_draft(raw) -> dict:
             raise ModelOutputError("блок неверной структуры")
         ev, facts = b.get("evidence_ids", []), b.get("fact_ids", [])
         if not isinstance(ev, list) or not all(isinstance(x, str) for x in ev):
-            raise ModelOutputError("evidence_ids не список строк")
+            raise ModelOutputError("evidence_ids is not a list of strings")
         if not isinstance(facts, list) or not all(isinstance(x, str) for x in facts):
-            raise ModelOutputError("fact_ids не список строк")
+            raise ModelOutputError("fact_ids is not a list of strings")
         out_blocks.append({"kind": b["kind"], "text": b["text"], "evidence_ids": ev, "fact_ids": facts})
     lists = {}
     for k in ("limitations", "follow_up_questions"):
         v = raw.get(k, [])
         if not isinstance(v, list) or not all(isinstance(x, str) for x in v):
-            raise ModelOutputError(f"{k} не список строк")
+            raise ModelOutputError(f"{k} is not a list of strings")
         lists[k] = v
     return {"status": status, "blocks": out_blocks, **lists}
 
@@ -179,13 +179,23 @@ def _clean(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
-def _check_draft(draft: dict, ctx: Context) -> tuple[list[dict], list[dict]]:
+def _check_draft(draft: dict, ctx: Context, *, english_only: bool = False) -> tuple[list[dict], list[dict]]:
     """Собирает блоки контракта из черновика модели и отбрасывает непроверенные."""
     blocks, rejections = [], []
+    if english_only:
+        for field in ("limitations", "follow_up_questions"):
+            if any(re.search(r"[\u0400-\u04ff]", text) for text in draft[field]):
+                rejections.append({"rule": "language.english_only", "block_id": None,
+                                   "reason": "All answer text must be in English."})
+                draft[field] = [text for text in draft[field] if not re.search(r"[\u0400-\u04ff]", text)]
     for n, b in enumerate(draft["blocks"], start=1):
         bid = f"blk_{n}"
         text = _clean(b["text"])[:1500]
         if not text:
+            continue
+        if english_only and re.search(r"[\u0400-\u04ff]", text):
+            rejections.append({"rule": "language.english_only", "block_id": bid,
+                               "reason": "Answer text must be in English."})
             continue
         model_ev = list(dict.fromkeys(e.strip() for e in b["evidence_ids"] if e.strip()))
         fact_ev: list[str] = []
@@ -205,11 +215,11 @@ def _check_draft(draft: dict, ctx: Context) -> tuple[list[dict], list[dict]]:
         block = {"id": bid, "kind": b["kind"], "text": text, "evidence_ids": ev, "quantities": quantities}
         rej = validate.check_block(block, ctx, answered=draft["status"] == "answered")
         if bad_facts:
-            rej.append({"rule": "references.unknown_fact", "block_id": bid, "reason": f"Неизвестные факты: {', '.join(bad_facts[:5])}."})
+            rej.append({"rule": "references.unknown_fact", "block_id": bid, "reason": f"Unknown facts: {', '.join(bad_facts[:5])}."})
         if rej:
             for r in rej:
-                if "Текст:" not in r["reason"]:
-                    r["reason"] = (r["reason"] + f" Текст: «{text[:160]}».")[:500]
+                if "Text:" not in r["reason"]:
+                    r["reason"] = (r["reason"] + f" Text: «{text[:160]}».")[:500]
             rejections += rej
             continue
         blocks.append(block)
@@ -281,7 +291,7 @@ def _fit_limits(blocks: list[dict], limits: dict, rejections: list[dict]) -> lis
     while sum(len(b["text"]) for b in out) > limits["max_total_chars"] and len(out) > 1:
         drop = next((b for b in reversed(out) if b["kind"] in ("observation", "synthesis")), out[-1])
         out.remove(drop)
-        rejections.append({"rule": "limits.total_chars", "block_id": drop["id"], "reason": "Превышен общий объем ответа."})
+        rejections.append({"rule": "limits.total_chars", "block_id": drop["id"], "reason": "The total answer length limit was exceeded."})
     return out
 
 
@@ -298,7 +308,7 @@ def _cap_evidence(blocks: list[dict], rejections: list[dict]) -> list[dict]:
                     used.append(e)
         quantities = [q for q in b["quantities"] if all(e in used for e in q["evidence_ids"])]
         if b["kind"] in validate.SUBSTANTIVE and b["evidence_ids"] and not keep:
-            rejections.append({"rule": "limits.citations", "block_id": b["id"], "reason": "Превышен лимит ссылок ответа."})
+            rejections.append({"rule": "limits.citations", "block_id": b["id"], "reason": "The answer citation limit was exceeded."})
             continue
         out.append(dict(b, evidence_ids=keep, quantities=quantities))
     return out
@@ -358,7 +368,7 @@ def _citations(ctx: Context, used_ev: list[str]) -> list[dict]:
         if not item:
             continue
         src, loc = item["source_metadata"], item["evidence"]["locator"]
-        where = loc.get("row_key") or (f"стр. {loc['page']}" if loc.get("page") else None) or loc.get("section")
+        where = loc.get("row_key") or (f"p. {loc['page']}" if loc.get("page") else None) or loc.get("section")
         label = f"{src['title']}, {where}" if where else src["title"]
         out.append({"evidence_id": e, "source_id": item["evidence"]["source_id"], "label": label[:300], "locator": loc})
     return out[:MAX_CITATIONS]

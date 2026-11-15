@@ -18,10 +18,10 @@ import { QuantityValue, RunPanel } from '../components/RunPanel';
 import s from './Investigation.module.css';
 
 const tabs = [
-  ['overview', 'Обзор'],
-  ['runs', 'Испытания'],
-  ['materials', 'Материалы и файлы'],
-  ['publications', 'Публикации'],
+  ['overview', 'Overview'],
+  ['runs', 'Test runs'],
+  ['materials', 'Materials and files'],
+  ['publications', 'Publications'],
 ] as const;
 export function InvestigationPage() {
   const { id = '' } = useParams();
@@ -68,11 +68,11 @@ export function InvestigationPage() {
   return (
     <>
       <Link className="textLink" to="/investigations">
-        <ArrowLeft size={13} /> К исследованиям
+        <ArrowLeft size={13} /> Back to investigations
       </Link>
       <div className={s.heading}>
         <PageHeader
-          eyebrow={`ИССЛЕДОВАНИЕ / ${inv.psi_id}`}
+          eyebrow={`INVESTIGATION / ${inv.psi_id}`}
           title={inv.acronym}
           description={inv.title}
           action={
@@ -84,7 +84,7 @@ export function InvestigationPage() {
                 onClick={() => void toggleSaved(id)}
               >
                 <Bookmark size={15} fill={saved ? 'currentColor' : 'none'} />
-                {saved ? 'Сохранено' : 'Сохранить'}
+                {saved ? 'Saved' : 'Save'}
               </Button>
               <Button
                 variant="secondary"
@@ -93,7 +93,7 @@ export function InvestigationPage() {
                 onClick={() => void toggleComparison(id)}
               >
                 {compared ? <Check size={15} /> : <GitCompareArrows size={15} />}{' '}
-                {compared ? 'В сравнении' : 'В сравнение'}
+                {compared ? 'In comparison' : 'Add to comparison'}
               </Button>
             </div>
           }
@@ -102,11 +102,11 @@ export function InvestigationPage() {
       <div className={s.meta}>
         <Badge tone="cyan">NASA PSI · {inv.psi_id}</Badge>
         <Badge>
-          {inv.gravity_regimes.includes('microgravity') ? 'Микрогравитация' : 'Другой режим'}
+          {inv.gravity_regimes.includes('microgravity') ? 'Microgravity' : 'Other regime'}
         </Badge>
-        <span>Записей в наборе: {run_summary.total}</span>
+        <span>Records in the dataset: {run_summary.total}</span>
       </div>
-      <div role="tablist" aria-label="Разделы исследования" className={s.tabs}>
+      <div role="tablist" aria-label="Investigation sections" className={s.tabs}>
         {tabs.map(([key, label], index) => (
           <button
             key={key}
@@ -132,30 +132,30 @@ export function InvestigationPage() {
           <>
             <div className={s.overviewGrid}>
               <Panel className={s.section}>
-                <h2>Задачи исследования</h2>
+                <h2>Research objectives</h2>
                 <ul className={s.objectives}>
                   {inv.objectives.map((text) => (
                     <li key={text}>{text}</li>
                   ))}
                 </ul>
                 <div className="divider" />
-                <h2>Установка и методика</h2>
+                <h2>Setup and methods</h2>
                 <p>{inv.setup_summary}</p>
               </Panel>
               <Panel className={s.section}>
-                <h2>Условия имеют значение</h2>
+                <h2>Conditions matter</h2>
                 <p>
-                  Материал, геометрия, состав атмосферы, давление и направление потока
-                  рассматриваются вместе.
+                  Material, geometry, atmosphere, pressure and flow direction are considered
+                  together.
                 </p>
-                <Notice>Сходство задачи не означает сопоставимость численных результатов.</Notice>
+                <Notice>Similar research goals do not make numerical results comparable.</Notice>
                 <Link className="textLink" to="/compare">
-                  Сопоставить методики <ArrowRight size={13} />
+                  Compare methods <ArrowRight size={13} />
                 </Link>
               </Panel>
             </div>
             <section className={s.claims}>
-              <h2 className="sectionTitle">Выводы и вопросы для проверки</h2>
+              <h2 className="sectionTitle">Findings and questions to investigate</h2>
               {claims.map((claim) => (
                 <Panel key={claim.id} className={s.claim}>
                   <div className="inline">
@@ -169,13 +169,13 @@ export function InvestigationPage() {
                       }
                     >
                       {claim.kind === 'hypothesis'
-                        ? 'Гипотеза / вопрос'
+                        ? 'Hypothesis / question'
                         : claim.kind === 'observation'
-                          ? 'Наблюдение'
-                          : 'Обобщение'}
+                          ? 'Observation'
+                          : 'Synthesis'}
                     </Badge>
                     {claim.review_status !== 'reviewed' && (
-                      <span className="tiny muted">Демонстрационная формулировка</span>
+                      <span className="tiny muted">Demo wording</span>
                     )}
                   </div>
                   <p>{claim.text}</p>
@@ -191,7 +191,7 @@ export function InvestigationPage() {
                         key={evidence}
                         onClick={() => setEvidenceId(evidence)}
                       >
-                        Открыть основание {index + 1} <ArrowRight size={12} />
+                        Open evidence {index + 1} <ArrowRight size={12} />
                       </button>
                     ))}
                   </div>
@@ -212,16 +212,16 @@ export function InvestigationPage() {
                   <div
                     className="tableScroll"
                     role="region"
-                    aria-label="Таблица испытаний"
+                    aria-label="Test runs table"
                     tabIndex={0}
                   >
                     <table>
                       <thead>
                         <tr>
-                          <th scope="col">Запись</th>
-                          <th scope="col">Кислород</th>
-                          <th scope="col">Давление</th>
-                          <th scope="col">Исход источника</th>
+                          <th scope="col">Record</th>
+                          <th scope="col">Oxygen</th>
+                          <th scope="col">Pressure</th>
+                          <th scope="col">Original outcome</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -269,12 +269,12 @@ export function InvestigationPage() {
                         setParams(next);
                       }}
                     >
-                      Следующие испытания
+                      Next test runs
                     </Button>
                   )}
                   <p style={{ marginTop: 20 }}>
                     <Link className="textLink" to="/measurements">
-                      <ChartScatter size={14} /> Открыть измерения FLEX
+                      <ChartScatter size={14} /> Open FLEX measurements
                     </Link>
                   </p>
                 </div>
@@ -286,7 +286,7 @@ export function InvestigationPage() {
                 />
               </div>
             ) : (
-              <EmptyState title="В этой ревизии нет отдельных записей" />
+              <EmptyState title="No individual test runs in this revision" />
             )}
           </>
         )}
@@ -307,10 +307,10 @@ export function InvestigationPage() {
                 .map((source) => <SourceCard key={source.id} source={source} />)
             ) : (
               <EmptyState
-                title="Публикации в этой ревизии не добавлены"
+                title="No publications have been added to this revision"
                 action={
                   <Button variant="secondary" onClick={() => selectTab('materials')}>
-                    Открыть доступные источники
+                    Open available sources
                   </Button>
                 }
               />

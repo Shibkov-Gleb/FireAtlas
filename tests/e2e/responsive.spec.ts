@@ -18,20 +18,18 @@ for (const width of [360, 768, 1280, 1920])
     for (const [name, path] of routes) {
       await ready(page, path);
       if (name === 'measurements') {
-        await page.getByRole('button', { name: 'Выбрать точку 30CAL03', exact: true }).click();
+        await page.getByRole('button', { name: 'Select point 30CAL03', exact: true }).click();
         await expect(page.getByTestId('selected-run-id')).toHaveText('30CAL03');
       }
       if (name === 'compare') {
         for (const inv of ['BASS-II', 'FLEX']) {
-          await page
-            .getByRole('button', { name: `Добавить ${inv} в сравнение`, exact: true })
-            .click();
+          await page.getByRole('button', { name: `Add ${inv} to comparison`, exact: true }).click();
           await expect(
-            page.getByRole('button', { name: `Убрать ${inv} в сравнение`, exact: true }),
+            page.getByRole('button', { name: `Remove ${inv} to comparison`, exact: true }),
           ).toBeVisible();
         }
         await expect(
-          page.getByRole('region', { name: 'Матрица сравнения исследований' }),
+          page.getByRole('region', { name: 'Investigation comparison matrix' }),
         ).toBeVisible();
       }
       await page.evaluate(() => document.fonts.ready.then(() => undefined));
@@ -62,12 +60,10 @@ test('mobile menu traps focus, closes with Escape and restores its trigger', asy
   await page.setViewportSize({ width: 360, height: 800 });
   await ready(page);
   await page.keyboard.press('Tab');
-  await expect(
-    page.getByRole('link', { name: 'Перейти к содержимому', exact: true }),
-  ).toBeFocused();
+  await expect(page.getByRole('link', { name: 'Skip to content', exact: true })).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page.locator('#main')).toBeFocused();
-  const menu = page.getByRole('button', { name: 'Открыть меню', exact: true });
+  const menu = page.getByRole('button', { name: 'Open menu', exact: true });
   await menu.click();
   await expect(page.getByRole('dialog')).toBeVisible();
   for (let i = 0; i < 12; i++) {

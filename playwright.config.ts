@@ -1,11 +1,12 @@
 import { defineConfig } from '@playwright/test';
 export default defineConfig({
   testDir: './tests/e2e',
+  outputDir: 'test-results/demo',
   fullyParallel: false,
   workers: 1,
   timeout: 60000,
   expect: { timeout: 12000 },
-  reporter: [['list'], ['html', { open: 'never' }]],
+  reporter: [['list'], ['html', { open: 'never', outputFolder: 'playwright-report/demo' }]],
   use: {
     baseURL: process.env.E2E_BASE_URL ?? 'http://127.0.0.1:5173',
     browserName: 'chromium',

@@ -32,7 +32,7 @@
     "src_psi69_exptable": {
       "id": "src_psi69_exptable",
       "data_revision": "psi-20261115-r1",
-      "title": "FLEX (PSI-69) - Experimental Table, версия 5",
+      "title": "FLEX (PSI-69) - Experimental Table, version 5",
       "kind": "experimental_table",
       "canonical_url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-69",
       "doi": null,
@@ -320,7 +320,7 @@
       "excerpt": null,
       "table_values": [],
       "verified": true,
-      "verification_note": "[FIXTURE] Запись без значения давления - пример отсутствующего параметра (AT-05)."
+      "verification_note": "[FIXTURE] Record без значения давления - пример отсутствующего параметра (AT-05)."
     },
     "ev_psi101_fixture01": {
       "id": "ev_psi101_fixture01",
@@ -337,7 +337,7 @@
       "excerpt": null,
       "table_values": [],
       "verified": true,
-      "verification_note": "[FIXTURE] Источник недоступен; метаданные доступны (AT-26)."
+      "verification_note": "[FIXTURE] Source Unavailable; метаdata доступны (AT-26)."
     },
     "ev_track_partial_gravity": {
       "id": "ev_track_partial_gravity",
@@ -524,7 +524,7 @@
         "ev_psi69_20cal08"
       ],
       "quality_notes": [
-        "Начальная доля кислорода 0.21 по описанию серии (приложение А)."
+        "Начальная oxygen fraction 0.21 по описанию серии (приложение А)."
       ]
     },
     "run_psi69_20cal10": {
@@ -693,7 +693,7 @@
         "ev_psi69_20cal10"
       ],
       "quality_notes": [
-        "Начальная доля кислорода 0.21 по описанию серии (приложение А)."
+        "Начальная oxygen fraction 0.21 по описанию серии (приложение А)."
       ]
     },
     "run_psi69_20cal12": {
@@ -862,7 +862,7 @@
         "ev_psi69_20cal12"
       ],
       "quality_notes": [
-        "Начальная доля кислорода 0.21 по описанию серии (приложение А)."
+        "Начальная oxygen fraction 0.21 по описанию серии (приложение А)."
       ]
     },
     "run_psi69_30cal02": {
@@ -1031,7 +1031,7 @@
         "ev_psi69_30cal02"
       ],
       "quality_notes": [
-        "Начальная доля кислорода 0.21 по описанию серии (приложение А)."
+        "Начальная oxygen fraction 0.21 по описанию серии (приложение А)."
       ]
     },
     "run_psi69_30cal03": {
@@ -1200,7 +1200,7 @@
         "ev_psi69_30cal03"
       ],
       "quality_notes": [
-        "Начальная доля кислорода 0.21 по описанию серии (приложение А)."
+        "Начальная oxygen fraction 0.21 по описанию серии (приложение А)."
       ]
     },
     "run_psi25_fixture01": {
@@ -1342,14 +1342,14 @@
         "ev_psi25_fixture02"
       ],
       "quality_notes": [
-        "[FIXTURE] Давление не сообщено в источнике: value=null, status=not_reported. Нормальное давление не подставляется."
+        "[FIXTURE] Pressure not reported by the source: value=null, status=not_reported. Нормальное pressure не подставляется."
       ]
     }
   },
   "materials": {
     "mat_methanol": {
       "id": "mat_methanol",
-      "label": "Метанол",
+      "label": "Methanol",
       "state": "liquid",
       "composition": "CH3OH",
       "aliases": [
@@ -1358,7 +1358,7 @@
     },
     "mat_psi25_fixture_solid": {
       "id": "mat_psi25_fixture_solid",
-      "label": "[FIXTURE] твердый образец",
+      "label": "[FIXTURE] solid sample",
       "state": "solid",
       "composition": null,
       "aliases": []
@@ -1372,7 +1372,7 @@
         "inv_psi69"
       ],
       "kind": "observation",
-      "text": "В опыте 30CAL03 время горения капли метанола составило 6,34 с.",
+      "text": "В test runе 30CAL03 burn duration капли methanolа составило 6,34 с.",
       "supporting_evidence_ids": [
         "ev_psi69_30cal03"
       ],
@@ -1381,7 +1381,7 @@
         "run_psi69_30cal03"
       ],
       "limitations": [
-        "Одна запись; не устанавливает зависимость времени горения от диаметра."
+        "Одна record; не устанавливает зависимость времени горения от diameterа."
       ],
       "review_status": "reviewed"
     },
@@ -1392,7 +1392,7 @@
         "inv_psi25"
       ],
       "kind": "hypothesis",
-      "text": "[FIXTURE] Исходная гипотеза исследования - отображается отдельно от результатов.",
+      "text": "[FIXTURE] Hypothesis investigations - отображается отдельно от результатов.",
       "supporting_evidence_ids": [],
       "contradicting_evidence_ids": [],
       "applicable_run_ids": [],
@@ -1406,14 +1406,14 @@
         "inv_psi25"
       ],
       "kind": "observation",
-      "text": "[FIXTURE] Наблюдение BASS-II о слабом потоке; текст и условия поставляет AI 1 (A1-05).",
+      "text": "[FIXTURE] Observation BASS-II о слабом потоке; текст и conditions поставляет AI 1 (A1-05).",
       "supporting_evidence_ids": [
         "ev_psi25_fixture01"
       ],
       "contradicting_evidence_ids": [],
       "applicable_run_ids": [],
       "limitations": [
-        "[FIXTURE] Результат относится к условиям опыта."
+        "[FIXTURE] Результат относится к conditionsм test runа."
       ],
       "review_status": "reviewed"
     }
@@ -1426,9 +1426,9 @@
       "acronym": "BASS-II",
       "title": "Burning and Suppression of Solids - II",
       "objectives": [
-        "[FIXTURE] Цель BASS-II; формулировку поставляет AI 1."
+        "[FIXTURE] Objective BASS-II; формулировку поставляет AI 1."
       ],
-      "setup_summary": "[FIXTURE] Краткое описание установки BASS-II.",
+      "setup_summary": "[FIXTURE] Summaryе описание установки BASS-II.",
       "scopes": [
         "prevention",
         "suppression"
@@ -1470,9 +1470,9 @@
       "acronym": "FLEX",
       "title": "Flame Extinguishment Experiment",
       "objectives": [
-        "[FIXTURE] Цель FLEX; формулировку поставляет AI 1."
+        "[FIXTURE] Objective FLEX; формулировку поставляет AI 1."
       ],
-      "setup_summary": "[FIXTURE] Краткое описание установки FLEX.",
+      "setup_summary": "[FIXTURE] Summaryе описание установки FLEX.",
       "scopes": [
         "suppression"
       ],
@@ -1534,9 +1534,9 @@
       "acronym": "SAME-R",
       "title": "Smoke Aerosol Measurement Experiment - Refurbished",
       "objectives": [
-        "[FIXTURE] Цель SAME-R; формулировку поставляет AI 1."
+        "[FIXTURE] Objective SAME-R; формулировку поставляет AI 1."
       ],
-      "setup_summary": "[FIXTURE] Краткое описание установки SAME-R.",
+      "setup_summary": "[FIXTURE] Summaryе описание установки SAME-R.",
       "scopes": [
         "detection"
       ],
@@ -1558,7 +1558,7 @@
   "scenarios": {
     "orbital": {
       "scenario_id": "orbital_custom",
-      "name": "Орбитальная станция",
+      "name": "Orbital station",
       "environment": "orbital_habitat",
       "celestial_body": null,
       "safety_task": "prevention",
@@ -1571,7 +1571,7 @@
       "assumptions": [
         {
           "field": "gravity_regime",
-          "text": "Орбитальная среда задает микрогравитационный контекст; давление и кислород пресетом не задаются.",
+          "text": "The orbital environment defines a microgravity context; the preset does not specify pressure or oxygen.",
           "origin": "preset_source",
           "source_ids": [
             "src_track_flame_in_freefall"
@@ -1581,7 +1581,7 @@
     },
     "moon": {
       "scenario_id": "moon_base",
-      "name": "Лунная база",
+      "name": "Lunar base",
       "environment": "surface_habitat",
       "celestial_body": "moon",
       "safety_task": "prevention",
@@ -1594,7 +1594,7 @@
       "assumptions": [
         {
           "field": "gravity_regime",
-          "text": "Целевой режим - частичная гравитация Луны. Наличие сценария не означает наличие опытов в корпусе.",
+          "text": "The target regime is lunar partial gravity. A scenario does not imply that matching test runs exist in the corpus.",
           "origin": "preset_source",
           "source_ids": [
             "src_track_flame_in_freefall"

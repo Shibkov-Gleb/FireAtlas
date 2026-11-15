@@ -20,17 +20,17 @@ import { Loading } from './ui';
 import s from './Shell.module.css';
 
 const navigation = [
-  ['/', 'Обзор', LayoutDashboard],
-  ['/investigations', 'Исследования', BookOpen],
-  ['/measurements', 'Измерения', ChartScatter],
-  ['/compare', 'Сравнение', GitCompareArrows],
-  ['/ask', 'Спросить AI', Sparkles],
-  ['/missions', 'Сценарии миссий', Orbit],
-  ['/reports', 'Отчёты', Files],
+  ['/', 'Overview', LayoutDashboard],
+  ['/investigations', 'Investigations', BookOpen],
+  ['/measurements', 'Measurements', ChartScatter],
+  ['/compare', 'Comparison', GitCompareArrows],
+  ['/ask', 'Ask AI', Sparkles],
+  ['/missions', 'Mission scenarios', Orbit],
+  ['/reports', 'Reports', Files],
 ] as const;
 function Navigation({ onNavigate }: { onNavigate: () => void }) {
   return (
-    <nav className={s.nav} aria-label="Разделы Fire Atlas">
+    <nav className={s.nav} aria-label="Fire Atlas sections">
       {navigation.map(([path, label, Icon]) => (
         <NavLink
           key={path}
@@ -55,15 +55,15 @@ function MissionCard({ onNavigate }: { onNavigate: () => void }) {
         <Orbit size={21} />
       </span>
       <div>
-        <small>ТЕКУЩАЯ МИССИЯ</small>
-        <strong>{workspace.scenario?.name ?? 'Без сценария'}</strong>
+        <small>CURRENT MISSION</small>
+        <strong>{workspace.scenario?.name ?? 'No scenario'}</strong>
         <span>
           {config.dictionaries.gravity_regime.find(
             (g) => g.value === workspace.scenario?.gravity_regime,
-          )?.label ?? 'Режим не сообщён'}
+          )?.label ?? 'Regime not reported'}
         </span>
       </div>
-      <NavLink to="/missions" onClick={onNavigate} aria-label="Изменить миссию">
+      <NavLink to="/missions" onClick={onNavigate} aria-label="Change mission">
         <ChevronRight size={18} />
       </NavLink>
     </div>
@@ -79,7 +79,7 @@ export function Shell() {
     path === '/' ? location.pathname === '/' : location.pathname.startsWith(path),
   );
   useEffect(() => {
-    document.title = `${current?.[1] ?? 'Страница не найдена'} · Fire Atlas`;
+    document.title = `${current?.[1] ?? 'Page not found'} · Fire Atlas`;
     if (previousPath.current !== location.pathname) {
       previousPath.current = location.pathname;
       window.scrollTo({ top: 0, left: 0 });
@@ -97,9 +97,9 @@ export function Shell() {
   return (
     <div className={s.layout}>
       <a className="skipLink" href="#main">
-        Перейти к содержимому
+        Skip to content
       </a>
-      <aside className={s.sidebar} aria-label="Главная навигация">
+      <aside className={s.sidebar} aria-label="Main navigation">
         <NavLink to="/" className={s.brand}>
           <span className={s.logo}>
             <Flame size={26} />
@@ -108,16 +108,16 @@ export function Shell() {
             Fire Atlas<small>MICROGRAVITY RESEARCH</small>
           </span>
         </NavLink>
-        <div className={s.navLabel}>РАБОЧЕЕ ПРОСТРАНСТВО</div>
+        <div className={s.navLabel}>WORKSPACE</div>
         <Navigation onNavigate={() => {}} />
         <MissionCard onNavigate={() => {}} />
         <div className={s.sidebarFooter}>
-          <span className={s.dot} /> NASA PSI · открытые источники
+          <span className={s.dot} /> NASA PSI · open sources
           <a
             href="https://psi.nasa.gov/physci/repo/"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Открыть репозиторий NASA PSI в новой вкладке"
+            aria-label="Open the NASA PSI repository in a new tab"
           >
             <ArrowUpRight size={14} />
           </a>
@@ -129,22 +129,22 @@ export function Shell() {
             <button
               className={`${s.mobileMenu} iconButton`}
               onClick={() => setOpen(true)}
-              aria-label="Открыть меню"
+              aria-label="Open menu"
               aria-expanded={open}
             >
               <Menu size={22} />
             </button>
-            <span>Рабочее пространство</span>
+            <span>Workspace</span>
             <ChevronRight size={14} />
-            <strong>{current?.[1] ?? 'Страница не найдена'}</strong>
+            <strong>{current?.[1] ?? 'Page not found'}</strong>
           </div>
           <div className={s.topMeta}>
-            {IS_DEMO && <span className={s.demoBadge}>ДЕМО</span>}
+            {IS_DEMO && <span className={s.demoBadge}>DEMO</span>}
             <span className={s.revision} title={workspace.data_revision}>
-              КОРПУС · {workspace.data_revision.toUpperCase()}
+              CORPUS · {workspace.data_revision.toUpperCase()}
             </span>
-            <span className={s.avatar} aria-label="Гостевое пространство">
-              Г
+            <span className={s.avatar} aria-label="Guest workspace">
+              G
             </span>
           </div>
         </header>
@@ -158,14 +158,14 @@ export function Shell() {
           <span>
             FIRE ATLAS <span className={s.footerDivider}>/</span> FLAME IN FREEFALL
           </span>
-          <span>Исследования с проверяемыми основаниями</span>
+          <span>Research backed by traceable evidence</span>
         </footer>
       </div>
       <Drawer
         open={open}
         onOpenChange={setOpen}
-        title="Навигация Fire Atlas"
-        description="Выберите раздел рабочего пространства."
+        title="Fire Atlas navigation"
+        description="Choose a workspace section."
       >
         <div className={s.drawerNavigation}>
           <Navigation onNavigate={() => setOpen(false)} />

@@ -1,7 +1,7 @@
 {
   "operation_id": "getJob",
   "case": "provider_failed",
-  "description": "Отказ провайдера модели (AT-14): failed + найденные материалы",
+  "description": "Отказ провайдера модели (AT-14): failed + найденные materials",
   "fixture": true,
   "default": false,
   "request": {
@@ -28,7 +28,7 @@
         "result_id": null,
         "error": {
           "code": "MODEL_PROVIDER_ERROR",
-          "message": "Сервис генерации ответа недоступен. Найденные материалы доступны для просмотра.",
+          "message": "The answer generation service is unavailable. Retrieved materials remain available to explore.",
           "details": [],
           "retryable": true
         },
@@ -44,7 +44,7 @@
       },
       "meta": {
         "request_id": "req_demo01",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

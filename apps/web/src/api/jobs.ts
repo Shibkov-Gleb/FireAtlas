@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { api, ApiError } from './client';
 import { isTerminal, type Job, type Schema } from './types';
@@ -19,7 +19,7 @@ export function pollInterval(
   return Math.max(interval, retryAfterMs);
 }
 export function useJob(id: string | null) {
-  return useQuery({
+  const query = useQuery({
     queryKey: ['job', id],
     queryFn: ({ signal }) => api.job(id!, signal),
     enabled: !!id,
@@ -34,6 +34,19 @@ export function useJob(id: string | null) {
           ),
     refetchOnMount: 'always',
   });
+  const job = query.data?.data;
+  const refetch = query.refetch;
+  const forbidden = query.error instanceof ApiError && !query.error.retryable;
+  useEffect(() => {
+    if (!job || isTerminal(job.state) || forbidden) return;
+    // Confirm the terminal state once after polling reaches the server deadline.
+    const timer = setTimeout(
+      () => void refetch(),
+      Math.max(0, Date.parse(job.deadline_at) - Date.now()) + 100,
+    );
+    return () => clearTimeout(timer);
+  }, [job?.id, job?.state, job?.deadline_at, forbidden, refetch]);
+  return query;
 }
 export type PendingAction<T> = { key: string; body: T; workspaceId: string; created: number };
 function readPending<T>(key: string): PendingAction<T> | null {
@@ -72,7 +85,7 @@ export function useJobSubmission<T extends Schema['AnalysisRequest'] | Schema['R
       setError(
         new ApiError(
           'WORKSPACE_CHANGED',
-          'Этот запрос относится к другому гостевому пространству. Начните новое действие.',
+          'This request belongs to a different guest workspace. Start a new action.',
         ),
       );
       return null;
@@ -81,7 +94,7 @@ export function useJobSubmission<T extends Schema['AnalysisRequest'] | Schema['R
       setError(
         new ApiError(
           'IDEMPOTENCY_EXPIRED',
-          'Срок ключа повтора истёк. Автоматически повторять запрос нельзя.',
+          'The retry key has expired. Start a new action to continue.',
         ),
       );
       return null;
@@ -110,7 +123,7 @@ export function useJobSubmission<T extends Schema['AnalysisRequest'] | Schema['R
       setError(
         new ApiError(
           'PENDING_ACTION',
-          'Сначала повторите незавершённый запрос или явно начните новое действие.',
+          'Retry the pending request or explicitly start a new action first.',
         ),
       );
       return null;

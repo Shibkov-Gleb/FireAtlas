@@ -1,7 +1,7 @@
 {
   "operation_id": "queryMeasurements",
   "case": "flex_5_points",
-  "description": "График FLEX: пять контрольных точек (AT-07)",
+  "description": "График FLEX: пять контрольных points (AT-07)",
   "fixture": true,
   "default": true,
   "request": {
@@ -25,12 +25,12 @@
       "data": {
         "x_axis": {
           "key": "sample.initial_diameter",
-          "label": "Начальный диаметр капли",
+          "label": "Initial droplet diameter",
           "unit": "m"
         },
         "y_axis": {
           "key": "metrics.burn_duration",
-          "label": "Время горения",
+          "label": "Burn duration",
           "unit": "s"
         },
         "points": [
@@ -93,7 +93,7 @@
       },
       "meta": {
         "request_id": "req_demo01",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

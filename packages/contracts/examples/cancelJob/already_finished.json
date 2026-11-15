@@ -1,7 +1,7 @@
 {
   "operation_id": "cancelJob",
   "case": "already_finished",
-  "description": "Задача уже завершена",
+  "description": "Task уже завершена",
   "fixture": true,
   "default": false,
   "request": {
@@ -18,7 +18,7 @@
     "body": {
       "error": {
         "code": "JOB_ALREADY_FINISHED",
-        "message": "Задача уже завершена.",
+        "message": "The job has already finished.",
         "details": [
           {
             "field": "state",
@@ -30,7 +30,7 @@
       },
       "meta": {
         "request_id": "req_demo02",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

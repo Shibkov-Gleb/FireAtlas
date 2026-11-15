@@ -1,7 +1,7 @@
 {
   "operation_id": "search",
   "case": "oxygen_021",
-  "description": "Вентиляция и твердые материалы, кислород 0.18-0.23 (Б.2, include_unknown=true)",
+  "description": "Вентиляция и твердые materials, oxygen 0.18-0.23 (Б.2, include_unknown=true)",
   "fixture": true,
   "default": true,
   "request": {
@@ -9,7 +9,7 @@
     "query": {},
     "headers": {},
     "body": {
-      "query": "влияние вентиляции на твердые материалы",
+      "query": "влияние вентиляции на твердые materials",
       "locale": "ru",
       "data_revision": "psi-20261115-r1",
       "filters": {
@@ -54,9 +54,9 @@
               "acronym": "BASS-II",
               "title": "Burning and Suppression of Solids - II",
               "objectives": [
-                "[FIXTURE] Цель BASS-II; формулировку поставляет AI 1."
+                "[FIXTURE] Objective BASS-II; формулировку поставляет AI 1."
               ],
-              "setup_summary": "[FIXTURE] Краткое описание установки BASS-II.",
+              "setup_summary": "[FIXTURE] Summaryе описание установки BASS-II.",
               "scopes": [
                 "prevention",
                 "suppression"
@@ -101,7 +101,7 @@
               },
               {
                 "code": "scope",
-                "text": "Направление: предотвращение",
+                "text": "Research area: prevention",
                 "field": "scopes",
                 "evidence_ids": []
               },
@@ -155,7 +155,7 @@
       },
       "meta": {
         "request_id": "req_demo01",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

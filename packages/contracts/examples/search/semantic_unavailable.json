@@ -1,7 +1,7 @@
 {
   "operation_id": "search",
   "case": "semantic_unavailable",
-  "description": "Семантический слой недоступен - lexical с предупреждением (FR-05)",
+  "description": "Семантический слой Unavailable - lexical с предупреждением (FR-05)",
   "fixture": true,
   "default": false,
   "request": {
@@ -9,7 +9,7 @@
     "query": {},
     "headers": {},
     "body": {
-      "query": "дым и чувствительность датчиков",
+      "query": "smoke and detector sensitivity",
       "locale": "ru",
       "data_revision": "psi-20261115-r1"
     }
@@ -28,9 +28,9 @@
               "acronym": "SAME-R",
               "title": "Smoke Aerosol Measurement Experiment - Refurbished",
               "objectives": [
-                "[FIXTURE] Цель SAME-R; формулировку поставляет AI 1."
+                "[FIXTURE] Objective SAME-R; формулировку поставляет AI 1."
               ],
-              "setup_summary": "[FIXTURE] Краткое описание установки SAME-R.",
+              "setup_summary": "[FIXTURE] Summaryе описание установки SAME-R.",
               "scopes": [
                 "detection"
               ],
@@ -52,7 +52,7 @@
             "match_reasons": [
               {
                 "code": "scope",
-                "text": "Направление: обнаружение",
+                "text": "Research area: detection",
                 "field": "scopes",
                 "evidence_ids": []
               }
@@ -84,12 +84,12 @@
       },
       "meta": {
         "request_id": "req_demo01",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": [
           {
             "code": "SEMANTIC_SEARCH_UNAVAILABLE",
-            "message": "Семантический поиск недоступен; используется поиск по тексту и фильтрам.",
+            "message": "Semantic search is unavailable; text search and filters are being used.",
             "field": null
           }
         ]

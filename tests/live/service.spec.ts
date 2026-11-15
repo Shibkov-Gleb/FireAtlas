@@ -9,70 +9,72 @@ test('NASA corpus → evidence → measurements → comparison → answer → Mo
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await ready(page);
-  await expect(page.getByText('ДЕМО', { exact: true })).toHaveCount(0);
+  await expect(page.getByText('DEMO', { exact: true })).toHaveCount(0);
   await page
-    .getByRole('textbox', { name: 'Ваш вопрос об исследованиях' })
-    .fill('Как вентиляция влияет на горение твердых материалов?');
-  await page.getByRole('button', { name: 'Исследовать', exact: true }).click();
+    .getByRole('textbox', { name: 'Your research question' })
+    .fill('How does ventilation affect the combustion of solid materials?');
+  await page.getByRole('button', { name: 'Explore', exact: true }).click();
   await page.getByRole('link', { name: 'BASS-II', exact: true }).click();
-  await page.getByRole('button', { name: 'Сохранить', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Сохранено', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'В сравнение', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'В сравнении', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Открыть основание 1', exact: true }).first().click();
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Saved', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Add to comparison', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'In comparison', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Open evidence 1', exact: true }).first().click();
   await expect(page.getByRole('dialog')).toBeVisible();
   await expect(
-    page.getByRole('dialog').getByRole('link', { name: /Открыть первоисточник/ }),
+    page.getByRole('dialog').getByRole('link', { name: /Open original source/ }),
   ).toHaveAttribute('href', /^https:\/\//);
-  await page.getByRole('button', { name: 'Закрыть панель', exact: true }).click();
+  await page.getByRole('button', { name: 'Close panel', exact: true }).click();
   await ready(page, '/measurements');
   const tablePoint = page.getByRole('button', { name: '30CAL03', exact: true });
   await tablePoint.click();
   await expect(page.getByTestId('selected-run-id')).toHaveText('30CAL03');
-  await expect(page.getByText('1,92 мм', { exact: true })).toBeVisible();
-  await expect(page.getByText('6,34 с', { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Основание 1', exact: true }).click();
+  await expect(page.getByText('1.92 mm', { exact: true })).toBeVisible();
+  await expect(page.getByText('6.34 s', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Evidence 1', exact: true }).click();
   const sourceDownload = page.waitForEvent('download');
-  await page.getByRole('link', { name: /Скачать файл источника/ }).click();
+  await page.getByRole('link', { name: /Download source file/ }).click();
   const sourceFile = await sourceDownload;
   expect((await readFile((await sourceFile.path())!)).byteLength).toBeGreaterThan(100);
-  await page.getByRole('button', { name: 'Закрыть панель', exact: true }).click();
+  await page.getByRole('button', { name: 'Close panel', exact: true }).click();
   await ready(page, '/compare');
-  await page.getByRole('button', { name: 'Добавить FLEX в сравнение', exact: true }).click();
-  await expect(page.getByRole('region', { name: 'Матрица сравнения исследований' })).toBeVisible();
+  await page.getByRole('button', { name: 'Add FLEX to comparison', exact: true }).click();
+  await expect(page.getByRole('region', { name: 'Investigation comparison matrix' })).toBeVisible();
   await ready(page, '/ask');
   await analyse(page);
   const original = page.url();
   await page.reload();
-  await page.getByRole('button', { name: 'Сохранить ответ', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Ответ сохранён', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Save answer', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Answer saved', exact: true })).toBeVisible();
   await ready(page, '/missions');
   await page
     .getByRole('button', {
-      name: 'Лунная база Поверхность Луны · частичная гравитация',
+      name: 'Lunar base Lunar surface · partial gravity',
       exact: true,
     })
     .click();
   await expect(
-    page.getByText('Прямых данных частичной гравитации в PSI нет.', { exact: true }),
+    page.getByText('PSI contains no direct partial-gravity measurements.', { exact: true }),
   ).toBeVisible();
   await page.goto(original);
   await expect(
-    page.getByRole('heading', { name: 'Контекст ответа: Орбитальная станция', exact: true }),
+    page.getByRole('heading', { name: 'Answer context: Orbital station', exact: true }),
   ).toBeVisible();
-  await expect(page.getByText(/Ответ получен на предыдущем снимке пространства/)).toBeVisible();
+  await expect(page.getByText(/This answer uses an earlier workspace snapshot/)).toBeVisible();
   await ready(page, '/reports');
   await page
-    .getByRole('textbox', { name: 'Название отчёта', exact: true })
-    .fill('Интеграционная проверка NASA');
-  await page.getByRole('button', { name: /Подготовить PDF/ }).click();
+    .getByRole('textbox', { name: 'Report title', exact: true })
+    .fill('NASA integration verification');
+  await page.getByRole('button', { name: /Prepare PDF/ }).click();
   const pdfDownload = page.waitForEvent('download');
-  await page.getByRole('button', { name: /Скачать PDF/ }).click();
-  const pdf = await readFile((await (await pdfDownload).path())!);
+  await page.getByRole('button', { name: /Download PDF/ }).click();
+  const downloaded = await pdfDownload;
+  await downloaded.saveAs('test-results/live/fire-atlas-english-report.pdf');
+  const pdf = await readFile((await downloaded.path())!);
   expect(pdf.subarray(0, 5).toString()).toBe('%PDF-');
   expect(pdf.length).toBeGreaterThan(20000);
   await page.reload();
-  await expect(page.getByRole('button', { name: /Скачать PDF/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Download PDF/ })).toBeVisible();
   expect(errors).toEqual([]);
 });
 
@@ -120,12 +122,14 @@ test('workspace conflict refreshes context and preserves the pending edit', asyn
     });
     if (!response.ok) throw new Error(`Workspace update failed: ${response.status}`);
   });
-  await page.getByRole('button', { name: 'Сохранить BASS-II', exact: true }).click();
-  await expect(page.getByText('Рабочий контекст изменился.', { exact: true })).toBeVisible();
-  await page.getByRole('button', { name: 'Применить мой выбор', exact: true }).click();
-  await expect(page.getByText('Рабочий контекст изменился.', { exact: true })).toHaveCount(0);
+  await page.getByRole('button', { name: 'Save BASS-II', exact: true }).click();
+  await expect(page.getByText('The workspace context has changed.', { exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Apply my selection', exact: true }).click();
+  await expect(page.getByText('The workspace context has changed.', { exact: true })).toHaveCount(
+    0,
+  );
   await page.reload();
-  await expect(page.getByRole('button', { name: /Убрать из сохранённых BASS-II/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Remove from saved BASS-II/ })).toBeVisible();
 });
 
 test('a cleared scenario remains usable and can be replaced with a mission preset', async ({
@@ -144,19 +148,19 @@ test('a cleared scenario remains usable and can be replaced with a mission prese
     if (!response.ok) throw new Error(`Clear scenario: ${response.status}`);
   });
   await page.reload();
-  await expect(page.getByText('Без сценария', { exact: true }).first()).toBeVisible();
+  await expect(page.getByText('No scenario', { exact: true }).first()).toBeVisible();
   await ready(page, '/missions');
   await expect(
-    page.getByText('Выберите пресет миссии для оценки применимости.', { exact: true }),
+    page.getByText('Choose a mission preset to assess applicability.', { exact: true }),
   ).toBeVisible();
   await page
     .getByRole('button', {
-      name: 'Лунная база Поверхность Луны · частичная гравитация',
+      name: 'Lunar base Lunar surface · partial gravity',
       exact: true,
     })
     .click();
   await expect(
-    page.getByText('Прямых данных частичной гравитации в PSI нет.', { exact: true }),
+    page.getByText('PSI contains no direct partial-gravity measurements.', { exact: true }),
   ).toBeVisible();
   expect(errors).toEqual([]);
 });

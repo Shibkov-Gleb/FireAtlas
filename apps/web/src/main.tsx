@@ -33,5 +33,5 @@ void bootstrap().catch((error) => {
   const root = document.getElementById('root');
   if (root)
     root.textContent =
-      'Не удалось запустить приложение. Обновите страницу или проверьте доступность сервера.';
+      'The application could not start. Reload the page or check the server connection.';
 });

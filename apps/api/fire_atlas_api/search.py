@@ -26,19 +26,19 @@ EMPTY_FILTERS: dict[str, Any] = {
 }
 # фильтр -> (поле Investigation, словарь подписей, префикс причины)
 LIST_FILTERS = {
-    "scopes": ("scopes", "scope", "Направление"),
-    "fuel_states": ("fuel_states", "fuel_state", "Состояние горючего"),
-    "gravity_regimes": ("gravity_regimes", "gravity_regime", "Гравитация"),
-    "material_ids": ("material_ids", None, "Материал"),
+    "scopes": ("scopes", "scope", "Research area"),
+    "fuel_states": ("fuel_states", "fuel_state", "Fuel state"),
+    "gravity_regimes": ("gravity_regimes", "gravity_regime", "Gravity"),
+    "material_ids": ("material_ids", None, "Material"),
 }
 REASON_CODE = {"scopes": "scope", "fuel_states": "fuel_state", "gravity_regimes": "gravity_regime",
                "material_ids": "material", "investigation_ids": "investigation_id",
                "has_measurements": "has_measurements"}
 # фильтр диапазона -> (имя в run.conditions, путь поля, единица, подпись)
 RANGE_FILTERS = {
-    "oxygen_range": ("oxygen_fraction", "conditions.oxygen_fraction", "fraction", "Доля кислорода"),
-    "pressure_range": ("pressure", "conditions.pressure", "Pa", "Давление"),
-    "airflow_range": ("airflow_speed", "conditions.airflow_speed", "m_s", "Скорость потока"),
+    "oxygen_range": ("oxygen_fraction", "conditions.oxygen_fraction", "fraction", "Oxygen fraction"),
+    "pressure_range": ("pressure", "conditions.pressure", "Pa", "Pressure"),
+    "airflow_range": ("airflow_speed", "conditions.airflow_speed", "m_s", "Airflow speed"),
 }
 
 
@@ -100,7 +100,7 @@ def evaluate(inv: dict, runs: list[dict], af: dict, dicts: dict, materials: dict
     if af["investigation_ids"] and inv["id"] not in af["investigation_ids"]:
         failed = True
         diffs.append({"code": "filter_mismatch", "field": "investigation_ids", "evidence_ids": [],
-                      "text": "Не входит в выбранный список исследований."})
+                      "text": "Not included in the selected investigations."})
 
     for fname, (ifield, dname, prefix) in LIST_FILTERS.items():
         wanted = af[fname]
@@ -115,7 +115,7 @@ def evaluate(inv: dict, runs: list[dict], af: dict, dicts: dict, materials: dict
             missing.append(ifield)
         else:
             failed = True
-            text = f"{prefix}: " + ", ".join(_label(dicts, dname, v, materials) for v in have) + " - не совпадает с фильтром"
+            text = f"{prefix}: " + ", ".join(_label(dicts, dname, v, materials) for v in have) + " - does not match the filter"
             diffs.append({"code": "filter_mismatch", "text": text[:300], "field": ifield, "evidence_ids": []})
 
     if af["has_measurements"] is not None:
@@ -123,9 +123,9 @@ def evaluate(inv: dict, runs: list[dict], af: dict, dicts: dict, materials: dict
         if has != af["has_measurements"]:
             failed = True
             diffs.append({"code": "filter_mismatch", "field": "has_measurements", "evidence_ids": [],
-                          "text": "Есть опыты с измерениями" if has else "Нет опытов с измерениями"})
+                          "text": "Test runs with measurements are available" if has else "No test runs with measurements"})
         elif has:
-            reasons.append({"code": "has_measurements", "text": "Есть опыты с измерениями", "field": None,
+            reasons.append({"code": "has_measurements", "text": "Test runs with measurements are available", "field": None,
                             "evidence_ids": []})
 
     range_set = [n for n in RANGE_FILTERS if af[n]]
@@ -147,13 +147,13 @@ def evaluate(inv: dict, runs: list[dict], af: dict, dicts: dict, materials: dict
                     run_ok[r["id"]] &= af["include_unknown"]
             if inside:
                 ev = sorted({e for rid in inside for e in known[rid][1]})[:20]
-                reasons.append({"code": name, "text": f"{label}: есть опыты в диапазоне фильтра", "field": path,
+                reasons.append({"code": name, "text": f"{label}: test runs fall within the filter range", "field": path,
                                 "evidence_ids": ev})
             else:
                 failed = True
                 lo, hi = min(v for v, _ in known.values()), max(v for v, _ in known.values())
                 diffs.append({"code": "filter_mismatch", "field": path, "evidence_ids": [],
-                              "text": f"{label}: значения опытов {lo:g}-{hi:g} вне диапазона фильтра"})
+                              "text": f"{label}: test run values {lo:g}-{hi:g} fall outside the filter range"})
             continue
         # Опытов с сообщенным значением нет - агрегат исследования (conditions_coverage).
         cov = next((c for c in inv["conditions_coverage"] if c["field"] == path and c["known_count"] > 0
@@ -165,12 +165,12 @@ def evaluate(inv: dict, runs: list[dict], af: dict, dicts: dict, materials: dict
             continue
         overlap = (rng["max"] is None or cov["min_value"] <= rng["max"]) and (rng["min"] is None or cov["max_value"] >= rng["min"])
         if overlap:
-            reasons.append({"code": name, "text": f"{label}: диапазон исследования пересекается с фильтром", "field": path,
+            reasons.append({"code": name, "text": f"{label}: investigation range overlaps the filter", "field": path,
                             "evidence_ids": cov["derivation_evidence_ids"][:20]})
         else:
             failed = True
             diffs.append({"code": "filter_mismatch", "field": path, "evidence_ids": cov["derivation_evidence_ids"][:20],
-                          "text": f"{label}: диапазон исследования {cov['min_value']:g}-{cov['max_value']:g} вне фильтра"})
+                          "text": f"{label}: investigation range {cov['min_value']:g}-{cov['max_value']:g} falls outside the filter"})
 
     matching = None
     if range_set:
@@ -180,7 +180,7 @@ def evaluate(inv: dict, runs: list[dict], af: dict, dicts: dict, materials: dict
                                                         for r in runs for n in range_set):
             failed = True
             diffs.append({"code": "filter_mismatch", "field": None, "evidence_ids": [],
-                          "text": "Нет опыта, который одновременно попадает во все диапазоны фильтра"})
+                          "text": "No test run meets all filter ranges simultaneously"})
 
     if missing and not af["include_unknown"]:
         failed = True
@@ -200,10 +200,10 @@ def check_ranked(ranked: list[dict], invs: dict[str, dict], runs_by: dict[str, l
             raise ContractViolation(f"ranked_items: {iid} нет в ревизии")
         own = {r["id"] for r in runs_by.get(iid, [])}
         if not set(it["matching_run_ids"]) <= own:
-            raise ContractViolation(f"ranked_items: опыт не принадлежит {iid}")
+            raise ContractViolation(f"ranked_items: test run не принадлежит {iid}")
         for r in it["match_reasons"] + it["differences"]:
             if not set(r["evidence_ids"]) <= existing_ev:
-                raise ContractViolation(f"ranked_items: причина {r['code']} ссылается на неизвестное доказательство")
+                raise ContractViolation(f"ranked_items: причина {r['code']} ссылается на unknownе evidence")
 
 
 def _merge_reasons(own: list[dict], extra: list[dict], limit: int = 20) -> list[dict]:

@@ -18,7 +18,7 @@ it('renders model text as text and makes evidence IDs the only citation controls
           {
             evidence_id: 'ev_1',
             source_id: 'src_1',
-            label: 'Проверить строку',
+            label: 'Check source row',
             locator: { page: 1, section: null, row_key: null, start_s: null, end_s: null },
           },
         ],
@@ -29,5 +29,5 @@ it('renders model text as text and makes evidence IDs the only citation controls
   expect(screen.queryByRole('img')).toBeNull();
   expect(screen.queryByRole('link')).toBeNull();
   expect(screen.getByText(/<img src=x/)).toBeTruthy();
-  expect(screen.getByRole('button', { name: /Проверить строку/ })).toBeTruthy();
+  expect(screen.getByRole('button', { name: /Check source row/ })).toBeTruthy();
 });

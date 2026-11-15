@@ -13,13 +13,14 @@ from __future__ import annotations
 import copy
 import json
 import shutil
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "examples"
 
 REV = "psi-20261115-r1"
-CV = "1.2.0"
+CV = "1.3.0"
 T0 = "2026-11-15T09:00:00Z"
 MMHG = 133.322387
 
@@ -405,7 +406,7 @@ def report(state, **kw):
     return base
 
 
-DICTIONARIES = json.loads((ROOT / "dictionaries.ru.json").read_text(encoding="utf-8"))  # источник правды подписей
+DICTIONARIES = json.loads((ROOT / "dictionaries.en.json").read_text(encoding="utf-8"))  # источник правды подписей
 
 CONFIG = {
     "contract_version": CV, "active_data_revision": REV,
@@ -676,6 +677,10 @@ ex("downloadReport", "preparing", "Отчет еще готовится", {"path
 
 
 def main():
+    sys.path.insert(0, str(ROOT))
+    from fa_contracts.english import english_display
+    assert OUT.resolve() == ROOT.resolve() / "examples"
+    readme = (OUT / "README.md").read_text(encoding="utf-8") if (OUT / "README.md").exists() else None
     if OUT.exists():
         shutil.rmtree(OUT)
     OUT.mkdir(parents=True)
@@ -684,7 +689,7 @@ def main():
         d = OUT / e["operation_id"]
         d.mkdir(exist_ok=True)
         p = d / f"{e['case']}.json"
-        p.write_text(json.dumps(e, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        p.write_text(json.dumps(english_display(e), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         index.append({"operation_id": e["operation_id"], "case": e["case"], "status": e["response"]["status"],
                       "default": e["default"], "fixture": True, "file": str(p.relative_to(OUT)), "description": e["description"]})
     (OUT / "index.json").write_text(json.dumps({"fixture": True, "data_revision": REV, "examples": index},
@@ -692,7 +697,9 @@ def main():
     # Фикстурные сущности - для тестов бэкенда и мок-сервера
     fx = {"data_revision": REV, "sources": SOURCES, "evidence": EVIDENCE, "runs": RUNS, "materials": MATERIALS,
           "claims": CLAIMS, "investigations": INVESTIGATIONS, "scenarios": {"orbital": ORBITAL, "moon": MOON}}
-    (ROOT / "fixtures_entities.json").write_text(json.dumps(fx, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (ROOT / "fixtures_entities.json").write_text(json.dumps(english_display(fx), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if readme is not None:
+        (OUT / "README.md").write_text(readme, encoding="utf-8")
     print(f"written {len(E)} examples")
 
 

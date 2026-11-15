@@ -1,7 +1,7 @@
 {
   "operation_id": "getInvestigation",
   "case": "revision_gone",
-  "description": "Ревизия удалена",
+  "description": "Revision удалена",
   "fixture": true,
   "default": false,
   "request": {
@@ -20,7 +20,7 @@
     "body": {
       "error": {
         "code": "DATA_REVISION_GONE",
-        "message": "Эта версия данных больше недоступна. Откройте актуальную версию.",
+        "message": "This data revision is no longer available. Откройте актуальную версию.",
         "details": [
           {
             "field": "data_revision",
@@ -32,7 +32,7 @@
       },
       "meta": {
         "request_id": "req_demo02",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

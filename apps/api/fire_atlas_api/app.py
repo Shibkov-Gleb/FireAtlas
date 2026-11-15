@@ -55,7 +55,7 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
         if request.method in UNSAFE and request.url.path.startswith("/api/"):
             denied = self._csrf_denied(request, settings)
             if denied:
-                response = error_response(request, ApiError("ACCESS_DENIED", "Запрос с недоверенного источника отклонен.",
+                response = error_response(request, ApiError("ACCESS_DENIED", "The request was rejected because its origin is not trusted.",
                                                             [{"field": "Origin", "reason": denied}]))
                 return self._finish(request, response, started)
         response = await call_next(request)
@@ -107,7 +107,7 @@ async def api_error_handler(request: Request, exc: ApiError):
 
 async def http_error_handler(request: Request, exc: HTTPException):
     if exc.status_code == 405:
-        err = ApiError("NOT_FOUND", "Метод не поддерживается для этого адреса.")
+        err = ApiError("NOT_FOUND", "This method is not supported at this URL.")
     else:
         err = ApiError("NOT_FOUND")
     return error_response(request, err)

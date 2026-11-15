@@ -1,7 +1,7 @@
 {
   "operation_id": "getJob",
   "case": "validation_failed",
-  "description": "Ответ не прошел проверку",
+  "description": "Answered не прошел проверку",
   "fixture": true,
   "default": false,
   "request": {
@@ -28,7 +28,7 @@
         "result_id": null,
         "error": {
           "code": "VALIDATION_FAILED",
-          "message": "Ответ не прошел проверку источников. Откройте найденные материалы.",
+          "message": "Answered не прошел проверку sourceов. Откройте найденные materials.",
           "details": [],
           "retryable": true
         },
@@ -43,7 +43,7 @@
       },
       "meta": {
         "request_id": "req_demo01",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

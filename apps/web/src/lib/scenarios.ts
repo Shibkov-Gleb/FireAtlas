@@ -13,24 +13,24 @@ export type MissionDraft = {
 export const presetDefinitions = [
   {
     id: 'orbital_custom',
-    name: 'Орбитальная станция',
-    description: 'Орбита · микрогравитация',
+    name: 'Orbital station',
+    description: 'Orbit · microgravity',
     environment: 'orbital_habitat',
     celestial_body: 'earth',
     gravity_regime: 'microgravity',
   },
   {
     id: 'lunar_base',
-    name: 'Лунная база',
-    description: 'Поверхность Луны · частичная гравитация',
+    name: 'Lunar base',
+    description: 'Lunar surface · partial gravity',
     environment: 'surface_habitat',
     celestial_body: 'moon',
     gravity_regime: 'partial',
   },
   {
     id: 'mars_rover',
-    name: 'Герметичный ровер',
-    description: 'Поверхность Марса · частичная гравитация',
+    name: 'Pressurized rover',
+    description: 'Martian surface · partial gravity',
     environment: 'pressurized_rover',
     celestial_body: 'mars',
     gravity_regime: 'partial',
@@ -94,17 +94,17 @@ export function draftToScenario(
 ): { scenario: Scenario; error: string | null } {
   let error: string | null = null;
   for (const [label, value, max] of [
-    ['Кислород', draft.oxygen, 100],
-    ['Давление', draft.pressure, Infinity],
-    ['Скорость воздуха', draft.airflow, Infinity],
+    ['Oxygen', draft.oxygen, 100],
+    ['Pressure', draft.pressure, Infinity],
+    ['Airflow speed', draft.airflow, Infinity],
   ] as const)
     if (
       value.trim() !== '' &&
       (!Number.isFinite(Number(value)) || Number(value) < 0 || Number(value) > max)
     )
-      error = `${label}: укажите допустимое конечное значение.`;
+      error = `${label}: enter a valid finite value.`;
   if (draft.name.trim().length < 3 || draft.name.length > 100)
-    error = 'Название миссии должно содержать от 3 до 100 символов.';
+    error = 'The mission name must contain 3 to 100 characters.';
   const scenario: Scenario = {
     ...(base ?? makePreset('orbital_custom')),
     name: draft.name.trim(),
@@ -125,7 +125,7 @@ export function draftToScenario(
     if (value.trim() !== '')
       scenario.assumptions.push({
         field,
-        text: `Значение введено пользователем: ${value}. Это условие сценария, а не измерение NASA.`,
+        text: `Value entered by the user: ${value}. This is a scenario assumption, not a NASA measurement.`,
         origin: 'user',
         source_ids: [],
       });

@@ -1,7 +1,7 @@
 {
   "operation_id": "cancelJob",
   "case": "cancelled",
-  "description": "Отмена принята",
+  "description": "Cancel принята",
   "fixture": true,
   "default": true,
   "request": {

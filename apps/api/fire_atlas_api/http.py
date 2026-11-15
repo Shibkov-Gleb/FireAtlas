@@ -9,6 +9,7 @@ import logging
 from typing import Any
 
 import fa_contracts as c
+from fa_contracts.english import english_display
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
@@ -29,7 +30,7 @@ def meta(request: Request, data_revision: str | None, warnings: list[dict] | Non
 
 class ContractJSONResponse(JSONResponse):
     def render(self, content: Any) -> bytes:
-        return json.dumps(content, ensure_ascii=False, allow_nan=False, separators=(",", ":")).encode("utf-8")
+        return json.dumps(english_display(content), ensure_ascii=False, allow_nan=False, separators=(",", ":")).encode("utf-8")
 
 
 def ok(request: Request, data: Any, schema: str, *, status: int = 200, data_revision: str | None = None,
@@ -42,18 +43,18 @@ def ok(request: Request, data: Any, schema: str, *, status: int = 200, data_revi
             # Расхождение кода с контрактом - дефект бэкенда. Клиенту не отдаем невалидный объект.
             log.error("response_contract_violation", extra={"schema": schema, "violations": violations,
                                                              "request_id": request.state.request_id})
-            raise ApiError("INTERNAL_ERROR", "Ответ сервера не прошел проверку контракта. Сообщите request_id.")
+            raise ApiError("INTERNAL_ERROR", "The server response failed contract validation. Report the request_id.")
     return ContractJSONResponse(body, status_code=status, headers=headers)
 
 
 async def read_json(request: Request, schema: str) -> dict:
     ctype = request.headers.get("content-type", "").split(";")[0].strip().lower()
     if ctype != JSON_CT:
-        raise ApiError("MALFORMED_JSON", "Ожидается Content-Type: application/json.",
+        raise ApiError("MALFORMED_JSON", "Content-Type: application/json is required.",
                        [{"field": "Content-Type", "reason": "unsupported_media_type"}])
     raw = await request.body()
     if len(raw) > request.app.state.settings.max_body_bytes:
-        raise validation_error([{"field": "$", "reason": "body_too_large"}], "Запрос слишком большой.")
+        raise validation_error([{"field": "$", "reason": "body_too_large"}], "The request is too large.")
     try:
         body = c.strict_json_loads(raw)
     except (ValueError, UnicodeDecodeError):

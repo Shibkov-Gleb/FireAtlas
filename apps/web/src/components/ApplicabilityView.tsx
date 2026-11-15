@@ -3,21 +3,21 @@ import { Badge, Notice } from './ui';
 import s from './ApplicabilityView.module.css';
 
 const labels = {
-  match: 'Совпадает',
-  mismatch: 'Отличается',
-  unknown: 'Неизвестно',
-  not_covered: 'Прямых данных нет',
+  match: 'Matches',
+  mismatch: 'Differs',
+  unknown: 'Unknown',
+  not_covered: 'No direct evidence',
 } as const;
 const fieldLabels: Record<string, string> = {
-  safety_task: 'Задача',
-  smoke_measurement: 'Измерения дыма',
-  joint_conditions: 'Сочетание условий',
-  gravity_regime: 'Гравитация',
-  oxygen_fraction: 'Доля кислорода',
-  pressure: 'Давление',
-  airflow_speed: 'Скорость воздуха',
-  geometry: 'Геометрия',
-  material_ids: 'Материал',
+  safety_task: 'Task',
+  smoke_measurement: 'Smoke measurements',
+  joint_conditions: 'Combined conditions',
+  gravity_regime: 'Gravity',
+  oxygen_fraction: 'Oxygen fraction',
+  pressure: 'Pressure',
+  airflow_speed: 'Airflow speed',
+  geometry: 'Geometry',
+  material_ids: 'Material',
 };
 export function ApplicabilityView({
   result,
@@ -28,11 +28,11 @@ export function ApplicabilityView({
   partial?: boolean;
   onEvidence?: (id: string) => void;
 }) {
-  if (!result) return <Notice>Выберите сценарий миссии для оценки применимости.</Notice>;
+  if (!result) return <Notice>Select a mission scenario to assess applicability.</Notice>;
   return (
     <section className={s.section}>
       <div className="spaceBetween">
-        <h2 className="sectionTitle">Применимость к условиям</h2>
+        <h2 className="sectionTitle">Applicability to conditions</h2>
         <Badge
           tone={
             partial || result.overall === 'insufficient_evidence'
@@ -43,27 +43,28 @@ export function ApplicabilityView({
           }
         >
           {partial
-            ? 'Перенос требует обоснования'
+            ? 'Transfer requires justification'
             : result.overall === 'direct_evidence'
-              ? 'Есть прямые основания'
+              ? 'Direct evidence available'
               : result.overall === 'related_evidence'
-                ? 'Связанные основания'
-                : 'Недостаточно доказательств'}
+                ? 'Related evidence'
+                : 'Insufficient evidence'}
         </Badge>
       </div>
       {partial && (
         <Notice tone="warning">
-          <strong>Прямых данных частичной гравитации в PSI нет.</strong> Связанные результаты
-          изучаются с явными ограничениями; выбор миссии не создаёт отсутствующие измерения.
+          <strong>PSI contains no direct partial-gravity measurements.</strong> Related findings are
+          considered with explicit limitations; selecting a mission does not create missing
+          measurements.
         </Notice>
       )}
-      <div className="tableScroll" role="region" tabIndex={0} aria-label="Факторы применимости">
+      <div className="tableScroll" role="region" tabIndex={0} aria-label="Applicability factors">
         <table>
           <thead>
             <tr>
-              <th scope="col">Фактор</th>
-              <th scope="col">Статус</th>
-              <th scope="col">Основание и ограничения</th>
+              <th scope="col">Factor</th>
+              <th scope="col">Status</th>
+              <th scope="col">Evidence and limitations</th>
             </tr>
           </thead>
           <tbody>
@@ -88,7 +89,7 @@ export function ApplicabilityView({
                   <div className="inline" style={{ marginTop: 8 }}>
                     {factor.evidence_ids.map((id, index) => (
                       <button key={id} className="textLink" onClick={() => onEvidence?.(id)}>
-                        Основание {index + 1}
+                        Evidence {index + 1}
                       </button>
                     ))}
                   </div>
@@ -100,7 +101,7 @@ export function ApplicabilityView({
       </div>
       {result.gaps.length > 0 && (
         <div className={s.gaps}>
-          <h3>Что ещё требуется проверить</h3>
+          <h3>What still needs to be checked</h3>
           {result.gaps.map((gap, index) => (
             <div key={index}>
               <p>{gap.description}</p>

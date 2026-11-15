@@ -18,13 +18,13 @@
     "body": {
       "error": {
         "code": "REPORT_NOT_READY",
-        "message": "Отчет еще готовится.",
+        "message": "The report is still being prepared.",
         "details": [],
         "retryable": true
       },
       "meta": {
         "request_id": "req_demo02",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

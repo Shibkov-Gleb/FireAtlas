@@ -42,9 +42,30 @@ export function searchFixture(
   const corpus = includeExtra ? [...investigations, extraInvestigation] : investigations;
   const q = body.query.trim().toLocaleLowerCase('ru');
   const keywords: Record<string, string[]> = {
-    inv_psi25: ['вентиля', 'воздух', 'твёрд', 'тверд', 'bass', 'материал'],
-    inv_psi69: ['капл', 'жидк', 'метанол', 'погасан', 'flex'],
-    inv_psi101: ['дым', 'частиц', 'обнаруж', 'same'],
+    inv_psi25: [
+      'ventilat',
+      'airflow',
+      'solid',
+      'material',
+      'bass',
+      'вентиля',
+      'воздух',
+      'твёрд',
+      'тверд',
+      'материал',
+    ],
+    inv_psi69: [
+      'droplet',
+      'liquid',
+      'methanol',
+      'extinct',
+      'flex',
+      'капл',
+      'жидк',
+      'метанол',
+      'погасан',
+    ],
+    inv_psi101: ['smoke', 'particle', 'detect', 'same', 'дым', 'частиц', 'обнаруж'],
   };
   const items: Schema['SearchItem'][] = [];
   for (const investigation of corpus) {
@@ -70,7 +91,7 @@ export function searchFixture(
       (f.has_measurements === null || hasMeasurements === f.has_measurements);
     const queryPass =
       !q ||
-      q === 'горение' ||
+      ['combustion', 'горение'].includes(q) ||
       investigation.id === 'inv_demo04' ||
       (keywords[investigation.id] ?? []).some((term) => q.includes(term)) ||
       [investigation.title, investigation.acronym, ...investigation.objectives]
@@ -85,7 +106,7 @@ export function searchFixture(
         ? [
             {
               code: 'scope_match',
-              text: 'Совпадают задача поиска и направление исследования.',
+              text: 'The research question and investigation scope match.',
               field: null,
               evidence_ids: [],
             },
@@ -93,7 +114,7 @@ export function searchFixture(
         : [
             {
               code: 'related',
-              text: 'Связанное направление для изучения других механизмов.',
+              text: 'A related research area for exploring other mechanisms.',
               field: null,
               evidence_ids: [],
             },
@@ -103,13 +124,13 @@ export function searchFixture(
         : [
             {
               code: 'different_object',
-              text: 'Другой объект или методика; это не точное совпадение с вопросом.',
+              text: 'Different subject or method; this is not an exact match for the question.',
               field: null,
               evidence_ids: [],
             },
           ],
       missing_fields:
-        investigation.id === 'inv_psi25' ? ['В тестовой записи не сообщено давление.'] : [],
+        investigation.id === 'inv_psi25' ? ['Pressure is not reported in this test record.'] : [],
       matching_run_ids: selectedRuns.map((r) => r.id),
       related: !queryPass,
       evidence_ids: evidence
@@ -176,8 +197,8 @@ export function measurementFixture(
     });
   }
   return {
-    x_axis: { key: 'sample.initial_diameter', label: 'Начальный диаметр капли', unit: 'm' },
-    y_axis: { key: 'metrics.burn_duration', label: 'Время горения', unit: 's' },
+    x_axis: { key: 'sample.initial_diameter', label: 'Initial droplet diameter', unit: 'm' },
+    y_axis: { key: 'metrics.burn_duration', label: 'Burn duration', unit: 's' },
     points: points.slice(0, body.limit),
     excluded_count: [...exclusions.values()].reduce((a, b) => a + b, 0),
     exclusions_by_reason: {
@@ -195,7 +216,7 @@ export function measurementFixture(
 export function defaultSearch(revision: string): Schema['SearchRequest'] {
   return {
     query: '',
-    locale: 'ru',
+    locale: 'en',
     data_revision: revision,
     filters: { ...emptyFilters(), scopes: ['prevention', 'detection', 'suppression'] },
     scenario: null,
@@ -211,33 +232,33 @@ export function comparisonFixture(
 ): Schema['ComparisonResponse'] {
   const valueById: Record<string, string[]> = {
     inv_psi25: [
-      'Твёрдые образцы',
-      'Распространение и погасание пламени',
-      'Поток, кислород, геометрия',
-      'Предотвращение',
+      'Solid samples',
+      'Flame spread and extinction',
+      'Airflow, oxygen, geometry',
+      'Prevention',
     ],
     inv_psi69: [
-      'Капли жидкого топлива',
-      'Горение и погасание капли',
-      'Атмосфера, давление, диаметр',
-      'Подавление',
+      'Liquid-fuel droplets',
+      'Droplet combustion and extinction',
+      'Atmosphere, pressure, diameter',
+      'Suppression',
     ],
     inv_psi101: [
-      'Частицы дыма',
-      'Образование и характеристики дыма',
-      'Материал, нагрев, перенос',
-      'Обнаружение',
+      'Smoke particles',
+      'Smoke generation and characteristics',
+      'Material, heating, transport',
+      'Detection',
     ],
   };
   return {
     investigations: selected,
-    rows: ['Объект исследования', 'Ключевой вопрос', 'Управляемые условия', 'Направление'].map(
+    rows: ['Research subject', 'Key question', 'Controlled conditions', 'Research area'].map(
       (label, index) => ({
         field: `field_${index}`,
         label,
         cells: selected.map((inv) => ({
           investigation_id: inv.id,
-          value_text: valueById[inv.id]?.[index] ?? 'Не сообщено',
+          value_text: valueById[inv.id]?.[index] ?? 'Not reported',
           status: valueById[inv.id] ? 'known' : 'not_reported',
           evidence_ids: evidence
             .filter((e) => inv.source_ids.includes(e.source_id))
@@ -250,7 +271,7 @@ export function comparisonFixture(
       reasons: [
         {
           code: 'different_method',
-          text: 'Разные объекты и методики: общая шкала пожарной опасности не обоснована.',
+          text: 'Different subjects and methods: a common fire-hazard scale is not justified.',
           field: null,
           evidence_ids: [],
         },
@@ -266,7 +287,7 @@ export function comparisonFixture(
       },
     },
     limitations: [
-      'Демонстрационное сопоставление описаний исследований; численные ряды не объединяются.',
+      'Demo comparison of investigation descriptions; numerical series are not combined.',
     ],
   };
 }

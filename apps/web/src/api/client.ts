@@ -65,19 +65,19 @@ export async function request<T>(
         data: undefined as T,
         meta: {
           request_id: response.headers.get('X-Request-ID') || '',
-          contract_version: '1.0.0',
+          contract_version: '1.3.0',
           data_revision: null,
           warnings: [],
         },
       };
     if (response.ok && responseType === 'blob') {
       if (!response.headers.get('Content-Type')?.startsWith('application/pdf'))
-        throw new ApiError('INVALID_RESPONSE', 'Сервер не вернул PDF.', response.status);
+        throw new ApiError('INVALID_RESPONSE', 'The server did not return a PDF.', response.status);
       return {
         data: (await response.blob()) as T,
         meta: {
           request_id: response.headers.get('X-Request-ID') || '',
-          contract_version: '1.0.0',
+          contract_version: '1.3.0',
           data_revision: null,
           warnings: [],
         },
@@ -89,7 +89,7 @@ export async function request<T>(
     } catch {
       throw new ApiError(
         'INVALID_RESPONSE',
-        'Сервер вернул ответ в неизвестном формате.',
+        'The server returned an unrecognized response format.',
         response.status,
         response.headers.get('X-Request-ID'),
       );
@@ -99,7 +99,7 @@ export async function request<T>(
         window.dispatchEvent(new Event('fireatlas:session-required'));
       throw new ApiError(
         body.error?.code || 'HTTP_ERROR',
-        body.error?.message || 'Не удалось выполнить запрос.',
+        body.error?.message || 'The request could not be completed.',
         response.status,
         body.meta?.request_id || null,
         body.error?.retryable || false,
@@ -110,7 +110,7 @@ export async function request<T>(
     if (!body.meta || !('data' in body))
       throw new ApiError(
         'INVALID_RESPONSE',
-        'В ответе отсутствуют данные или метаданные.',
+        'The response is missing data or metadata.',
         response.status,
       );
     for (const warning of body.meta.warnings)
@@ -123,14 +123,14 @@ export async function request<T>(
     if (controller.signal.aborted)
       throw new ApiError(
         'REQUEST_TIMEOUT',
-        'Сервер не ответил вовремя. Ваш ввод сохранён.',
+        'The server did not respond in time. Your input has been preserved.',
         0,
         null,
         true,
       );
     throw new ApiError(
       'NETWORK_ERROR',
-      'Нет соединения с сервером. Проверьте подключение и повторите запрос.',
+      'Unable to connect to the server. Check your connection and try again.',
       0,
       null,
       true,
@@ -212,9 +212,7 @@ export const api = {
     request<Schema['Report']>(`/reports/${encodeURIComponent(id)}`, { signal }),
   downloadReport: (path: string) => {
     if (!safeDownloadPath(path))
-      return Promise.reject(
-        new ApiError('INVALID_DOWNLOAD_PATH', 'Ссылка на скачивание недопустима.'),
-      );
+      return Promise.reject(new ApiError('INVALID_DOWNLOAD_PATH', 'The download link is invalid.'));
     return request<Blob>(
       path.slice('/api/v1'.length),
       { headers: { Accept: 'application/pdf' } },
