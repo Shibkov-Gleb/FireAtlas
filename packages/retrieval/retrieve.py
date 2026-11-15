@@ -10,6 +10,8 @@ import json
 import math
 import re
 import sys
+from copy import deepcopy
+from functools import lru_cache
 from pathlib import Path
 
 RETRIEVAL_REVISION = "lexical-2"
@@ -179,14 +181,21 @@ COND_FIELDS = [("oxygen_range", "oxygen_fraction", "кислород"), ("pressu
                ("helium_range", "helium_fraction", "доля гелия")]
 
 
+@lru_cache(maxsize=4)
+def _release_index(release_path):
+    """Release directories are immutable; cache is private to this module."""
+    data = load(release_path)
+    docs, idf = index(data)
+    return data, docs, idf
+
+
 def retrieve(request, release_dir=None):
     release_dir = Path(release_dir) if release_dir else ROOT / "data" / "releases" / request["data_revision"]
     if not release_dir.exists():
         raise FileNotFoundError(f"data revision {request['data_revision']} not found")
-    data = load(release_dir)
+    data, docs, idf = _release_index(str(release_dir.resolve()))
     if data["manifest"]["data_revision"] != request["data_revision"]:
         raise ValueError("release directory does not match the requested data_revision")
-    docs, idf = index(data)
     f = request.get("filters") or {}
     scenario = request.get("scenario")
     qterms = expand(request.get("question") or request.get("query") or "")
@@ -284,9 +293,9 @@ def retrieve(request, release_dir=None):
     bundle, coverage = build_bundle(data, request, ranked, qterms, target_partial, idf)
     warnings = [{"code": "SEMANTIC_SEARCH_UNAVAILABLE",
                  "message": "Семантический поиск не используется в P0; работает лексический поиск.", "field": None}]
-    return {"request_id": request.get("request_id"), "data_revision": request["data_revision"],
+    return deepcopy({"request_id": request.get("request_id"), "data_revision": request["data_revision"],
             "retrieval_revision": RETRIEVAL_REVISION, "mode": "lexical", "ranked_items": ranked,
-            "evidence_bundle": bundle, "coverage": coverage, "warnings": warnings}
+            "evidence_bundle": bundle, "coverage": coverage, "warnings": warnings})
 
 
 def facts(run, ev_ids):
