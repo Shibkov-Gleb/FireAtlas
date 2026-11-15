@@ -1,7 +1,7 @@
 {
   "operation_id": "patchCurrentWorkspace",
   "case": "fourth_selected",
-  "description": "Четвертое исследование в сравнении (AT-10)",
+  "description": "Четвертое investigation in comparison (AT-10)",
   "fixture": true,
   "default": false,
   "request": {
@@ -25,7 +25,7 @@
     "body": {
       "error": {
         "code": "VALIDATION_ERROR",
-        "message": "В сравнении может быть не больше трех исследований. Текущий набор сохранен.",
+        "message": "In comparison может быть не больше трех исследований. Текущий набор сохранен.",
         "details": [
           {
             "field": "selected_investigation_ids",
@@ -37,7 +37,7 @@
       },
       "meta": {
         "request_id": "req_demo02",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

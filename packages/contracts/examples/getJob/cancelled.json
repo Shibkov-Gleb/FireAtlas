@@ -1,7 +1,7 @@
 {
   "operation_id": "getJob",
   "case": "cancelled",
-  "description": "Отменено пользователем (AT-17)",
+  "description": "Cancelled пользователем (AT-17)",
   "fixture": true,
   "default": false,
   "request": {
@@ -36,7 +36,7 @@
       },
       "meta": {
         "request_id": "req_demo01",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

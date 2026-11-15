@@ -22,7 +22,7 @@
         "workspace_revision": 3,
         "scenario_snapshot": {
           "scenario_id": "moon_base",
-          "name": "Лунная база",
+          "name": "Lunar base",
           "environment": "surface_habitat",
           "celestial_body": "moon",
           "safety_task": "prevention",
@@ -35,7 +35,7 @@
           "assumptions": [
             {
               "field": "gravity_regime",
-              "text": "Целевой режим - частичная гравитация Луны. Наличие сценария не означает наличие опытов в корпусе.",
+              "text": "The target regime is lunar partial gravity. A scenario does not imply that matching test runs exist in the corpus.",
               "origin": "preset_source",
               "source_ids": [
                 "src_track_flame_in_freefall"
@@ -49,7 +49,7 @@
           {
             "id": "block_limit1",
             "kind": "limitation",
-            "text": "В корпусе нет опытов частичной гравитации, поэтому прямого ответа для лунной базы нет. Доступны связанные микрогравитационные исследования.",
+            "text": "В corpusе нет test runs частичной гравитации, поэтому прямого ответа для лунной базы нет. Доступны связанные микрогравитационные investigations.",
             "evidence_ids": [
               "ev_track_partial_gravity"
             ],
@@ -62,7 +62,7 @@
             {
               "field": "gravity_regime",
               "status": "not_covered",
-              "explanation": "Целевой режим - частичная гравитация; в корпусе только микрогравитация. Перенос требует обоснования.",
+              "explanation": "Target regime: partial gravity; в corpusе только Microgravity. Transfer requires justification.",
               "evidence_ids": [
                 "ev_track_partial_gravity"
               ]
@@ -70,32 +70,32 @@
             {
               "field": "oxygen_fraction",
               "status": "unknown",
-              "explanation": "Доля кислорода базы не задана.",
+              "explanation": "Oxygen fraction базы not specified.",
               "evidence_ids": []
             },
             {
               "field": "pressure",
               "status": "unknown",
-              "explanation": "Давление базы не задано.",
+              "explanation": "Pressure базы not specified.",
               "evidence_ids": []
             },
             {
               "field": "material_ids",
               "status": "unknown",
-              "explanation": "Материал не выбран.",
+              "explanation": "No material selected.",
               "evidence_ids": []
             }
           ],
           "gaps": [
             {
               "field": "gravity_regime",
-              "description": "Нет прямых опытов частичной гравитации в PSI.",
-              "suggested_next_step": "Изучить связанные микрогравитационные исследования с явной оговоркой; сохранить пробел в отчете."
+              "description": "Нет прямых test runs частичной гравитации в PSI.",
+              "suggested_next_step": "Изучить связанные микрогравитационные investigations с явной оговоркой; save пробел в Reportе."
             },
             {
               "field": "oxygen_fraction",
-              "description": "Не задана атмосфера базы.",
-              "suggested_next_step": "Указать долю кислорода и давление сценария."
+              "description": "Not specified атмоSphere базы.",
+              "suggested_next_step": "Specify долю oxygenа и pressure сценария."
             }
           ],
           "basis": {
@@ -107,7 +107,7 @@
           {
             "evidence_id": "ev_track_partial_gravity",
             "source_id": "src_track_flame_in_freefall",
-            "label": "Flame in Freefall - условия трека",
+            "label": "Flame in Freefall - conditions трека",
             "locator": {
               "page": null,
               "section": "[FIXTURE] Details",
@@ -118,11 +118,11 @@
           }
         ],
         "limitations": [
-          "Отсутствие данных не означает безопасность."
+          "Missing data do not establish safety."
         ],
         "follow_up_questions": [
-          "Какой материал рассматривается?",
-          "Какие давление и доля кислорода на базе?"
+          "Какой material рассматривается?",
+          "Какие pressure и oxygen fraction на базе?"
         ],
         "retrieval_mode": "lexical",
         "reasoning_revision": "reasoning-0.1-fixture",
@@ -136,7 +136,7 @@
       },
       "meta": {
         "request_id": "req_demo01",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

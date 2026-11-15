@@ -1,7 +1,7 @@
 {
   "operation_id": "getInvestigation",
   "case": "bass_with_hypothesis",
-  "description": "BASS-II: наблюдение и отдельно гипотеза",
+  "description": "BASS-II: observation и отдельно гипотеза",
   "fixture": true,
   "default": false,
   "request": {
@@ -26,9 +26,9 @@
           "acronym": "BASS-II",
           "title": "Burning and Suppression of Solids - II",
           "objectives": [
-            "[FIXTURE] Цель BASS-II; формулировку поставляет AI 1."
+            "[FIXTURE] Objective BASS-II; формулировку поставляет AI 1."
           ],
-          "setup_summary": "[FIXTURE] Краткое описание установки BASS-II.",
+          "setup_summary": "[FIXTURE] Summaryе описание установки BASS-II.",
           "scopes": [
             "prevention",
             "suppression"
@@ -71,14 +71,14 @@
               "inv_psi25"
             ],
             "kind": "observation",
-            "text": "[FIXTURE] Наблюдение BASS-II о слабом потоке; текст и условия поставляет AI 1 (A1-05).",
+            "text": "[FIXTURE] Observation BASS-II о слабом потоке; текст и conditions поставляет AI 1 (A1-05).",
             "supporting_evidence_ids": [
               "ev_psi25_fixture01"
             ],
             "contradicting_evidence_ids": [],
             "applicable_run_ids": [],
             "limitations": [
-              "[FIXTURE] Результат относится к условиям опыта."
+              "[FIXTURE] Результат относится к conditionsм test runа."
             ],
             "review_status": "reviewed"
           },
@@ -89,7 +89,7 @@
               "inv_psi25"
             ],
             "kind": "hypothesis",
-            "text": "[FIXTURE] Исходная гипотеза исследования - отображается отдельно от результатов.",
+            "text": "[FIXTURE] Hypothesis investigations - отображается отдельно от результатов.",
             "supporting_evidence_ids": [],
             "contradicting_evidence_ids": [],
             "applicable_run_ids": [],
@@ -135,7 +135,7 @@
       },
       "meta": {
         "request_id": "req_demo01",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

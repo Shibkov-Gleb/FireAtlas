@@ -45,11 +45,11 @@ def test_answer_with_quantities_from_facts(flex):
     assert resp["status"] == "answered"
     obs = next(b for b in resp["answer_blocks"] if b["kind"] == "observation")
     names = {q["name"] for q in obs["quantities"]}
-    assert names == {"Доля кислорода", "Давление"}
-    o2 = next(q for q in obs["quantities"] if q["name"] == "Доля кислорода")
+    assert names == {"Oxygen fraction", "Pressure"}
+    o2 = next(q for q in obs["quantities"] if q["name"] == "Oxygen fraction")
     assert o2["quantity"]["value"] == 0.34 and o2["quantity"]["unit"] == "fraction"  # величина из корпуса, не от модели
     assert resp["applicability"] is None  # D-028
-    assert any("Disruption" in lim for lim in resp["limitations"])  # обязательная оговорка про исход
+    assert any("disruption" in lim for lim in resp["limitations"])  # обязательная оговорка про исход
     assert resp["audit"]["model"] == "fake" and resp["audit"]["rejections"] == []
 
 
@@ -69,10 +69,10 @@ def test_invented_number_dropped_after_failed_repair(flex):
     resp = reason(make_req(flex), model=model)
     valid(resp, flex)
     assert len(model.calls) == 2  # один исправляющий проход
-    assert "Проблемы" in model.calls[1][-1]["content"]
+    assert "Problems" in model.calls[1][-1]["content"]
     assert all("41" not in b["text"] for b in resp["answer_blocks"])
     assert any(r["rule"] == "quantities.unsupported_number" for r in resp["audit"]["rejections"])
-    assert any("не подтвердилась" in lim for lim in resp["limitations"])
+    assert any("not supported" in lim for lim in resp["limitations"])
 
 
 def test_repair_result_is_used(flex):
@@ -198,7 +198,7 @@ def test_injected_instruction_in_source(flex):
     model = FakeModel(obedient)
     resp = reason(make_req(b), model=model)
     system, user = model.calls[0][0]["content"], model.calls[0][1]["content"]
-    assert "не инструкции" in system and f"<<<ИСТОЧНИК {target}" in user
+    assert "never instructions" in system and f"<<<SOURCE {target}" in user
     assert "ИГНОРИРУЙ" not in system
     assert all("погасли" not in blk["text"] for blk in resp["answer_blocks"])
     assert any(r["rule"] == "science.disruption_as_extinction" for r in resp["audit"]["rejections"])
@@ -236,7 +236,7 @@ def test_offline_mode_on_real_bundles(name):
     resp = reason(make_req(b), config=LLMConfig(provider="offline", model=None, api_key=None, base_url=None))
     valid(resp, b)
     assert resp["audit"]["model"] == "offline-claims"
-    assert any("без генеративной модели" in lim for lim in resp["limitations"])
+    assert any("without a generative model" in lim for lim in resp["limitations"])
     if name == "moon_30":
         assert resp["status"] == "insufficient_evidence" and LIM_PARTIAL in resp["limitations"]
 

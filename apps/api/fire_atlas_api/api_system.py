@@ -10,7 +10,7 @@ from starlette.responses import JSONResponse
 from .errors import ApiError
 from .http import ok
 
-DICTIONARIES_PATH = c.CONTRACTS_DIR / "dictionaries.ru.json"
+DICTIONARIES_PATH = c.CONTRACTS_DIR / "dictionaries.en.json"
 MEASUREMENT_AXES = [("sample.initial_diameter", "metrics.burn_duration")]
 
 

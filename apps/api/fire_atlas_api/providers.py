@@ -138,7 +138,7 @@ class StubRetriever:
             rows = conn.execute("SELECT entity_type, id, body FROM entities WHERE data_revision = ? "
                                 "AND entity_type IN ('investigation','run','claim','evidence','source')", (rev,)).fetchall()
         if not rows:
-            raise RetrievalUnavailable(f"нет данных ревизии {rev}")
+            raise RetrievalUnavailable(f"no data ревизии {rev}")
         E: dict[str, dict[str, dict]] = {}
         for r in rows:
             E.setdefault(r["entity_type"], {})[r["id"]] = json.loads(r["body"])
@@ -186,7 +186,7 @@ class StubRetriever:
             "target_gravity_covered": gravity_ok,
             "direct_evidence_available": gravity_ok and bool(items),
             "reasons": [] if gravity_ok else [{"code": "gravity_not_covered", "field": "gravity_regime", "evidence_ids": [],
-                                               "text": "В корпусе нет опытов с целевым режимом гравитации."}],
+                                               "text": "The corpus has no test runs in the target gravity regime."}],
         }
         bundle = {
             "bundle_id": "bnd_" + req["request_id"][4:], "data_revision": rev, "question": req["question"],
@@ -200,7 +200,7 @@ class StubRetriever:
                   for n, i in enumerate(inv_ids)]
         return {"request_id": req["request_id"], "data_revision": rev, "retrieval_revision": STUB_RETRIEVAL_REVISION,
                 "mode": "curated", "ranked_items": ranked, "evidence_bundle": bundle, "coverage": coverage,
-                "warnings": [{"code": "RETRIEVAL_STUB", "message": "Поиск AI 1 не подключен; используется подборка бэкенда.",
+                "warnings": [{"code": "RETRIEVAL_STUB", "message": "AI 1 retrieval is not connected; a backend selection is being used.",
                               "field": None}]}
 
 
@@ -213,16 +213,16 @@ def stub_reason(req: dict) -> dict:
     cov = b["coverage"]
     if not allowed or not cov["direct_evidence_available"]:
         status = "insufficient_evidence"
-        reasons = "; ".join(r["text"] for r in cov["reasons"]) or "Подходящих доказательств не найдено."
+        reasons = "; ".join(r["text"] for r in cov["reasons"]) or "No matching evidence was found."
         used = allowed[:3]
         blocks.append({"id": "blk_1", "kind": "limitation", "evidence_ids": used, "quantities": [],
-                       "text": f"[ЗАГЛУШКА AI 2] Прямых данных недостаточно. {reasons} Отсутствие данных не означает безопасность."})
+                       "text": f"[AI 2 STUB] There is not enough direct evidence. {reasons} Missing data do not establish safety."})
     else:
         used = allowed[:5]
         acr = sorted({inv for e in used for inv in by_ev[e]["investigation_ids"]})
         blocks.append({"id": "blk_1", "kind": "summary", "evidence_ids": used, "quantities": [],
-                       "text": f"[ЗАГЛУШКА AI 2] Это не сгенерированный ответ. Найдено доказательств: {len(allowed)}; "
-                               f"исследования: {', '.join(acr)}. Откройте источники ниже."})
+                       "text": f"[AI 2 STUB] This is not a generated answer. Evidence records found: {len(allowed)}; "
+                               f"investigations: {', '.join(acr)}. Open the sources below."})
         for n, c in enumerate([c for c in b["selected_claims"] if c["kind"] == "observation"][:3], start=2):
             ev = [e for e in c["supporting_evidence_ids"] if e in allowed]
             if ev:
@@ -230,13 +230,13 @@ def stub_reason(req: dict) -> dict:
                                "quantities": []})
                 used += [e for e in ev if e not in used]
         blocks.append({"id": f"blk_{len(blocks) + 1}", "kind": "limitation", "evidence_ids": [], "quantities": [],
-                       "text": "Результаты относятся к условиям конкретных опытов."})
+                       "text": "The results apply to the conditions of the specific test runs."})
     citations = [{"evidence_id": e, "source_id": by_ev[e]["source_metadata"]["id"],
                   "label": by_ev[e]["source_metadata"]["title"], "locator": by_ev[e]["evidence"]["locator"]} for e in used]
     return {
         "status": status, "answer_blocks": blocks[:8], "applicability": None, "citations": citations,
-        "limitations": ["Ответ сформирован заглушкой бэкенда; модуль AI 2 не подключен."],
-        "follow_up_questions": ["Какой материал и какие условия атмосферы рассматриваются?"] if status != "answered" else [],
+        "limitations": ["This answer was produced by the backend stub; the AI 2 module is not connected."],
+        "follow_up_questions": ["Which material and atmosphere conditions are being considered?"] if status != "answered" else [],
         "reasoning_revision": STUB_REASONING_REVISION,
         "validation_summary": {"schema_valid": True, "references_valid": True, "quantities_valid": True, "scope_valid": True},
         "audit": {"checked_evidence_ids": used, "rejections": [], "model": None, "model_version": None},
@@ -249,44 +249,44 @@ def stub_assess_applicability(scenario: dict, investigations: list[dict], runs: 
     regimes = {r["conditions"]["gravity_regime"] for r in runs} | {g for i in investigations for g in i["gravity_regimes"]}
     target = scenario["gravity_regime"]
     if target in regimes:
-        g_status, g_text = "match", "Режим гравитации представлен в выбранных исследованиях."
+        g_status, g_text = "match", "The gravity regime is represented in the selected investigations."
     elif target in ("partial", "simulated_partial"):
-        g_status, g_text = "not_covered", "Целевой режим - частичная гравитация; прямых опытов в корпусе нет. Перенос требует обоснования."
-        gaps.append({"field": "gravity_regime", "description": "Нет прямых опытов частичной гравитации.",
-                     "suggested_next_step": "Изучить связанные исследования с явной оговоркой; сохранить пробел в отчете."})
+        g_status, g_text = "not_covered", "The target regime is partial gravity; the corpus has no direct tests. Transfer requires justification."
+        gaps.append({"field": "gravity_regime", "description": "There are no direct partial-gravity test runs.",
+                     "suggested_next_step": "Explore related studies with an explicit caveat; keep the evidence gap in the report."})
     else:
-        g_status, g_text = "mismatch", "Режим гравитации сценария отличается от режимов исследований."
+        g_status, g_text = "mismatch", "The scenario gravity regime differs from those of the investigations."
     factors.append({"field": "gravity_regime", "status": g_status, "explanation": g_text, "evidence_ids": []})
     scopes = {s for i in investigations for s in i["scopes"]}
     factors.append({"field": "safety_task", "status": "match" if scenario["safety_task"] in scopes else "mismatch",
-                    "explanation": "Задача сценария совпадает с направлением исследования." if scenario["safety_task"] in scopes
-                    else "Направление исследований отличается от задачи сценария.", "evidence_ids": []})
+                    "explanation": "The scenario task matches the research area." if scenario["safety_task"] in scopes
+                    else "The research area differs from the scenario task.", "evidence_ids": []})
     mats = {m for i in investigations for m in i["material_ids"]}
     if not scenario["material_ids"]:
-        factors.append({"field": "material_ids", "status": "unknown", "explanation": "Материал не выбран.", "evidence_ids": []})
+        factors.append({"field": "material_ids", "status": "unknown", "explanation": "No material selected.", "evidence_ids": []})
     else:
         hit = set(scenario["material_ids"]) & mats
         factors.append({"field": "material_ids", "status": "match" if hit else "mismatch",
-                        "explanation": "Материал есть в исследованиях (по material_id)." if hit else "Выбранного материала нет в исследованиях.",
+                        "explanation": "The material is present in the investigations (by material_id)." if hit else "The selected material is not present in the investigations.",
                         "evidence_ids": []})
     cov_field = {"oxygen_fraction": "conditions.oxygen_fraction", "pressure": "conditions.pressure",
                  "airflow_speed": "conditions.airflow_speed"}
     for f, cf in cov_field.items():
         q = scenario[f]
         if q is None or q["value"] is None:
-            factors.append({"field": f, "status": "unknown", "explanation": "Условие сценария не задано.", "evidence_ids": []})
-            gaps.append({"field": f, "description": "Условие сценария не задано.", "suggested_next_step": "Указать значение в сценарии."})
+            factors.append({"field": f, "status": "unknown", "explanation": "The scenario condition is not specified.", "evidence_ids": []})
+            gaps.append({"field": f, "description": "The scenario condition is not specified.", "suggested_next_step": "Specify a value in the scenario."})
             continue
         covs = [c for i in investigations for c in i["conditions_coverage"] if c["field"] == cf and c["known_count"] > 0]
         if not covs:
-            factors.append({"field": f, "status": "not_covered", "explanation": "В исследованиях нет сообщенных значений.", "evidence_ids": []})
+            factors.append({"field": f, "status": "not_covered", "explanation": "The investigations contain no reported values.", "evidence_ids": []})
             continue
         ev = sorted({e for c in covs for e in c["derivation_evidence_ids"]})
         inside = any(c["min_value"] is not None and c["max_value"] is not None and c["min_value"] <= q["value"] <= c["max_value"]
                      for c in covs)
         factors.append({"field": f, "status": "unknown" if inside else "mismatch", "evidence_ids": ev,
-                        "explanation": "Значение внутри наблюдаемого диапазона; совместный опыт с таким сочетанием не проверен."
-                        if inside else "Значение вне наблюдаемого диапазона исследований."})
+                        "explanation": "The value falls within the observed range; a test with this combination has not been verified."
+                        if inside else "The value is outside the observed investigation range."})
     overall = "related_evidence" if scenario["safety_task"] in scopes else "insufficient_evidence"
     return {"overall": overall, "factors": factors, "gaps": gaps,
             "basis": {"reviewed_rules_version": STUB_RULES_VERSION,

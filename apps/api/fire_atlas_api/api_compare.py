@@ -15,7 +15,7 @@ def _load(request: Request, rev: str, ids: list[str]) -> list[dict]:
     found = db.get_entities(rev, "investigation", ids)
     missing = [i for i in ids if i not in found]
     if missing:
-        raise ApiError("NOT_FOUND", f"Исследование {missing[0]} не найдено в версии данных {rev}.",
+        raise ApiError("NOT_FOUND", f"Investigation {missing[0]} not found in data revision {rev}.",
                        [{"field": "investigation_ids", "reason": f"not_found:{missing[0]}"}], data_revision=rev)
     return [found[i] for i in ids]
 
@@ -30,7 +30,7 @@ def _applicability(request: Request, scenario: dict, invs: list[dict], rev: str)
         result = request.app.state.providers["applicability"](scenario, invs, runs, evidence)
         return check_applicability(result, scenario, rev, runs)
     except ContractViolation as e:
-        raise ApiError("INTERNAL_ERROR", "Оценка применимости не прошла проверку. Сообщите request_id.") from e
+        raise ApiError("INTERNAL_ERROR", "The applicability assessment failed validation. Report the request_id.") from e
 
 
 async def compare(request: Request):

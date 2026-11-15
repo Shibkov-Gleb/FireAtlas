@@ -29,8 +29,8 @@ def test_at09_different_methods_partially_compatible(server):
     rows = {row["field"]: row for row in d["rows"]}
     p = {cl["investigation_id"]: cl for cl in rows["conditions.pressure"]["cells"]}
     assert p["inv_psi25"]["status"] == "not_reported" and p["inv_psi25"]["value_text"] is None  # пропуск не равен совпадению
-    assert rows["sample.initial_diameter"]["cells"][1]["value_text"] == "1.61 мм - 2.06 мм"
-    assert "Время горения (5)" in rows["measured_metrics"]["cells"][1]["value_text"]
+    assert rows["sample.initial_diameter"]["cells"][1]["value_text"] == "1.61 mm - 2.06 mm"
+    assert "Burn duration (5)" in rows["measured_metrics"]["cells"][1]["value_text"]
     assert d["applicability"] is None and d["limitations"]
 
 
@@ -106,9 +106,9 @@ def test_report_ready_download_and_content(guest, tmp_path):
     assert hashlib.sha256(dl.raw).hexdigest() == rep.data["sha256"]
     assert "attachment" in dl.headers["content-disposition"]
     text = _pdf_text(dl.raw, tmp_path)
-    for needle in ["Вентиляция и горение материалов", FIX_REV, "Как поток воздуха влияет на горение?", "Орбитальная станция",
-                   "Сравнение исследований", "Первоисточники", "https://psi.nasa.gov/physci/repo/data/investigations/PSI-69",
-                   "Исходная гипотеза (не результат)", "не является заключением о безопасности"]:
+    for needle in ["Вентиляция и горение материалов", FIX_REV, "Как поток воздуха влияет на горение?", "Orbital station",
+                   "Compare investigations", "Original sources", "https://psi.nasa.gov/physci/repo/data/investigations/PSI-69",
+                   "Original hypothesis (not a finding)", "not a safety assessment"]:
         assert needle in text, needle
     again = guest.get(rep.data["download_path"])  # повторное скачивание не создает новый отчет
     assert again.raw == dl.raw

@@ -24,12 +24,12 @@ AXIS_UNITS = {
     "metrics.particle_diameter": "m",
 }
 AXIS_LABELS = {
-    "sample.initial_diameter": "Начальный диаметр", "sample.thickness": "Толщина образца",
-    "conditions.oxygen_fraction": "Доля кислорода", "conditions.pressure": "Давление",
-    "conditions.airflow_speed": "Скорость потока (калиброванная)", "conditions.ambient_temperature": "Температура среды",
-    "conditions.gravity_level": "Уровень гравитации", "metrics.burn_duration": "Время горения",
-    "metrics.visible_extinction_diameter": "Диаметр видимого погасания",
-    "metrics.flame_spread_rate": "Скорость распространения пламени", "metrics.particle_diameter": "Диаметр частиц",
+    "sample.initial_diameter": "Initial diameter", "sample.thickness": "Sample thickness",
+    "conditions.oxygen_fraction": "Oxygen fraction", "conditions.pressure": "Pressure",
+    "conditions.airflow_speed": "Calibrated airflow speed", "conditions.ambient_temperature": "Ambient temperature",
+    "conditions.gravity_level": "Gravity level", "metrics.burn_duration": "Burn duration",
+    "metrics.visible_extinction_diameter": "Visible extinction diameter",
+    "metrics.flame_spread_rate": "Flame spread rate", "metrics.particle_diameter": "Particle diameter",
 }
 ASSET_TYPES = {".pdf": "application/pdf", ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg",
                ".csv": "text/csv", ".txt": "text/plain",
@@ -38,7 +38,7 @@ ASSET_TYPES = {".pdf": "application/pdf", ".png": "image/png", ".jpg": "image/jp
 
 
 def _not_found(what: str, rev: str):
-    return ApiError("NOT_FOUND", f"{what} не найден в версии данных {rev}.", data_revision=rev)
+    return ApiError("NOT_FOUND", f"{what} not found in data revision {rev}.", data_revision=rev)
 
 
 def _entity(request: Request, etype: str, id_: str, what: str) -> tuple[dict, str]:
@@ -50,7 +50,7 @@ def _entity(request: Request, etype: str, id_: str, what: str) -> tuple[dict, st
 
 
 async def get_investigation(request: Request):
-    inv, rev = _entity(request, "investigation", request.path_params["id"], "Исследование")
+    inv, rev = _entity(request, "investigation", request.path_params["id"], "Investigation")
     db = request.app.state.db
     claims = db.get_entities(rev, "claim", inv["claim_ids"])
     published = [claims[cid] for cid in inv["claim_ids"]
@@ -71,7 +71,7 @@ async def get_investigation(request: Request):
 
 async def list_runs(request: Request):
     inv_id = request.path_params["id"]
-    inv, rev = _entity(request, "investigation", inv_id, "Исследование")
+    inv, rev = _entity(request, "investigation", inv_id, "Investigation")
     s = request.app.state.settings
     limit = int_param(request, "limit", 20, 1, s.run_limit_max)
     cursor = query_param(request, "cursor", "Cursor", required=False)
@@ -98,12 +98,12 @@ async def list_runs(request: Request):
 
 
 async def get_run(request: Request):
-    run, rev = _entity(request, "run", request.path_params["id"], "Опыт")
+    run, rev = _entity(request, "run", request.path_params["id"], "Test run")
     return ok(request, run, "TestRunEnvelope", data_revision=rev)
 
 
 async def get_evidence(request: Request):
-    ev, rev = _entity(request, "evidence", request.path_params["id"], "Доказательство")
+    ev, rev = _entity(request, "evidence", request.path_params["id"], "Evidence")
     src = request.app.state.db.get_entity(rev, "source", ev["source_id"])
     if src is None:  # импорт гарантирует ссылочную целостность; сюда попадать не должны
         raise ApiError("INTERNAL_ERROR")
@@ -111,15 +111,15 @@ async def get_evidence(request: Request):
 
 
 async def get_source(request: Request):
-    src, rev = _entity(request, "source", request.path_params["id"], "Источник")
+    src, rev = _entity(request, "source", request.path_params["id"], "Source")
     return ok(request, src, "SourceEnvelope", data_revision=rev)
 
 
 async def get_source_asset(request: Request):
     """BE-11: только зарегистрированный asset; путь не принимается из запроса; sha256 сверяется."""
-    src, rev = _entity(request, "source", request.path_params["id"], "Источник")
+    src, rev = _entity(request, "source", request.path_params["id"], "Source")
     asset_id = src["local_asset_id"]
-    unavailable = ApiError("NOT_FOUND", "Файл источника недоступен. Метаданные и ссылка на оригинал доступны.", data_revision=rev)
+    unavailable = ApiError("NOT_FOUND", "The source file is unavailable. Metadata and the original source link remain accessible.", data_revision=rev)
     if not asset_id or src["availability"] != "available":
         raise unavailable
     base = request.app.state.settings.assets_dir.resolve()
@@ -183,11 +183,11 @@ async def query_measurements(request: Request):
     db = request.app.state.db
     inv_id, x, y = body["investigation_id"], body["x_metric"], body["y_metric"]
     if db.get_entity(rev, "investigation", inv_id) is None:
-        raise _not_found("Исследование", rev)
+        raise _not_found("Investigation", rev)
     from .api_system import MEASUREMENT_AXES
 
     if (x, y) not in MEASUREMENT_AXES:
-        raise validation_error([{"field": "y_metric", "reason": "unsupported_axis"}], "Эта пара показателей не поддерживается.")
+        raise validation_error([{"field": "y_metric", "reason": "unsupported_axis"}], "This pair of metrics is not supported.")
     for rng_name in ("oxygen_range", "pressure_range", "co2_range", "helium_range"):
         rng = (body.get("filters") or {}).get(rng_name)
         if rng and rng["min"] is not None and rng["max"] is not None and rng["min"] > rng["max"]:

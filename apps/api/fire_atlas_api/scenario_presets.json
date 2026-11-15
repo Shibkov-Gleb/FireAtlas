@@ -1,10 +1,10 @@
 [
   {
     "preset_id": "orbital_habitat",
-    "label": "Орбитальная станция",
+    "label": "Orbital station",
     "scenario": {
       "scenario_id": "orbital_custom",
-      "name": "Орбитальная станция",
+      "name": "Orbital station",
       "environment": "orbital_habitat",
       "celestial_body": null,
       "safety_task": "prevention",
@@ -17,7 +17,7 @@
       "assumptions": [
         {
           "field": "gravity_regime",
-          "text": "Орбитальная среда задает микрогравитационный контекст; давление и кислород пресетом не задаются.",
+          "text": "The orbital environment defines a microgravity context; the preset does not specify pressure or oxygen.",
           "origin": "preset_source",
           "source_ids": [
             "src_track_flame_in_freefall"
@@ -28,10 +28,10 @@
   },
   {
     "preset_id": "moon_base",
-    "label": "Лунная база",
+    "label": "Lunar base",
     "scenario": {
       "scenario_id": "moon_base",
-      "name": "Лунная база",
+      "name": "Lunar base",
       "environment": "surface_habitat",
       "celestial_body": "moon",
       "safety_task": "prevention",
@@ -44,7 +44,7 @@
       "assumptions": [
         {
           "field": "gravity_regime",
-          "text": "Целевой режим - частичная гравитация Луны. Наличие сценария не означает наличие опытов в корпусе.",
+          "text": "The target regime is lunar partial gravity. A scenario does not imply that matching test runs exist in the corpus.",
           "origin": "preset_source",
           "source_ids": [
             "src_track_flame_in_freefall"

@@ -1,7 +1,7 @@
 {
   "operation_id": "getSource",
   "case": "unavailable_file",
-  "description": "Файл недоступен, метаданные доступны (AT-26)",
+  "description": "File unavailable, метаdata доступны (AT-26)",
   "fixture": true,
   "default": false,
   "request": {
@@ -34,7 +34,7 @@
       },
       "meta": {
         "request_id": "req_demo01",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

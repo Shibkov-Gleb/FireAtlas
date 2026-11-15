@@ -22,7 +22,7 @@
         "workspace_revision": 3,
         "scenario_snapshot": {
           "scenario_id": "orbital_custom",
-          "name": "Орбитальная станция",
+          "name": "Orbital station",
           "environment": "orbital_habitat",
           "celestial_body": null,
           "safety_task": "prevention",
@@ -35,7 +35,7 @@
           "assumptions": [
             {
               "field": "gravity_regime",
-              "text": "Орбитальная среда задает микрогравитационный контекст; давление и кислород пресетом не задаются.",
+              "text": "The orbital environment defines a microgravity context; the preset does not specify pressure or oxygen.",
               "origin": "preset_source",
               "source_ids": [
                 "src_track_flame_in_freefall"
@@ -49,7 +49,7 @@
           {
             "id": "block_summary",
             "kind": "summary",
-            "text": "В контрольной записи FLEX 30CAL03 капля метанола горела 6,34 с до погасания.",
+            "text": "В контрольной записи FLEX 30CAL03 Droplet methanolа горела 6,34 с до погасания.",
             "evidence_ids": [
               "ev_psi69_30cal03"
             ],
@@ -78,7 +78,7 @@
           {
             "id": "block_demo01",
             "kind": "observation",
-            "text": "В опыте 30CAL03 время горения составило 6,34 с.",
+            "text": "В test runе 30CAL03 burn duration составило 6,34 с.",
             "evidence_ids": [
               "ev_psi69_30cal03"
             ],
@@ -107,7 +107,7 @@
           {
             "id": "block_limit",
             "kind": "limitation",
-            "text": "Одна запись не устанавливает зависимость времени горения от диаметра капли.",
+            "text": "Одна record не устанавливает зависимость времени горения от diameterа капли.",
             "evidence_ids": [],
             "quantities": []
           }
@@ -117,7 +117,7 @@
           {
             "evidence_id": "ev_psi69_30cal03",
             "source_id": "src_psi69_exptable",
-            "label": "FLEX PSI-69, Experimental Table v5, строка 30CAL03",
+            "label": "FLEX PSI-69, Experimental Table v5, row 30CAL03",
             "locator": {
               "page": null,
               "section": null,
@@ -128,10 +128,10 @@
           }
         ],
         "limitations": [
-          "Результат относится к условиям опыта: метанол, доля кислорода 0.21, микрогравитация."
+          "Результат относится к conditionsм test runа: methanol, oxygen fraction 0.21, Microgravity."
         ],
         "follow_up_questions": [
-          "Сравнить с другими записями серии 30CAL?"
+          "Compare с другими записями серии 30CAL?"
         ],
         "retrieval_mode": "lexical",
         "reasoning_revision": "reasoning-0.1-fixture",
@@ -145,7 +145,7 @@
       },
       "meta": {
         "request_id": "req_demo01",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

@@ -25,24 +25,24 @@ STATUS = {
 }
 
 DEFAULT_MESSAGES = {
-    "MALFORMED_JSON": "Некорректный запрос: тело должно быть JSON-объектом.",
-    "SESSION_REQUIRED": "Сессия не найдена или истекла. Создайте новое гостевое пространство.",
-    "ACCESS_DENIED": "Доступ запрещен.",
-    "NOT_FOUND": "Объект не найден.",
-    "WORKSPACE_CONFLICT": "Контекст изменился. Обновите его перед повтором.",
-    "IDEMPOTENCY_CONFLICT": "Этот запрос уже отправлялся с другими данными.",
-    "JOB_ALREADY_FINISHED": "Задача уже завершена.",
-    "REPORT_NOT_READY": "Отчет еще не готов.",
-    "DATA_REVISION_GONE": "Эта версия данных больше недоступна.",
-    "RESOURCE_EXPIRED": "Срок хранения истек.",
-    "VALIDATION_ERROR": "Запрос не прошел проверку.",
-    "INVALID_CURSOR": "Список изменился. Загрузите его заново.",
-    "RATE_LIMITED": "Слишком много запросов. Повторите позже.",
-    "INTERNAL_ERROR": "Внутренняя ошибка сервиса. Сообщите request_id.",
-    "MODEL_PROVIDER_ERROR": "Сервис генерации ответа недоступен.",
-    "AI_UNAVAILABLE": "AI временно недоступен. Каталог и источники работают.",
-    "DATA_NOT_READY": "Данные еще не опубликованы. Попробуйте позже.",
-    "JOB_TIMEOUT": "Ответ не получен за отведенное время.",
+    "MALFORMED_JSON": "Invalid request: the body must be a JSON object.",
+    "SESSION_REQUIRED": "The session was not found or has expired. Create a new guest workspace.",
+    "ACCESS_DENIED": "Access denied.",
+    "NOT_FOUND": "Object not found.",
+    "WORKSPACE_CONFLICT": "The context changed. Refresh it before retrying.",
+    "IDEMPOTENCY_CONFLICT": "This request was already submitted with different data.",
+    "JOB_ALREADY_FINISHED": "The job has already finished.",
+    "REPORT_NOT_READY": "The report is not ready yet.",
+    "DATA_REVISION_GONE": "This data revision is no longer available.",
+    "RESOURCE_EXPIRED": "The retention period has expired.",
+    "VALIDATION_ERROR": "The request failed validation.",
+    "INVALID_CURSOR": "The list changed. Reload it.",
+    "RATE_LIMITED": "Too many requests. Try again later.",
+    "INTERNAL_ERROR": "Internal service error. Report the request_id.",
+    "MODEL_PROVIDER_ERROR": "The answer generation service is unavailable.",
+    "AI_UNAVAILABLE": "AI is temporarily unavailable. The catalog and sources remain available.",
+    "DATA_NOT_READY": "The data have not been published yet. Try again later.",
+    "JOB_TIMEOUT": "No answer was received before the deadline.",
 }
 
 RETRYABLE = {"RATE_LIMITED", "INTERNAL_ERROR", "MODEL_PROVIDER_ERROR", "AI_UNAVAILABLE", "DATA_NOT_READY", "JOB_TIMEOUT"}
@@ -77,5 +77,5 @@ class ApiError(Exception):
 
 def validation_error(violations: list[dict], message: str | None = None) -> ApiError:
     if message is None and violations and all(v.get("reason") == "unexpected_field" for v in violations):
-        message = "Запрос содержит недопустимые поля."
+        message = "The request contains invalid fields."
     return ApiError("VALIDATION_ERROR", message, [dict(v) for v in violations])

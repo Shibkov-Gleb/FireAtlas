@@ -1,7 +1,7 @@
 {
   "operation_id": "compareInvestigations",
   "case": "different_methods",
-  "description": "Два исследования с разными методиками (AT-09)",
+  "description": "Два investigations с разными методиками (AT-09)",
   "fixture": true,
   "default": true,
   "request": {
@@ -30,9 +30,9 @@
             "acronym": "BASS-II",
             "title": "Burning and Suppression of Solids - II",
             "objectives": [
-              "[FIXTURE] Цель BASS-II; формулировку поставляет AI 1."
+              "[FIXTURE] Objective BASS-II; формулировку поставляет AI 1."
             ],
-            "setup_summary": "[FIXTURE] Краткое описание установки BASS-II.",
+            "setup_summary": "[FIXTURE] Summaryе описание установки BASS-II.",
             "scopes": [
               "prevention",
               "suppression"
@@ -74,9 +74,9 @@
             "acronym": "FLEX",
             "title": "Flame Extinguishment Experiment",
             "objectives": [
-              "[FIXTURE] Цель FLEX; формулировку поставляет AI 1."
+              "[FIXTURE] Objective FLEX; формулировку поставляет AI 1."
             ],
-            "setup_summary": "[FIXTURE] Краткое описание установки FLEX.",
+            "setup_summary": "[FIXTURE] Summaryе описание установки FLEX.",
             "scopes": [
               "suppression"
             ],
@@ -147,7 +147,7 @@
               },
               {
                 "investigation_id": "inv_psi69",
-                "value_text": "Капли жидкого топлива (метанол)",
+                "value_text": "Liquid-fuel droplets (methanol)",
                 "status": "known",
                 "evidence_ids": [
                   "ev_psi69_30cal03"
@@ -157,7 +157,7 @@
           },
           {
             "field": "conditions.pressure",
-            "label": "Давление",
+            "label": "Pressure",
             "cells": [
               {
                 "investigation_id": "inv_psi25",
@@ -169,7 +169,7 @@
               },
               {
                 "investigation_id": "inv_psi69",
-                "value_text": "около 101 кПа (757.7-764.2 мм рт. ст.)",
+                "value_text": "около 101 kPa (757.7-764.2 мм рт. ст.)",
                 "status": "known",
                 "evidence_ids": [
                   "ev_psi69_20cal08",
@@ -183,7 +183,7 @@
           },
           {
             "field": "sample.initial_diameter",
-            "label": "Начальный диаметр капли",
+            "label": "Initial droplet diameter",
             "cells": [
               {
                 "investigation_id": "inv_psi25",
@@ -211,7 +211,7 @@
           "reasons": [
             {
               "code": "different_object",
-              "text": "Разные объекты: твердые образцы и капли жидкого топлива",
+              "text": "Разные объекты: твердые образцы и liquid-fuel droplets",
               "field": null,
               "evidence_ids": []
             },
@@ -225,13 +225,13 @@
         },
         "applicability": null,
         "limitations": [
-          "Сравниваются задачи и условия; численные результаты не объединяются (DR-06).",
+          "Сравниваются задачи и conditions; численные результаты не объединяются (DR-06).",
           "Отсутствие поля не трактуется как совпадение."
         ]
       },
       "meta": {
         "request_id": "req_demo01",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

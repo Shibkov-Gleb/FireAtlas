@@ -32,13 +32,13 @@ TERMINAL = {"succeeded", "failed", "cancelled", "expired"}
 ACTIVE = ("queued", "running")
 OUTPUT_LIMITS = {"max_blocks": 8, "max_follow_ups": 3, "max_total_chars": 10000}
 JOB_MESSAGES = {
-    "MODEL_PROVIDER_ERROR": "Сервис генерации ответа недоступен. Найденные материалы доступны для просмотра.",
-    "VALIDATION_FAILED": "Ответ не прошел проверку источников и не опубликован. Откройте найденные материалы.",
-    "REASONING_TIMEOUT": "Модуль ответа не уложился во время. Найденные материалы доступны для просмотра.",
-    "AI_UNAVAILABLE": "Поиск доказательств временно недоступен. Каталог и источники работают.",
-    "JOB_TIMEOUT": "Ответ не получен за отведенное время.",
-    "EXPORT_FAILED": "Не удалось подготовить PDF. Повторите экспорт.",
-    "INTERNAL_ERROR": "Внутренняя ошибка при выполнении задачи. Сообщите request_id.",
+    "MODEL_PROVIDER_ERROR": "The answer generation service is unavailable. Retrieved materials remain available to explore.",
+    "VALIDATION_FAILED": "The answer failed source validation and was not published. Open the retrieved materials.",
+    "REASONING_TIMEOUT": "The reasoning module exceeded its deadline. Retrieved materials remain available.",
+    "AI_UNAVAILABLE": "Evidence retrieval is temporarily unavailable. The catalog and sources remain available.",
+    "JOB_TIMEOUT": "No answer was received before the deadline.",
+    "EXPORT_FAILED": "The PDF could not be prepared. Retry the export.",
+    "INTERNAL_ERROR": "An internal error occurred while running the job. Report the request_id.",
 }
 EMPTY_FILTERS = {"scopes": [], "investigation_ids": [], "material_ids": [], "fuel_states": [], "gravity_regimes": [],
                  "oxygen_range": None, "pressure_range": None, "airflow_range": None, "has_measurements": None,
@@ -70,13 +70,13 @@ def job_to_api(row) -> dict:
 def citation_label(source: dict, loc: dict) -> str:
     parts = [source["title"]]
     if loc["page"] is not None:
-        parts.append(f"стр. {loc['page']}")
+        parts.append(f"p. {loc['page']}")
     if loc["section"]:
         parts.append(loc["section"])
     if loc["row_key"]:
-        parts.append(f"строка {loc['row_key']}")
+        parts.append(f"row {loc['row_key']}")
     if loc["start_s"] is not None and loc["end_s"] is not None:
-        parts.append(f"{loc['start_s']:g}-{loc['end_s']:g} с")
+        parts.append(f"{loc['start_s']:g}-{loc['end_s']:g} s")
     return ", ".join(parts)[:300]
 
 
@@ -137,7 +137,7 @@ class JobRunner:
                     self.metrics.job_finished(r["type"], "expired", "JOB_TIMEOUT")
                     if r["type"] == "report":
                         conn.execute("UPDATE reports SET state='failed', error=? WHERE job_id=? AND state='preparing'",
-                                     (dumps(job_error("JOB_TIMEOUT", "Отчет не подготовлен за отведенное время.")), r["id"]))
+                                     (dumps(job_error("JOB_TIMEOUT", "The report was not prepared before its deadline.")), r["id"]))
             expired = conn.execute("SELECT id, file_name FROM reports WHERE state='ready' AND expires_at <= ?", (now,)).fetchall()
             for r in expired:
                 conn.execute("UPDATE reports SET state='expired' WHERE id=? AND state='ready'", (r["id"],))
@@ -231,7 +231,7 @@ class JobRunner:
         attempt_tag = f"{job['id'][4:]}_{job['attempts']}"
 
         self._stage(job, "retrieving")
-        rreq = {"request_id": f"req_{attempt_tag}", "question": rq["question"], "locale": "ru", "scenario": scenario,
+        rreq = {"request_id": f"req_{attempt_tag}", "question": rq["question"], "locale": rq.get("locale", "en"), "scenario": scenario,
                 "filters": EMPTY_FILTERS, "selected_investigation_ids": rq["selected_investigation_ids"],
                 "data_revision": rev, "top_k": 12, "deadline_at": job["deadline_at"], "include_related": False}
         c.validate("InternalRetrievalRequest", rreq)
@@ -240,7 +240,7 @@ class JobRunner:
         self._set_fallback(job["id"], bundle["allowed_evidence_ids"])
 
         self._stage(job, "reasoning")
-        qreq = {"request_id": f"req_{attempt_tag}r", "evidence_bundle": bundle, "locale": "ru", "output_limits": OUTPUT_LIMITS,
+        qreq = {"request_id": f"req_{attempt_tag}r", "evidence_bundle": bundle, "locale": rq.get("locale", "en"), "output_limits": OUTPUT_LIMITS,
                 "deadline_at": job["deadline_at"], "reasoning_revision": self.s.reasoning_revision}
         c.validate("InternalReasoningRequest", qreq)
         resp = self._timed(job, "reasoning", self.providers["reasoner"], qreq)

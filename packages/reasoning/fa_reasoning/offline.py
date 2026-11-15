@@ -8,8 +8,8 @@ from __future__ import annotations
 
 from .context import Context
 
-OFFLINE_NOTE = ("Ответ собран из проверенных выводов корпуса без генеративной модели; формулировки выводов "
-                "приводятся по источникам.")
+OFFLINE_NOTE = ("This answer is assembled from reviewed corpus findings without a generative model; the findings are quoted "
+                "from the sources.")
 
 
 def compose(ctx: Context, limits: dict) -> dict:
@@ -27,7 +27,7 @@ def compose(ctx: Context, limits: dict) -> dict:
             break
     if not blocks:
         return {"status": "insufficient_evidence", "blocks": [
-            {"kind": "limitation", "text": "В пакете нет проверенных выводов, которые отвечают на вопрос.",
+            {"kind": "limitation", "text": "The bundle contains no reviewed findings that answer the question.",
              "evidence_ids": [], "fact_ids": []}],
             "limitations": [OFFLINE_NOTE], "follow_up_questions": []}
     summary_ev = []
@@ -36,8 +36,8 @@ def compose(ctx: Context, limits: dict) -> dict:
             if e not in summary_ev:
                 summary_ev.append(e)
     blocks.insert(0, {"kind": "summary", "evidence_ids": summary_ev, "fact_ids": [],
-                      "text": "По вопросу найдены проверенные выводы исследований. Они приведены ниже вместе с "
-                              "доказательствами; применимость ограничена условиями опытов."})
+                      "text": "Reviewed research findings were retrieved for this question. They are shown below with "
+                              "evidence; applicability is limited to the test conditions."})
     limitations = [OFFLINE_NOTE]
     for c in used_claims:
         for lim in c.get("limitations", []):

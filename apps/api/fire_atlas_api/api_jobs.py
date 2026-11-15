@@ -25,7 +25,7 @@ PUBLISHED_CLAIMS = {("observation", "reviewed"), ("synthesis", "reviewed"), ("hy
 def _idem_key(request: Request) -> str:
     key = request.headers.get("idempotency-key")
     if key is None:
-        raise validation_error([{"field": "Idempotency-Key", "reason": "required"}], "Нужен заголовок Idempotency-Key (UUID).")
+        raise validation_error([{"field": "Idempotency-Key", "reason": "required"}], "An Idempotency-Key header containing a UUID is required.")
     if not UUID_RE.match(key.strip()):
         raise validation_error([{"field": "Idempotency-Key", "reason": "invalid_format"}])
     return key.strip().lower()
@@ -37,7 +37,7 @@ def _replay(conn, ws_id: str, op: str, key: str, h: str):
     if row is None:
         return None
     if row["body_hash"] != h:
-        raise ApiError("IDEMPOTENCY_CONFLICT", "Этот ключ уже использован с другими данными. Запустите новое действие.",
+        raise ApiError("IDEMPOTENCY_CONFLICT", "This key has already been used with different data. Start a new action.",
                        [{"field": "Idempotency-Key", "reason": "body_mismatch"}])
     return conn.execute("SELECT * FROM jobs WHERE id=?", (row["job_id"],)).fetchone()
 
@@ -56,7 +56,7 @@ def _rate_limit(conn, ws_id: str, job_type: str, active_max: int, per_minute: in
                           "ORDER BY deadline_at", (ws_id, job_type)).fetchall()
     if len(active) >= active_max:
         wait = max(1, int((parse_iso(active[0]["deadline_at"]) - now).total_seconds()) + 1)
-        raise ApiError("RATE_LIMITED", "Предыдущая задача еще выполняется. Дождитесь ее завершения или отмените ее.",
+        raise ApiError("RATE_LIMITED", "The previous job is still running. Wait for it to finish or cancel it.",
                        [{"field": None, "reason": "active_job_limit"}], headers={"Retry-After": str(wait)})
     if per_minute:
         window = iso(plus(now, seconds=-60))
@@ -64,7 +64,7 @@ def _rate_limit(conn, ws_id: str, job_type: str, active_max: int, per_minute: in
                               (ws_id, job_type, window)).fetchall()
         if len(recent) >= per_minute:
             wait = max(1, int(60 - (now - parse_iso(recent[0]["created_at"])).total_seconds()) + 1)
-            raise ApiError("RATE_LIMITED", "Слишком много запусков за минуту. Повторите позже.",
+            raise ApiError("RATE_LIMITED", "Too many jobs started in one minute. Try again later.",
                            [{"field": None, "reason": "per_minute_limit"}], headers={"Retry-After": str(wait)})
 
 
@@ -87,7 +87,7 @@ def _job_response(request: Request, row) -> Response:
 async def create_analysis(request: Request):
     s = request.app.state.settings
     if not s.feature_analysis:
-        raise ApiError("AI_UNAVAILABLE", "Анализ AI сейчас выключен. Каталог, сравнение и источники доступны.")
+        raise ApiError("AI_UNAVAILABLE", "AI analysis is currently disabled. The catalog, comparison and sources remain available.")
     ws = session_workspace(request)
     key = _idem_key(request)
     body = await read_json(request, "AnalysisRequest")
@@ -123,9 +123,9 @@ def _own_job(request: Request):
     with request.app.state.db.read() as conn:
         row = conn.execute("SELECT * FROM jobs WHERE id=?", (request.path_params["id"],)).fetchone()
     if row is None:
-        raise ApiError("NOT_FOUND", "Задача не найдена.")
+        raise ApiError("NOT_FOUND", "Job not found.")
     if row["workspace_id"] != ws["id"]:
-        raise ApiError("ACCESS_DENIED", "Задача принадлежит другой сессии.")
+        raise ApiError("ACCESS_DENIED", "The job belongs to another session.")
     return ws, row
 
 
@@ -143,7 +143,7 @@ async def cancel_job(request: Request):
                            (now, row["id"]))
         if cur.rowcount == 1 and row["type"] == "report":
             conn.execute("UPDATE reports SET state='failed', error=? WHERE job_id=? AND state='preparing'",
-                         (dumps({"code": "EXPORT_FAILED", "message": "Экспорт отменен пользователем.", "details": [],
+                         (dumps({"code": "EXPORT_FAILED", "message": "Export cancelled by the user.", "details": [],
                                  "retryable": True}), row["id"]))
         state = conn.execute("SELECT state FROM jobs WHERE id=?", (row["id"],)).fetchone()["state"]
     if cur.rowcount != 1:
@@ -157,9 +157,9 @@ async def get_answer(request: Request):
     with request.app.state.db.read() as conn:
         row = conn.execute("SELECT workspace_id, body FROM answers WHERE id=?", (request.path_params["id"],)).fetchone()
     if row is None:
-        raise ApiError("NOT_FOUND", "Ответ не найден.")
+        raise ApiError("NOT_FOUND", "Answer not found.")
     if row["workspace_id"] != ws["id"]:
-        raise ApiError("ACCESS_DENIED", "Этот ответ принадлежит другой сессии.")
+        raise ApiError("ACCESS_DENIED", "This answer belongs to another session.")
     answer = json.loads(row["body"])
     return ok(request, answer, "AnalysisResultEnvelope", data_revision=answer["data_revision"])
 
@@ -176,7 +176,7 @@ def _report_snapshot(request: Request, ws: dict, body: dict, state: dict, conn) 
         bad = [{"field": f"answer_ids[{i}]", "reason": "not_in_workspace"} for i, a in enumerate(body["answer_ids"])
                if a not in rows or rows[a]["workspace_id"] != ws["id"] or rows[a]["data_revision"] != rev]
         if bad:
-            raise validation_error(bad, "Ответ не принадлежит текущему пространству или его версии данных.")
+            raise validation_error(bad, "The answer does not belong to the current workspace or its data revision.")
         answers = [json.loads(rows[a]["body"]) for a in body["answer_ids"]]
     invs_map = db.get_entities(rev, "investigation", body["investigation_ids"])
     bad = [{"field": f"investigation_ids[{i}]", "reason": "not_found_in_revision"}
@@ -205,7 +205,7 @@ def _report_snapshot(request: Request, ws: dict, body: dict, state: dict, conn) 
 async def create_report(request: Request):
     s = request.app.state.settings
     if not s.feature_reports:
-        raise ApiError("AI_UNAVAILABLE", "Экспорт отчетов сейчас выключен.")
+        raise ApiError("AI_UNAVAILABLE", "Report export is currently disabled.")
     ws = session_workspace(request)
     key = _idem_key(request)
     body = await read_json(request, "ReportRequest")
@@ -242,9 +242,9 @@ def _own_report(request: Request):
     with request.app.state.db.read() as conn:
         row = conn.execute("SELECT * FROM reports WHERE id=?", (request.path_params["id"],)).fetchone()
     if row is None:
-        raise ApiError("NOT_FOUND", "Отчет не найден.")
+        raise ApiError("NOT_FOUND", "Report not found.")
     if row["workspace_id"] != ws["id"]:
-        raise ApiError("ACCESS_DENIED", "Отчет принадлежит другой сессии.")
+        raise ApiError("ACCESS_DENIED", "The report belongs to another session.")
     return row
 
 
@@ -271,16 +271,16 @@ async def download_report(request: Request):
     rep = report_to_api(row)
     request.state.data_revision = rep["data_revision"]
     if rep["state"] == "expired":
-        raise ApiError("RESOURCE_EXPIRED", "Срок хранения отчета истек. Создайте отчет заново.")
+        raise ApiError("RESOURCE_EXPIRED", "The report retention period has expired. Create a new report.")
     if rep["state"] == "preparing":
-        raise ApiError("REPORT_NOT_READY", "Отчет еще готовится.", retryable=True)
+        raise ApiError("REPORT_NOT_READY", "The report is still being prepared.", retryable=True)
     if rep["state"] == "failed":
-        raise ApiError("REPORT_NOT_READY", "Отчет не был создан. Запустите экспорт заново.", retryable=False)
+        raise ApiError("REPORT_NOT_READY", "The report was not created. Start a new export.", retryable=False)
     path = request.app.state.settings.reports_dir / row["file_name"]
     if not path.is_file():
-        raise ApiError("RESOURCE_EXPIRED", "Файл отчета больше недоступен. Создайте отчет заново.")
+        raise ApiError("RESOURCE_EXPIRED", "The report file is no longer available. Create a new report.")
     if hashlib.sha256(path.read_bytes()).hexdigest() != row["sha256"]:
-        raise ApiError("INTERNAL_ERROR", "Файл отчета поврежден. Создайте отчет заново.")
+        raise ApiError("INTERNAL_ERROR", "The report file is damaged. Create a new report.")
     return FileResponse(path, media_type="application/pdf", filename=f"fire-atlas-{row['id']}.pdf",
                         headers={"Cache-Control": "no-store"})
 

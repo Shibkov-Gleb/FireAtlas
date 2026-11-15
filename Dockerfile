@@ -9,6 +9,10 @@ WORKDIR /app
 COPY apps/api/requirements.txt apps/api/requirements.txt
 RUN pip install --no-cache-dir -r apps/api/requirements.txt
 
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends fonts-dejavu-extra \
+ && rm -rf /var/lib/apt/lists/*
+
 COPY packages/contracts packages/contracts
 # Модули AI 1 и AI 2 (D-025); без них анализ в production не стартует
 COPY packages/retrieval packages/retrieval
@@ -27,10 +31,7 @@ ENV FA_ENV=production \
     FA_FONT_DIR=/usr/share/fonts/truetype/dejavu \
     FA_VALIDATE_RESPONSES=false
 
-RUN apt-get update \
- && apt-get install -y --no-install-recommends fonts-dejavu-extra \
- && rm -rf /var/lib/apt/lists/* \
- && PYTHONPATH=apps/api:packages/contracts python3 -c "from pathlib import Path; from fire_atlas_api.report_pdf import find_fonts; find_fonts(Path('/usr/share/fonts/truetype/dejavu'))"
+RUN PYTHONPATH=apps/api:packages/contracts python3 -c "from pathlib import Path; from fire_atlas_api.report_pdf import find_fonts; find_fonts(Path('/usr/share/fonts/truetype/dejavu'))"
 
 RUN useradd --system --uid 10001 fireatlas && mkdir -p /var/lib/fire-atlas && chown fireatlas /var/lib/fire-atlas
 USER fireatlas

@@ -1,7 +1,7 @@
 {
   "operation_id": "createAnalysis",
   "case": "idempotency_conflict",
-  "description": "Тот же ключ, другое тело",
+  "description": "Тот же ключ, Other тело",
   "fixture": true,
   "default": false,
   "request": {
@@ -27,7 +27,7 @@
     "body": {
       "error": {
         "code": "IDEMPOTENCY_CONFLICT",
-        "message": "Этот запрос уже отправлялся с другими данными. Запустите новый анализ.",
+        "message": "This request was already submitted with different data. Запустите новый анализ.",
         "details": [
           {
             "field": "Idempotency-Key",
@@ -39,7 +39,7 @@
       },
       "meta": {
         "request_id": "req_demo02",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

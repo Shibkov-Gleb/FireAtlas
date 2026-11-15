@@ -139,7 +139,7 @@ def test_moon_partial_gravity_never_direct():
     res = assess_applicability(full_scenario(gravity="partial"), [inv()], runs, ev)
     check_contract(res, ev)
     g = factor(res, "gravity_regime")
-    assert g["status"] == "not_covered" and "частичная" in g["explanation"]
+    assert g["status"] == "not_covered" and "partial gravity" in g["explanation"]
     assert any(gp["field"] == "gravity_regime" for gp in res["gaps"])
     assert res["overall"] == "related_evidence"
 
@@ -150,7 +150,7 @@ def test_simulated_partial_does_not_replace_partial():
     res = assess_applicability(full_scenario(gravity="partial"), [inv()], runs, ev)
     check_contract(res, ev)
     g = factor(res, "gravity_regime")
-    assert g["status"] == "not_covered" and "не подменяют" in g["explanation"]
+    assert g["status"] == "not_covered" and "not interchangeable" in g["explanation"]
     assert res["overall"] != "direct_evidence"
 
 
@@ -169,8 +169,8 @@ def test_oxygen_outside_observed_shows_difference_explicitly():
     check_contract(res, ev)
     f = factor(res, "oxygen_fraction")
     assert f["status"] == "mismatch"
-    assert "16 %" in f["explanation"] and "21 %" in f["explanation"]  # диапазон и ближайшее значение
-    assert f["evidence_ids"] == ["ev_r1"]  # ближайший опыт
+    assert "16 %" in f["explanation"] and "21 %" in f["explanation"]  # диапазон и ближайшее value
+    assert f["evidence_ids"] == ["ev_r1"]  # ближайший test run
     assert res["overall"] == "related_evidence"
 
 
@@ -223,7 +223,7 @@ def test_not_reported_in_source_is_unknown_not_safe():
     res = assess_applicability(full_scenario(), [inv(coverage=cov)], runs, ev)
     check_contract(res, ev)
     f = factor(res, "pressure")
-    assert f["status"] == "unknown" and "не сообщается" in f["explanation"]
+    assert f["status"] == "unknown" and "not reported" in f["explanation"]
     assert res["overall"] != "direct_evidence"
 
 
@@ -233,7 +233,7 @@ def test_material_matched_by_id_and_composition_not_claimed():
     assert factor(res, "material_ids")["status"] == "mismatch"  # похожее название не считается совпадением
     res = assess_applicability(full_scenario(materials=["mat_pmma_black"]), [inv()], runs, evidence_for(runs))
     f = factor(res, "material_ids")
-    assert f["status"] == "match" and "состава не заявляется" in f["explanation"]
+    assert f["status"] == "match" and "matching composition is not claimed" in f["explanation"]
 
 
 def test_task_mismatch_is_insufficient():

@@ -91,7 +91,7 @@ def test_run_level_range_match_and_mismatch(server):
     flex = next(i for i in r.data["items"] if i["investigation"]["id"] == "inv_psi69")
     assert flex["related"] is True and flex["relevance_category"] in ("related", "contextual")
     diff = next(x for x in flex["differences"] if x["field"] == "conditions.pressure")
-    assert diff["code"] == "filter_mismatch" and "вне диапазона" in diff["text"]
+    assert diff["code"] == "filter_mismatch" and "outside the filter range" in diff["text"]
     assert not any(not i["related"] for i in r.data["items"])  # прямых совпадений нет
 
 
@@ -109,7 +109,7 @@ def test_list_filters_and_material_labels(server):
     r = cl.post(S, body(filters={"material_ids": ["mat_methanol"]}))
     assert_contract(r)
     assert ids(r) == ["inv_psi69"]
-    assert any(x["text"] == "Материал: Метанол" for x in r.data["items"][0]["match_reasons"])
+    assert any(x["text"] == "Material: Methanol" for x in r.data["items"][0]["match_reasons"])
     r = cl.post(S, body(filters={"investigation_ids": ["inv_psi101"]}))
     assert ids(r) == ["inv_psi101"]
     r = cl.post(S, body(filters={"has_measurements": True}))
@@ -131,7 +131,7 @@ def test_filters_only_query_is_allowed(server):
     (body(filters={"oxygen_range": {"min": 0.3, "max": 0.2, "unit": "fraction"}}), "filters.oxygen_range", "min_greater_than_max"),
     (body(filters={"oxygen_range": {"min": 0.1, "max": 21, "unit": "fraction"}}), None, None),  # 21 - проценты, а не доля
     (body(limit=101), "limit", None),
-    (body(locale="en"), "locale", None),
+    (body(locale="fr"), "locale", None),
 ])
 def test_search_validation(server, b, field, reason):
     r = server.client().post(S, b)

@@ -15,7 +15,7 @@
     "headers": {},
     "body": {
       "data": {
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "active_data_revision": "psi-20261115-r1",
         "feature_flags": {
           "analysis": true,
@@ -36,487 +36,487 @@
           "unit": [
             {
               "value": "Pa",
-              "label": "Па"
+              "label": "Pa"
             },
             {
               "value": "m_s",
-              "label": "м/с"
+              "label": "m/s"
             },
             {
               "value": "m",
-              "label": "м"
+              "label": "m"
             },
             {
               "value": "s",
-              "label": "с"
+              "label": "s"
             },
             {
               "value": "K",
-              "label": "К"
+              "label": "K"
             },
             {
               "value": "fraction",
-              "label": "доля"
+              "label": "fraction"
             },
             {
               "value": "g_fraction",
-              "label": "доля g"
+              "label": "g fraction"
             },
             {
               "value": "count",
-              "label": "шт."
+              "label": "count"
             },
             {
               "value": "dimensionless",
-              "label": "безразмерная"
+              "label": "dimensionless"
             }
           ],
           "quantity_status": [
             {
               "value": "measured",
-              "label": "измерено"
+              "label": "Measured"
             },
             {
               "value": "reported",
-              "label": "сообщено в источнике"
+              "label": "Reported"
             },
             {
               "value": "derived",
-              "label": "вычислено"
+              "label": "Derived"
             },
             {
               "value": "not_reported",
-              "label": "не сообщено"
+              "label": "Not reported"
             },
             {
               "value": "not_applicable",
-              "label": "неприменимо"
+              "label": "Not applicable"
             },
             {
               "value": "unusable",
-              "label": "непригодно"
+              "label": "Unusable"
             }
           ],
           "scope": [
             {
               "value": "prevention",
-              "label": "Предотвращение"
+              "label": "Prevention"
             },
             {
               "value": "detection",
-              "label": "Обнаружение"
+              "label": "Detection"
             },
             {
               "value": "suppression",
-              "label": "Подавление"
+              "label": "Suppression"
             }
           ],
           "fuel_state": [
             {
               "value": "solid",
-              "label": "твердое"
+              "label": "Solid"
             },
             {
               "value": "liquid",
-              "label": "жидкое"
+              "label": "Liquid"
             },
             {
               "value": "gas",
-              "label": "газ"
+              "label": "Gas"
             },
             {
               "value": "aerosol",
-              "label": "аэрозоль"
+              "label": "Aerosol"
             }
           ],
           "gravity_regime": [
             {
               "value": "normal",
-              "label": "нормальная"
+              "label": "Normal gravity"
             },
             {
               "value": "microgravity",
-              "label": "микрогравитация"
+              "label": "Microgravity"
             },
             {
               "value": "partial",
-              "label": "частичная"
+              "label": "Partial gravity"
             },
             {
               "value": "simulated_partial",
-              "label": "имитация частичной"
+              "label": "Simulated partial gravity"
             },
             {
               "value": "unknown",
-              "label": "неизвестно"
+              "label": "Unknown"
             }
           ],
           "geometry": [
             {
               "value": "film",
-              "label": "пленка"
+              "label": "Film"
             },
             {
               "value": "sheet",
-              "label": "лист"
+              "label": "Sheet"
             },
             {
               "value": "slab",
-              "label": "пластина"
+              "label": "Slab"
             },
             {
               "value": "rod",
-              "label": "стержень"
+              "label": "Rod"
             },
             {
               "value": "sphere",
-              "label": "сфера"
+              "label": "Sphere"
             },
             {
               "value": "droplet",
-              "label": "капля"
+              "label": "Droplet"
             },
             {
               "value": "fabric",
-              "label": "ткань"
+              "label": "Fabric"
             },
             {
               "value": "other",
-              "label": "другое"
+              "label": "Other"
             },
             {
               "value": "unknown",
-              "label": "неизвестно"
+              "label": "Unknown"
             }
           ],
           "flow_configuration": [
             {
               "value": "concurrent",
-              "label": "попутный"
+              "label": "Concurrent"
             },
             {
               "value": "opposed",
-              "label": "встречный"
+              "label": "Opposed"
             },
             {
               "value": "quiescent",
-              "label": "без потока"
+              "label": "Quiescent"
             },
             {
               "value": "other",
-              "label": "другое"
+              "label": "Other"
             },
             {
               "value": "unknown",
-              "label": "неизвестно"
+              "label": "Unknown"
             }
           ],
           "metric_key": [
             {
               "value": "burn_duration",
-              "label": "Время горения"
+              "label": "Burn duration"
             },
             {
               "value": "visible_extinction_diameter",
-              "label": "Диаметр видимого погасания"
+              "label": "Visible extinction diameter"
             },
             {
               "value": "flame_spread_rate",
-              "label": "Скорость распространения пламени"
+              "label": "Flame spread rate"
             },
             {
               "value": "particle_diameter",
-              "label": "Диаметр частиц"
+              "label": "Particle diameter"
             }
           ],
           "outcome_category": [
             {
               "value": "no_ignition",
-              "label": "нет воспламенения"
+              "label": "No ignition"
             },
             {
               "value": "extinction",
-              "label": "погасание (Extinction)"
+              "label": "Extinction"
             },
             {
               "value": "burn_to_completion",
-              "label": "полное выгорание"
+              "label": "Burn to completion"
             },
             {
               "value": "disruption",
-              "label": "разрушение капли (Disruption)"
+              "label": "Disruption"
             },
             {
               "value": "ongoing_at_stop",
-              "label": "горение при остановке"
+              "label": "Ongoing at stop"
             },
             {
               "value": "smoke_measurement",
-              "label": "измерение дыма"
+              "label": "Smoke measurement"
             },
             {
               "value": "unknown",
-              "label": "неизвестно"
+              "label": "Unknown"
             }
           ],
           "interpretation_status": [
             {
               "value": "source_explicit",
-              "label": "указано в источнике"
+              "label": "Explicit in source"
             },
             {
               "value": "reviewed_mapping",
-              "label": "проверенное сопоставление"
+              "label": "Reviewed mapping"
             },
             {
               "value": "unmapped",
-              "label": "не сопоставлено"
+              "label": "Not mapped"
             }
           ],
           "source_kind": [
             {
               "value": "repository",
-              "label": "репозиторий"
+              "label": "Repository"
             },
             {
               "value": "report",
-              "label": "отчет"
+              "label": "Report"
             },
             {
               "value": "publication",
-              "label": "публикация"
+              "label": "Publication"
             },
             {
               "value": "experimental_table",
-              "label": "таблица опытов"
+              "label": "Experimental table"
             },
             {
               "value": "video",
-              "label": "видео"
+              "label": "Video"
             },
             {
               "value": "image",
-              "label": "изображение"
+              "label": "Image"
             },
             {
               "value": "calibration",
-              "label": "калибровка"
+              "label": "Calibration"
             }
           ],
           "source_availability": [
             {
               "value": "available",
-              "label": "доступен"
+              "label": "Available"
             },
             {
               "value": "metadata_only",
-              "label": "только метаданные"
+              "label": "Metadata only"
             },
             {
               "value": "unavailable",
-              "label": "недоступен"
+              "label": "Unavailable"
             }
           ],
           "claim_kind": [
             {
               "value": "observation",
-              "label": "Наблюдение"
+              "label": "Observation"
             },
             {
               "value": "synthesis",
-              "label": "Обобщение"
+              "label": "Synthesis"
             },
             {
               "value": "hypothesis",
-              "label": "Исходная гипотеза"
+              "label": "Hypothesis"
             }
           ],
           "environment": [
             {
               "value": "orbital_habitat",
-              "label": "Орбитальная станция"
+              "label": "Orbital station"
             },
             {
               "value": "surface_habitat",
-              "label": "Поверхностная база"
+              "label": "Surface habitat"
             },
             {
               "value": "pressurized_rover",
-              "label": "Герметичный ровер"
+              "label": "Pressurized rover"
             },
             {
               "value": "custom",
-              "label": "Свой сценарий"
+              "label": "Custom"
             }
           ],
           "celestial_body": [
             {
               "value": "earth",
-              "label": "Земля"
+              "label": "Earth"
             },
             {
               "value": "moon",
-              "label": "Луна"
+              "label": "Moon"
             },
             {
               "value": "mars",
-              "label": "Марс"
+              "label": "Mars"
             },
             {
               "value": "other",
-              "label": "другое"
+              "label": "Other"
             }
           ],
           "relevance_category": [
             {
               "value": "direct",
-              "label": "Прямое соответствие"
+              "label": "Direct"
             },
             {
               "value": "related",
-              "label": "Связанная задача"
+              "label": "Related"
             },
             {
               "value": "contextual",
-              "label": "Контекст"
+              "label": "Contextual"
             }
           ],
           "retrieval_mode": [
             {
               "value": "hybrid",
-              "label": "гибридный поиск"
+              "label": "Hybrid search"
             },
             {
               "value": "lexical",
-              "label": "текстовый поиск"
+              "label": "Lexical search"
             },
             {
               "value": "curated",
-              "label": "подборка"
+              "label": "Curated selection"
             }
           ],
           "cell_status": [
             {
               "value": "known",
-              "label": "известно"
+              "label": "Known"
             },
             {
               "value": "not_reported",
-              "label": "не сообщено"
+              "label": "Not reported"
             },
             {
               "value": "not_applicable",
-              "label": "неприменимо"
+              "label": "Not applicable"
             }
           ],
           "comparability_status": [
             {
               "value": "compatible",
-              "label": "сопоставимы"
+              "label": "Comparable"
             },
             {
               "value": "partially_compatible",
-              "label": "частично сопоставимы"
+              "label": "Partially comparable"
             },
             {
               "value": "incompatible",
-              "label": "несопоставимы"
+              "label": "Not comparable"
             }
           ],
           "applicability_overall": [
             {
               "value": "direct_evidence",
-              "label": "Есть прямые данные"
+              "label": "Direct evidence"
             },
             {
               "value": "related_evidence",
-              "label": "Только связанные данные"
+              "label": "Related evidence"
             },
             {
               "value": "insufficient_evidence",
-              "label": "Недостаточно данных"
+              "label": "Insufficient evidence"
             }
           ],
           "factor_status": [
             {
               "value": "match",
-              "label": "совпадает"
+              "label": "Match"
             },
             {
               "value": "mismatch",
-              "label": "отличается"
+              "label": "Mismatch"
             },
             {
               "value": "unknown",
-              "label": "неизвестно"
+              "label": "Unknown"
             },
             {
               "value": "not_covered",
-              "label": "прямых данных нет"
+              "label": "No direct coverage"
             }
           ],
           "answer_status": [
             {
               "value": "answered",
-              "label": "Ответ"
+              "label": "Answered"
             },
             {
               "value": "insufficient_evidence",
-              "label": "Недостаточно доказательств"
+              "label": "Insufficient evidence"
             },
             {
               "value": "conflicting_evidence",
-              "label": "Доказательства расходятся"
+              "label": "Conflicting evidence"
             }
           ],
           "answer_block_kind": [
             {
               "value": "summary",
-              "label": "Кратко"
+              "label": "Summary"
             },
             {
               "value": "observation",
-              "label": "Наблюдение"
+              "label": "Observation"
             },
             {
               "value": "synthesis",
-              "label": "Обобщение"
+              "label": "Synthesis"
             },
             {
               "value": "limitation",
-              "label": "Ограничение"
+              "label": "Limitation"
             }
           ],
           "exclusion_reason": [
             {
               "value": "missing_x",
-              "label": "нет значения X"
+              "label": "Missing x"
             },
             {
               "value": "missing_y",
-              "label": "нет значения Y"
+              "label": "Missing y"
             },
             {
               "value": "unusable_unit",
-              "label": "непригодная единица"
+              "label": "Unusable unit"
             },
             {
               "value": "unverified_record",
-              "label": "непроверенная запись"
+              "label": "Unverified record"
             },
             {
               "value": "filtered_out",
-              "label": "исключено фильтром"
+              "label": "Filtered out"
             }
           ],
           "materials": [
             {
               "value": "mat_psi25_fixture_solid",
-              "label": "[FIXTURE] твердый образец"
+              "label": "[FIXTURE] solid sample"
             },
             {
               "value": "mat_methanol",
-              "label": "Метанол"
+              "label": "Methanol"
             }
           ]
         },
@@ -536,7 +536,7 @@
       },
       "meta": {
         "request_id": "req_demo01",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

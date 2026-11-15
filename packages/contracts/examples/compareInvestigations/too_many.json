@@ -1,7 +1,7 @@
 {
   "operation_id": "compareInvestigations",
   "case": "too_many",
-  "description": "Четыре исследования -> 422",
+  "description": "Четыре investigations -> 422",
   "fixture": true,
   "default": false,
   "request": {
@@ -24,7 +24,7 @@
     "body": {
       "error": {
         "code": "VALIDATION_ERROR",
-        "message": "Сравнить можно от двух до трех исследований.",
+        "message": "Compare можно от двух до трех исследований.",
         "details": [
           {
             "field": "investigation_ids",
@@ -36,7 +36,7 @@
       },
       "meta": {
         "request_id": "req_demo02",
-        "contract_version": "1.2.0",
+        "contract_version": "1.3.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }
