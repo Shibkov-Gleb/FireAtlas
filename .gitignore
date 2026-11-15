@@ -10,7 +10,12 @@ var/
 node_modules/
 dist/
 .DS_Store
-# temporary third-party copy, replaced by the PSI originals in data/raw
 data/mirror_provisional/
-# 49 MB report: kept locally, sha256 recorded in data/raw/download_log.json
 data/raw/PSI-25/BASS-II Summary Report.pdf
+.env.local
+.env.*.local
+playwright-report/
+test-results/
+coverage/
+.sites-runtime/
+*.tsbuildinfo
