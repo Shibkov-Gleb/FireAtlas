@@ -279,7 +279,8 @@ export function Reports() {
                       <span>
                         <strong>{answer.question}</strong>
                         <small>
-                          {answer.scenario_snapshot?.name} · {formatDate(answer.created_at)}
+                          {answer.scenario_snapshot?.name ?? 'Без сценария'} ·{' '}
+                          {formatDate(answer.created_at)}
                           <br />
                           {answer.data_revision} · снимок {answer.workspace_revision}
                         </small>
@@ -319,7 +320,7 @@ export function Reports() {
                 </div>
                 <h2>{title || 'Название отчёта'}</h2>
                 <p className={s.context}>
-                  Текущая миссия: {workspace.scenario?.name}
+                  Текущая миссия: {workspace.scenario?.name ?? 'Без сценария'}
                   <br />
                   Корпус: {workspace.data_revision}
                 </p>
@@ -339,7 +340,7 @@ export function Reports() {
                   .filter((answer) => selectedAnswers.includes(answer.id))
                   .map((answer) => (
                     <div className={s.answerPreview} key={answer.id}>
-                      <strong>{answer.scenario_snapshot?.name}</strong>
+                      <strong>{answer.scenario_snapshot?.name ?? 'Без сценария'}</strong>
                       <p>{answer.question}</p>
                     </div>
                   ))}

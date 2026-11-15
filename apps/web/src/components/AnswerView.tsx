@@ -128,7 +128,7 @@ export function AnswerView({
         </Button>
       </div>
       <Panel className={s.context}>
-        <h2>Контекст ответа: {answer.scenario_snapshot?.name}</h2>
+        <h2>Контекст ответа: {answer.scenario_snapshot?.name ?? 'Без сценария'}</h2>
         <p>{answer.question}</p>
         <div className={s.metadata}>
           <span>{formatDate(answer.created_at)}</span>
@@ -160,8 +160,9 @@ export function AnswerView({
       {oldContext && (
         <Notice tone="warning">
           Ответ получен на предыдущем снимке пространства:{' '}
-          <strong>{answer.scenario_snapshot?.name}</strong>. Текущий контекст:{' '}
-          <strong>{workspace.scenario?.name}</strong>. Сохранение и отчёт сохранят исходные условия.
+          <strong>{answer.scenario_snapshot?.name ?? 'Без сценария'}</strong>. Текущий контекст:{' '}
+          <strong>{workspace.scenario?.name ?? 'Без сценария'}</strong>. Сохранение и отчёт сохранят
+          исходные условия.
           <div style={{ marginTop: 12 }}>
             <Button variant="secondary" onClick={() => onAsk(answer.question)}>
               Подготовить новый вопрос в текущем контексте

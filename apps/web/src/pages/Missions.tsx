@@ -104,7 +104,7 @@ export function Missions() {
         eyebrow="КОНТЕКСТ / ПРИМЕНИМОСТЬ ДОКАЗАТЕЛЬСТВ"
         title="Сценарии миссий"
         description="Изменение среды меняет применимость исследований. Оно не создаёт отсутствующие измерения."
-        action={<Badge tone="cyan">{workspace.scenario?.name}</Badge>}
+        action={<Badge tone="cyan">{workspace.scenario?.name ?? 'Без сценария'}</Badge>}
       />
       <div className={s.presets}>
         {presetDefinitions.map((preset, index) => {

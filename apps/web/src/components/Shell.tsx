@@ -56,7 +56,7 @@ function MissionCard({ onNavigate }: { onNavigate: () => void }) {
       </span>
       <div>
         <small>ТЕКУЩАЯ МИССИЯ</small>
-        <strong>{workspace.scenario?.name}</strong>
+        <strong>{workspace.scenario?.name ?? 'Без сценария'}</strong>
         <span>
           {config.dictionaries.gravity_regime.find(
             (g) => g.value === workspace.scenario?.gravity_regime,

@@ -12,7 +12,7 @@ import {
 } from 'recharts';
 import { ArrowRight, ChartScatter } from 'lucide-react';
 import { api } from '../api/client';
-import { emptyFilters, type Schema } from '../api/types';
+import { type Schema } from '../api/types';
 import { useWorkspace } from '../state/WorkspaceProvider';
 import { Badge, Button, EmptyState, Loading, Notice, PageHeader, Panel } from '../components/ui';
 import { ErrorState } from '../components/ErrorState';
@@ -30,15 +30,25 @@ export function Measurements() {
   const [evidenceId, setEvidenceId] = useState<string | null>(null);
   const axes = config.measurement_axes[0];
   const investigationId = axes?.investigation_ids[0] ?? 'inv_psi69';
+  const allRuns = params.get('series') === 'all';
+  const controlRunIds = ['20cal08', '20cal10', '20cal12', '30cal02', '30cal03'].map(
+    (id) => `run_psi69_${id}`,
+  );
   const query = useQuery({
-    queryKey: ['measurements', investigationId, workspace.data_revision, params.get('cursor')],
+    queryKey: [
+      'measurements',
+      investigationId,
+      workspace.data_revision,
+      allRuns,
+      params.get('cursor'),
+    ],
     queryFn: ({ signal }) =>
       api
         .measurements(
           {
             investigation_id: investigationId,
             data_revision: workspace.data_revision,
-            run_ids: [],
+            run_ids: allRuns ? [] : controlRunIds,
             x_metric: axes!.x_key,
             y_metric: axes!.y_key,
             filters: { outcome_categories: [], material_ids: [] },
@@ -126,10 +136,29 @@ export function Measurements() {
       />
       <div className={s.conditions}>
         <div className="inline">
-          <Badge>Метанол</Badge>
-          <Badge>Начальная доля O₂: 21 %</Badge>
-          <Badge tone="teal">Контрольные записи FLEX</Badge>
+          <Badge>FLEX · капли жидкого топлива</Badge>
+          <Badge>Условия зависят от опыта</Badge>
+          <Badge tone="teal">
+            {allRuns ? 'Корпус измерений FLEX' : 'Пять контрольных записей FLEX'}
+          </Badge>
         </div>
+        <label className={s.outcomeFilter}>
+          Выборка
+          <select
+            value={allRuns ? 'all' : 'control'}
+            onChange={(event) => {
+              const next = new URLSearchParams(params);
+              if (event.target.value === 'all') next.set('series', 'all');
+              else next.delete('series');
+              next.delete('cursor');
+              next.delete('run');
+              setParams(next);
+            }}
+          >
+            <option value="control">Пять контрольных опытов</option>
+            <option value="all">Все опыты FLEX</option>
+          </select>
+        </label>
         <label className={s.outcomeFilter}>
           Исход
           <select
@@ -144,6 +173,10 @@ export function Measurements() {
             <option value="">Все исходы</option>
             <option value="extinction">Погасание</option>
             <option value="disruption">Разрушение капли</option>
+            <option value="burn_to_completion">Догорание</option>
+            <option value="no_ignition">Нет воспламенения</option>
+            <option value="ongoing_at_stop">Горение при остановке</option>
+            <option value="unknown">Исход не сообщён</option>
           </select>
         </label>
       </div>
