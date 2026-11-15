@@ -85,7 +85,7 @@ export function Ask() {
           <Panel className={s.questionPanel}>
             <div className="spaceBetween">
               <h2>Ваш вопрос</h2>
-              <Badge tone="cyan">{workspace.scenario.name}</Badge>
+              <Badge tone="cyan">{workspace.scenario?.name}</Badge>
             </div>
             <form onSubmit={(event) => void submit(event)}>
               <label className="srOnly" htmlFor="analysis-question">
@@ -106,7 +106,7 @@ export function Ask() {
               />
               <div className={s.questionMeta}>
                 <span id="analysis-hint">
-                  Условия: {workspace.scenario.name} · снимок {workspace.revision}
+                  Условия: {workspace.scenario?.name} · снимок {workspace.revision}
                 </span>
                 <span>
                   {question.length}/{config.limits.question_chars_max}

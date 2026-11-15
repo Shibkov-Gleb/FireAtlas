@@ -26,6 +26,11 @@ export function SourceCard({ source }: { source: Source }) {
         {source.kind} · {source.data_revision}
       </p>
       {source.doi && <p className="tiny wordBreak">DOI: {source.doi}</p>}
+      {source.local_asset_id && source.availability === 'available' && (
+        <a className="textLink" href={api.sourceAssetUrl(source.id, source.data_revision)}>
+          Скачать файл источника <FileText size={14} />
+        </a>
+      )}
       {source.availability === 'unavailable' && (
         <p className="tiny muted">
           Вложение недоступно. Метаданные и посадочная страница остаются доступными.

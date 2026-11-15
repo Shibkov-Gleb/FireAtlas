@@ -9,9 +9,9 @@ it('keeps canonical range units and explicit unknown policy in URLs', () => {
     orbitalScenario,
   );
   expect(error).toBeNull();
-  expect(request.filters.oxygen_range).toEqual({ min: 0.18, max: 0.23, unit: 'fraction' });
-  expect(request.filters.pressure_range?.min).toBe(90000);
-  expect(request.filters.include_unknown).toBe(true);
+  expect(request.filters!.oxygen_range).toEqual({ min: 0.18, max: 0.23, unit: 'fraction' });
+  expect(request.filters!.pressure_range?.min).toBe(90000);
+  expect(request.filters!.include_unknown).toBe(true);
 });
 it('blocks inverted, nonfinite and out-of-range oxygen values', () => {
   for (const query of ['o2_min=0.5&o2_max=0.2', 'pressure_min=NaN', 'o2_max=1.1'])

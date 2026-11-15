@@ -128,7 +128,7 @@ export function AnswerView({
         </Button>
       </div>
       <Panel className={s.context}>
-        <h2>Контекст ответа: {answer.scenario_snapshot.name}</h2>
+        <h2>Контекст ответа: {answer.scenario_snapshot?.name}</h2>
         <p>{answer.question}</p>
         <div className={s.metadata}>
           <span>{formatDate(answer.created_at)}</span>
@@ -140,13 +140,13 @@ export function AnswerView({
           <dl>
             <div>
               <dt>Гравитация</dt>
-              <dd>{answer.scenario_snapshot.gravity_regime}</dd>
+              <dd>{answer.scenario_snapshot?.gravity_regime}</dd>
             </div>
             {(
               [
-                ['Кислород', answer.scenario_snapshot.oxygen_fraction],
-                ['Давление', answer.scenario_snapshot.pressure],
-                ['Скорость воздуха', answer.scenario_snapshot.airflow_speed],
+                ['Кислород', answer.scenario_snapshot?.oxygen_fraction],
+                ['Давление', answer.scenario_snapshot?.pressure],
+                ['Скорость воздуха', answer.scenario_snapshot?.airflow_speed],
               ] as const
             ).map(([label, value]) => (
               <div key={label}>
@@ -160,8 +160,8 @@ export function AnswerView({
       {oldContext && (
         <Notice tone="warning">
           Ответ получен на предыдущем снимке пространства:{' '}
-          <strong>{answer.scenario_snapshot.name}</strong>. Текущий контекст:{' '}
-          <strong>{workspace.scenario.name}</strong>. Сохранение и отчёт сохранят исходные условия.
+          <strong>{answer.scenario_snapshot?.name}</strong>. Текущий контекст:{' '}
+          <strong>{workspace.scenario?.name}</strong>. Сохранение и отчёт сохранят исходные условия.
           <div style={{ marginTop: 12 }}>
             <Button variant="secondary" onClick={() => onAsk(answer.question)}>
               Подготовить новый вопрос в текущем контексте
@@ -222,7 +222,9 @@ export function AnswerView({
       )}
       <ApplicabilityView
         result={answer.applicability}
-        partial={['partial', 'simulated_partial'].includes(answer.scenario_snapshot.gravity_regime)}
+        partial={['partial', 'simulated_partial'].includes(
+          answer.scenario_snapshot?.gravity_regime ?? '',
+        )}
         onEvidence={setEvidenceId}
       />
       {answer.follow_up_questions.length > 0 && (

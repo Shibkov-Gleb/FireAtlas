@@ -87,6 +87,9 @@ export function RunPanel({
     return <Notice tone="warning">Выбранная запись относится к другому исследованию.</Notice>;
   const conditions = [
     ['Доля кислорода', run.conditions.oxygen_fraction, 'fraction'],
+    ['Доля азота', run.conditions.nitrogen_fraction, 'fraction'],
+    ['Доля CO₂', run.conditions.co2_fraction, 'fraction'],
+    ['Доля гелия', run.conditions.helium_fraction, 'fraction'],
     ['Общее давление', run.conditions.pressure, 'Pa'],
     ['Калиброванная скорость', run.conditions.airflow_speed, 'm_s'],
     ['Температура', run.conditions.ambient_temperature, 'K'],
@@ -117,7 +120,7 @@ export function RunPanel({
           <div>
             <dt>Материал</dt>
             <dd>
-              {config.dictionaries.materials.find((m) => m.id === run.material_id)?.label ??
+              {config.dictionaries.materials.find((m) => m.value === run.material_id)?.label ??
                 'Не сообщено'}
             </dd>
           </div>
@@ -145,7 +148,7 @@ export function RunPanel({
           <div>
             <dt>Режим</dt>
             <dd>
-              {config.dictionaries.gravity_regimes.find(
+              {config.dictionaries.gravity_regime.find(
                 (g) => g.value === run.conditions.gravity_regime,
               )?.label ?? run.conditions.gravity_regime}
             </dd>

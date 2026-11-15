@@ -159,8 +159,8 @@ export function Compare() {
               </table>
             </div>
             {data.comparability.reasons.map((reason) => (
-              <Notice key={reason} tone="warning">
-                {reason}
+              <Notice key={`${reason.code}:${reason.field}`} tone="warning">
+                {reason.text}
               </Notice>
             ))}
             {data.limitations.map((text) => (
@@ -170,7 +170,9 @@ export function Compare() {
             ))}
             <ApplicabilityView
               result={data.applicability}
-              partial={['partial', 'simulated_partial'].includes(workspace.scenario.gravity_regime)}
+              partial={['partial', 'simulated_partial'].includes(
+                workspace.scenario?.gravity_regime ?? '',
+              )}
               onEvidence={setEvidenceId}
             />
             <div className="spaceBetween">

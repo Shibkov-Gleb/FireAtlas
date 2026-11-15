@@ -43,14 +43,14 @@ export function Missions() {
       api
         .applicability(
           {
-            scenario: workspace.scenario,
+            scenario: workspace.scenario!,
             investigation_ids: ids,
             data_revision: workspace.data_revision,
           },
           signal,
         )
         .then((r) => r.data),
-    enabled: !!options.data,
+    enabled: !!options.data && !!workspace.scenario,
   });
   async function applyPreset(id: string, carry: boolean) {
     const preset = makePreset(id);
@@ -104,7 +104,7 @@ export function Missions() {
         eyebrow="КОНТЕКСТ / ПРИМЕНИМОСТЬ ДОКАЗАТЕЛЬСТВ"
         title="Сценарии миссий"
         description="Изменение среды меняет применимость исследований. Оно не создаёт отсутствующие измерения."
-        action={<Badge tone="cyan">{workspace.scenario.name}</Badge>}
+        action={<Badge tone="cyan">{workspace.scenario?.name}</Badge>}
       />
       <div className={s.presets}>
         {presetDefinitions.map((preset, index) => {
@@ -112,9 +112,9 @@ export function Missions() {
           return (
             <button
               key={preset.id}
-              aria-pressed={workspace.scenario.scenario_id === preset.id}
+              aria-pressed={workspace.scenario?.scenario_id === preset.id}
               disabled={pending}
-              className={`${s.preset} ${workspace.scenario.scenario_id === preset.id ? s.active : ''}`}
+              className={`${s.preset} ${workspace.scenario?.scenario_id === preset.id ? s.active : ''}`}
               onClick={() => choose(preset.id)}
             >
               <span className={s.icon}>
@@ -122,7 +122,7 @@ export function Missions() {
               </span>
               <strong>{preset.name}</strong>
               <small>{preset.description}</small>
-              {workspace.scenario.scenario_id === preset.id && (
+              {workspace.scenario?.scenario_id === preset.id && (
                 <Check size={15} className={s.check} />
               )}
             </button>
@@ -151,7 +151,7 @@ export function Missions() {
               value={draft.safety_task}
               onChange={(e) => field('safety_task', e.target.value as MissionDraft['safety_task'])}
             >
-              {config.dictionaries.scopes.map((option) => (
+              {config.dictionaries.scope.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -166,7 +166,7 @@ export function Missions() {
                 field('gravity_regime', e.target.value as MissionDraft['gravity_regime'])
               }
             >
-              {config.dictionaries.gravity_regimes.map((option) => (
+              {config.dictionaries.gravity_regime.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -224,16 +224,16 @@ export function Missions() {
           <fieldset className={s.materials}>
             <legend>Материалы</legend>
             {config.dictionaries.materials.map((material) => (
-              <label className="checkLabel" key={material.id}>
+              <label className="checkLabel" key={material.value}>
                 <input
                   type="checkbox"
-                  checked={draft.material_ids.includes(material.id)}
+                  checked={draft.material_ids.includes(material.value)}
                   onChange={() =>
                     field(
                       'material_ids',
-                      draft.material_ids.includes(material.id)
-                        ? draft.material_ids.filter((id) => id !== material.id)
-                        : [...draft.material_ids, material.id],
+                      draft.material_ids.includes(material.value)
+                        ? draft.material_ids.filter((id) => id !== material.value)
+                        : [...draft.material_ids, material.value],
                     )
                   }
                 />
@@ -256,7 +256,9 @@ export function Missions() {
           </div>
         </form>
       </Panel>
-      {options.isError ? (
+      {!workspace.scenario ? (
+        <Notice>Выберите пресет миссии для оценки применимости.</Notice>
+      ) : options.isError ? (
         <ErrorState error={options.error} onRetry={() => void options.refetch()} />
       ) : applicability.isPending ? (
         <Loading>Проверяем применимость к миссии…</Loading>
@@ -265,7 +267,9 @@ export function Missions() {
       ) : (
         <ApplicabilityView
           result={applicability.data}
-          partial={['partial', 'simulated_partial'].includes(workspace.scenario.gravity_regime)}
+          partial={['partial', 'simulated_partial'].includes(
+            workspace.scenario?.gravity_regime ?? '',
+          )}
           onEvidence={setEvidenceId}
         />
       )}

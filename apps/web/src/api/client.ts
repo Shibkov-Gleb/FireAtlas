@@ -83,7 +83,7 @@ export async function request<T>(
         },
       };
     }
-    let body: Envelope<T> & Partial<Schema['ErrorEnvelope']>;
+    let body: Envelope<T> & Partial<Schema['ErrorResponse']>;
     try {
       body = await response.json();
     } catch {
@@ -145,6 +145,8 @@ const revQuery = (revision: string) => `data_revision=${encodeURIComponent(revis
 const entityPath = (collection: string, id: string, revision: string) =>
   `/${collection}/${encodeURIComponent(id)}?${revQuery(revision)}`;
 export const api = {
+  sourceAssetUrl: (id: string, revision: string) =>
+    `${baseUrl}/sources/${encodeURIComponent(id)}/asset?${revQuery(revision)}`,
   config: (signal?: AbortSignal) => request<Schema['Config']>('/config', { signal }),
   workspace: (signal?: AbortSignal) =>
     request<Schema['Workspace']>('/workspaces/current', { signal }),
@@ -161,7 +163,7 @@ export const api = {
   investigation: (id: string, revision: string, signal?: AbortSignal) =>
     request<Schema['InvestigationDetail']>(entityPath('investigations', id, revision), { signal }),
   runs: (id: string, revision: string, cursor: string | null = null, signal?: AbortSignal) =>
-    request<Schema['RunList']>(
+    request<Schema['RunPage']>(
       `/investigations/${encodeURIComponent(id)}/runs?${revQuery(revision)}&limit=20${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ''}`,
       { signal },
     ),

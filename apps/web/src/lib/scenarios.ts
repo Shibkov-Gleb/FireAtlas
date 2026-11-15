@@ -8,7 +8,7 @@ export type MissionDraft = {
   airflow: string;
   geometry: Schema['Geometry'] | '';
   material_ids: string[];
-  gravity_regime: Schema['Gravity'];
+  gravity_regime: Schema['GravityRegime'];
 };
 export const presetDefinitions = [
   {
@@ -53,7 +53,8 @@ export function makePreset(id: string): Scenario {
     assumptions: [],
   };
 }
-export function scenarioToDraft(scenario: Scenario): MissionDraft {
+export function scenarioToDraft(scenario: Scenario | null): MissionDraft {
+  scenario ??= makePreset('orbital_custom');
   return {
     name: scenario.name,
     safety_task: scenario.safety_task,
@@ -67,12 +68,12 @@ export function scenarioToDraft(scenario: Scenario): MissionDraft {
     gravity_regime: scenario.gravity_regime,
   };
 }
-function inputQuantity(
+function inputQuantity<U extends Quantity['unit']>(
   raw: string,
-  unit: Quantity['unit'],
+  unit: U,
   factor: number,
   rawUnit: string,
-): Quantity | null {
+): (Quantity & { unit: U }) | null {
   return raw.trim() === ''
     ? null
     : {
@@ -89,7 +90,7 @@ function inputQuantity(
 }
 export function draftToScenario(
   draft: MissionDraft,
-  base: Scenario,
+  base: Scenario | null,
 ): { scenario: Scenario; error: string | null } {
   let error: string | null = null;
   for (const [label, value, max] of [
@@ -105,7 +106,7 @@ export function draftToScenario(
   if (draft.name.trim().length < 3 || draft.name.length > 100)
     error = 'Название миссии должно содержать от 3 до 100 символов.';
   const scenario: Scenario = {
-    ...base,
+    ...(base ?? makePreset('orbital_custom')),
     name: draft.name.trim(),
     safety_task: draft.safety_task,
     geometry: draft.geometry || null,

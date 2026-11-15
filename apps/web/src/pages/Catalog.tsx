@@ -57,19 +57,19 @@ export function Catalog() {
     set('q', draft.trim());
   }
   const groups = [
-    { name: 'scope', label: 'Направление', options: config.dictionaries.scopes },
+    { name: 'scope', label: 'Направление', options: config.dictionaries.scope },
     {
       name: 'investigation',
       label: 'Исследование',
       options: (options.data ?? []).map((i) => ({ value: i.id, label: i.acronym })),
     },
-    { name: 'fuel', label: 'Состояние топлива', options: config.dictionaries.fuel_states },
+    { name: 'fuel', label: 'Состояние топлива', options: config.dictionaries.fuel_state },
     {
       name: 'material',
       label: 'Материал',
-      options: config.dictionaries.materials.map((m) => ({ value: m.id, label: m.label })),
+      options: config.dictionaries.materials.map((m) => ({ value: m.value, label: m.label })),
     },
-    { name: 'gravity', label: 'Гравитация', options: config.dictionaries.gravity_regimes },
+    { name: 'gravity', label: 'Гравитация', options: config.dictionaries.gravity_regime },
   ];
   const filters = (
     <div className={s.filterContents}>
@@ -193,25 +193,25 @@ export function Catalog() {
         <div className={s.chips}>
           {inv.fuel_states.map((state) => (
             <Badge key={state}>
-              {config.dictionaries.fuel_states.find((f) => f.value === state)?.label ?? state}
+              {config.dictionaries.fuel_state.find((f) => f.value === state)?.label ?? state}
             </Badge>
           ))}
           {inv.gravity_regimes.map((regime) => (
             <Badge key={regime}>
-              {config.dictionaries.gravity_regimes.find((g) => g.value === regime)?.label ?? regime}
+              {config.dictionaries.gravity_regime.find((g) => g.value === regime)?.label ?? regime}
             </Badge>
           ))}
         </div>
         <div className={s.reasons}>
           {item.match_reasons.map((reason) => (
-            <p key={reason}>
+            <p key={`${reason.code}:${reason.field}`}>
               <CheckCircle2 size={14} />
-              {reason}
+              {reason.text}
             </p>
           ))}
           {item.differences.map((text) => (
-            <p className={s.difference} key={text}>
-              {text}
+            <p className={s.difference} key={`${text.code}:${text.field}`}>
+              {text.text}
             </p>
           ))}
           {item.missing_fields.map((text) => (
@@ -286,17 +286,15 @@ export function Catalog() {
                 onChange={(e) => set('sort', e.target.value)}
               >
                 <option value="relevance">По соответствию</option>
-                <option value="title">По названию</option>
+                <option value="acronym">По названию</option>
               </select>
             </label>
           </div>
           <div className={s.searchMode}>
             <span className={s.statusDot} />
-            {data?.retrieval_mode === 'semantic'
-              ? 'Семантический поиск'
-              : data?.retrieval_mode === 'hybrid'
-                ? 'Текстовый и семантический поиск'
-                : 'Поиск по тексту и фильтрам'}
+            {data?.retrieval_mode === 'hybrid'
+              ? 'Текстовый и семантический поиск'
+              : 'Поиск по тексту и фильтрам'}
             <span>Ревизия {workspace.data_revision}</span>
           </div>
           {parsed.error && <Notice tone="error">{parsed.error}</Notice>}

@@ -9,6 +9,9 @@ const labels = {
   not_covered: 'Прямых данных нет',
 } as const;
 const fieldLabels: Record<string, string> = {
+  safety_task: 'Задача',
+  smoke_measurement: 'Измерения дыма',
+  joint_conditions: 'Сочетание условий',
   gravity_regime: 'Гравитация',
   oxygen_fraction: 'Доля кислорода',
   pressure: 'Давление',
@@ -21,10 +24,11 @@ export function ApplicabilityView({
   partial = false,
   onEvidence,
 }: {
-  result: Schema['ApplicabilityResult'];
+  result: Schema['ApplicabilityResult'] | null | undefined;
   partial?: boolean;
   onEvidence?: (id: string) => void;
 }) {
+  if (!result) return <Notice>Выберите сценарий миссии для оценки применимости.</Notice>;
   return (
     <section className={s.section}>
       <div className="spaceBetween">

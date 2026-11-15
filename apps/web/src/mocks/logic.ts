@@ -31,8 +31,8 @@ export function matchesRun(run: TestRun, filters: Filters): boolean {
       !range ||
       (quantity.value === null
         ? filters.include_unknown
-        : (range.min === null || quantity.value >= range.min) &&
-          (range.max === null || quantity.value <= range.max)),
+        : (range.min == null || quantity.value >= range.min) &&
+          (range.max == null || quantity.value <= range.max)),
   );
 }
 export function searchFixture(
@@ -48,7 +48,7 @@ export function searchFixture(
   };
   const items: Schema['SearchItem'][] = [];
   for (const investigation of corpus) {
-    const f = body.filters;
+    const f = body.filters ?? emptyFilters();
     const entityPass =
       overlaps(f.scopes, investigation.scopes) &&
       overlaps(f.investigation_ids, [investigation.id]) &&
@@ -82,11 +82,32 @@ export function searchFixture(
       investigation,
       relevance_category: queryPass ? 'direct' : 'related',
       match_reasons: queryPass
-        ? ['Совпадают задача поиска и направление исследования.']
-        : ['Связанное направление для изучения других механизмов.'],
+        ? [
+            {
+              code: 'scope_match',
+              text: 'Совпадают задача поиска и направление исследования.',
+              field: null,
+              evidence_ids: [],
+            },
+          ]
+        : [
+            {
+              code: 'related',
+              text: 'Связанное направление для изучения других механизмов.',
+              field: null,
+              evidence_ids: [],
+            },
+          ],
       differences: queryPass
         ? []
-        : ['Другой объект или методика; это не точное совпадение с вопросом.'],
+        : [
+            {
+              code: 'different_object',
+              text: 'Другой объект или методика; это не точное совпадение с вопросом.',
+              field: null,
+              evidence_ids: [],
+            },
+          ],
       missing_fields:
         investigation.id === 'inv_psi25' ? ['В тестовой записи не сообщено давление.'] : [],
       matching_run_ids: selectedRuns.map((r) => r.id),
@@ -97,7 +118,7 @@ export function searchFixture(
     });
   }
   items.sort((a, b) =>
-    body.sort === 'title'
+    body.sort === 'acronym'
       ? a.investigation.acronym.localeCompare(b.investigation.acronym) ||
         a.investigation.id.localeCompare(b.investigation.id)
       : Number(a.related) - Number(b.related) ||
@@ -116,7 +137,7 @@ export function searchFixture(
     next_cursor: offset + body.limit < items.length ? `${offset + body.limit}.${signature}` : null,
     total: items.length,
     retrieval_mode: 'lexical',
-    applied_filters: body.filters,
+    applied_filters: body.filters ?? emptyFilters(),
   };
 }
 export function measurementFixture(
@@ -133,7 +154,12 @@ export function measurementFixture(
     const x = run.sample.initial_diameter;
     const y = run.metrics.find((m) => m.metric_key === 'burn_duration')?.quantity;
     let reason: string | null = null;
-    if (!matchesRun(run, body.filters)) reason = 'filtered_out';
+    if (
+      !matchesRun(run, { ...emptyFilters(), ...body.filters }) ||
+      (body.filters?.outcome_categories.length &&
+        !body.filters.outcome_categories.includes(run.terminal_outcome.category))
+    )
+      reason = 'filtered_out';
     else if (x.status === 'unusable' || y?.status === 'unusable') reason = 'unusable_unit';
     else if (x.value === null) reason = 'missing_x';
     else if (y?.value == null) reason = 'missing_y';
@@ -154,10 +180,14 @@ export function measurementFixture(
     y_axis: { key: 'metrics.burn_duration', label: 'Время горения', unit: 's' },
     points: points.slice(0, body.limit),
     excluded_count: [...exclusions.values()].reduce((a, b) => a + b, 0),
-    exclusions_by_reason: [...exclusions.entries()].map(([reason, count]) => ({
-      reason: reason as Schema['MeasurementResponse']['exclusions_by_reason'][number]['reason'],
-      count,
-    })),
+    exclusions_by_reason: {
+      missing_x: 0,
+      missing_y: 0,
+      unusable_unit: 0,
+      unverified_record: 0,
+      filtered_out: 0,
+      ...Object.fromEntries(exclusions),
+    },
     truncated: points.length > body.limit,
     next_cursor: null,
   };
@@ -217,7 +247,14 @@ export function comparisonFixture(
     ),
     comparability: {
       status: 'partially_compatible',
-      reasons: ['Разные объекты и методики: общая шкала пожарной опасности не обоснована.'],
+      reasons: [
+        {
+          code: 'different_method',
+          text: 'Разные объекты и методики: общая шкала пожарной опасности не обоснована.',
+          field: null,
+          evidence_ids: [],
+        },
+      ],
     },
     applicability: {
       overall: 'related_evidence',

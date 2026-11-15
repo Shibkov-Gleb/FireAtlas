@@ -32,7 +32,7 @@ export const rangeKeys = [
 export function parseCatalog(
   params: URLSearchParams,
   revision: string,
-  scenario: Schema['Scenario'],
+  scenario: Schema['Scenario'] | null,
 ): { request: Schema['SearchRequest']; error: string | null } {
   const filters: Filters = {
     ...emptyFilters(),
@@ -46,7 +46,7 @@ export function parseCatalog(
       .filter((v): v is Schema['FuelState'] => ['solid', 'liquid', 'gas', 'aerosol'].includes(v)),
     gravity_regimes: params
       .getAll('gravity')
-      .filter((v): v is Schema['Gravity'] =>
+      .filter((v): v is Schema['GravityRegime'] =>
         ['normal', 'microgravity', 'partial', 'simulated_partial', 'unknown'].includes(v),
       ),
     include_unknown: params.get('unknown') === 'true',
@@ -71,7 +71,9 @@ export function parseCatalog(
         (unit === 'fraction' && ((min !== null && min > 1) || (max !== null && max > 1)))
       )
         error = `${name}: проверьте границы диапазона.`;
-      filters[field] = { min, max, unit };
+      if (field === 'oxygen_range') filters.oxygen_range = { min, max, unit: 'fraction' };
+      else if (field === 'pressure_range') filters.pressure_range = { min, max, unit: 'Pa' };
+      else filters.airflow_range = { min, max, unit: 'm_s' };
     }
   }
   const query = params.get('q') ?? '';
@@ -99,7 +101,7 @@ export function parseCatalog(
       include_related: params.get('related') === 'true',
       cursor: params.get('cursor'),
       limit: 20,
-      sort: params.get('sort') === 'title' ? 'title' : 'relevance',
+      sort: params.get('sort') === 'acronym' ? 'acronym' : 'relevance',
     },
     error,
   };

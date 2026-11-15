@@ -4,7 +4,7 @@ import type { AnalysisResult, Job, Report, Scenario, Schema, Workspace } from '.
 export type StoredJob = {
   job: Job;
   input: Schema['AnalysisRequest'] | Schema['ReportRequest'];
-  snapshot: Scenario;
+  snapshot: Scenario | null;
   created: number;
   mock: string;
 };

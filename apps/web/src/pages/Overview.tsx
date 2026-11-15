@@ -58,6 +58,7 @@ export function Overview() {
         .search(
           {
             query: '',
+            sort: 'acronym',
             locale: 'ru',
             data_revision: workspace.data_revision,
             filters: { ...emptyFilters(), scopes: ['prevention', 'detection', 'suppression'] },

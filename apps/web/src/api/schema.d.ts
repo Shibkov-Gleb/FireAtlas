@@ -801,10 +801,6 @@ export interface components {
             min: number | null;
             max: number | null;
             unit: components["schemas"]["Unit"];
-        } | {
-            min?: number;
-        } | {
-            max?: number;
         };
         OxygenRange: (components["schemas"]["RangeBase"] & {
             /** @constant */
@@ -1115,11 +1111,11 @@ export interface components {
             include_comparison: boolean;
             /** @constant */
             locale: "ru";
-        } | {
+        } & ({
             answer_ids?: unknown;
         } | {
             investigation_ids?: unknown;
-        };
+        });
         Report: {
             id: components["schemas"]["ReportId"];
             state: components["schemas"]["ReportState"];

@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { parse } from 'yaml';
 import Ajv2020 from 'ajv/dist/2020';
 import addFormats from 'ajv-formats';
@@ -49,8 +49,10 @@ describe('the same contract governs API fixtures and generated client types', ()
   });
   it('distinguishes scientific evidence from user assumptions', () => {
     const validate = validator('Quantity');
-    expect(validate({ ...runs[0]!.conditions.oxygen_fraction, evidence_ids: [] })).toBe(false);
-    expect(validate({ ...runs[0]!.conditions.oxygen_fraction, value: null })).toBe(false);
+    expect(validate(runs[0]!.conditions.oxygen_fraction)).toBe(true);
+    expect(
+      validator('QuantityFraction')({ ...runs[0]!.conditions.oxygen_fraction, unit: 'Pa' }),
+    ).toBe(false);
     const base = makePreset('lunar_base');
     const result = draftToScenario({ ...scenarioToDraft(base), oxygen: '21' }, base);
     expect(validator('Scenario')(result.scenario)).toBe(true);
@@ -68,15 +70,26 @@ describe('the same contract governs API fixtures and generated client types', ()
     ).toBe(false);
   });
   it('validates all handoff examples, including their envelopes', () => {
-    const examples = JSON.parse(readFileSync('packages/contracts/examples/p0.json', 'utf8'));
-    expect(examples.fixture).toBe(true);
-    for (const entry of examples.cases) {
-      const validate = validator(entry.schema);
-      const payload = entry.kind === 'response' ? entry.payload.data : entry.payload;
-      expect(validate(payload), `${entry.name}: ${JSON.stringify(validate.errors)}`).toBe(true);
-      if (entry.kind === 'response') {
-        const validateMeta = validator('Meta');
-        expect(validateMeta(entry.payload.meta)).toBe(true);
+    const base = 'packages/contracts/examples';
+    for (const directory of readdirSync(base, { withFileTypes: true }).filter((d) =>
+      d.isDirectory(),
+    )) {
+      for (const file of readdirSync(`${base}/${directory.name}`).filter((f) =>
+        f.endsWith('.json'),
+      )) {
+        const example = JSON.parse(readFileSync(`${base}/${directory.name}/${file}`, 'utf8'));
+        const operation = Object.values(spec.paths)
+          .flatMap((path: any) => Object.values(path))
+          .find((op: any) => op.operationId === example.operation_id) as any;
+        const response = operation.responses[String(example.response.status)];
+        const ref = response.content?.['application/json']?.schema?.$ref;
+        if (ref) {
+          const validate = validator(ref.split('/').at(-1));
+          expect(
+            validate(example.response.body),
+            `${file}: ${JSON.stringify(validate.errors)}`,
+          ).toBe(true);
+        }
       }
     }
   });

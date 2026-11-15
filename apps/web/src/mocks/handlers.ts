@@ -19,7 +19,7 @@ import { withState, type DemoState, type StoredJob } from './store';
 const now = () => new Date().toISOString();
 const meta = () => ({
   request_id: `req_${crypto.randomUUID()}`,
-  contract_version: '1.0.0',
+  contract_version: '1.2.0',
   data_revision: REVISION,
   warnings: [],
 });
@@ -120,7 +120,7 @@ function makeAnswer(record: StoredJob): AnalysisResult {
         quantities: [],
       },
     ],
-    applicability: applicability(record.snapshot),
+    applicability: record.snapshot ? applicability(record.snapshot) : null,
     citations: evidence
       .filter((e) => ['ev_demo_bass', 'ev_psi69_30cal03'].includes(e.id))
       .map((e) => ({
@@ -131,7 +131,7 @@ function makeAnswer(record: StoredJob): AnalysisResult {
       })),
     limitations: [
       'Нет оценки безопасности аппарата или вероятности пожара.',
-      ...(record.snapshot.gravity_regime === 'partial'
+      ...(record.snapshot?.gravity_regime === 'partial'
         ? ['Нет прямых измерений частичной гравитации.']
         : []),
     ],
@@ -196,7 +196,7 @@ function advanceJob(state: DemoState, record: StoredJob) {
         id: job.result_id,
         state: 'ready',
         title: (record.input as Schema['ReportRequest']).title,
-        source_workspace_revision: record.input.workspace_revision,
+        source_workspace_revision: record.input.workspace_revision!,
         data_revision: REVISION,
         created_at: now(),
         expires_at: new Date(Date.now() + 86400000).toISOString(),
@@ -261,7 +261,7 @@ async function createJob(request: Request, type: Job['type']) {
       input_context: {
         workspace_revision: workspace.revision,
         data_revision: REVISION,
-        scenario_id: workspace.scenario.scenario_id,
+        scenario_id: workspace.scenario?.scenario_id ?? null,
       },
       fallback_evidence_ids: [],
     };

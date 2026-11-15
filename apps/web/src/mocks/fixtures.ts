@@ -1,3 +1,4 @@
+import dictionaries from '../../../../packages/contracts/dictionaries.ru.json';
 import type { Investigation, Quantity, Scenario, Schema, Source, TestRun } from '../api/types';
 
 export const REVISION = 'demo-20261104-r1';
@@ -172,13 +173,13 @@ export const extraInvestigation = makeInvestigation(
   ['Синтетическая карточка интерфейса. Научных результатов нет.'],
   'Только тестовый сценарий comparison_limit.',
 );
-export function quantity(
+export function quantity<U extends Quantity['unit']>(
   value: number | null,
-  unit: Quantity['unit'],
+  unit: U,
   evidenceIds: string[] = [],
   rawValue: string | null = value === null ? null : String(value),
   rawUnit: string | null = unit,
-): Quantity {
+): Quantity & { unit: U } {
   return {
     value,
     unit,
@@ -191,7 +192,7 @@ export function quantity(
     derivation: null,
   };
 }
-export const notApplicable = (unit: Quantity['unit']): Quantity => ({
+export const notApplicable = <U extends Quantity['unit']>(unit: U): Quantity & { unit: U } => ({
   ...quantity(null, unit),
   status: 'not_applicable',
 });
@@ -219,6 +220,9 @@ export const flexRuns: TestRun[] = controlRows.map(
       conditions: {
         gravity_regime: 'microgravity',
         gravity_level: quantity(null, 'g_fraction'),
+        nitrogen_fraction: quantity(null, 'fraction'),
+        co2_fraction: quantity(null, 'fraction'),
+        helium_fraction: quantity(null, 'fraction'),
         oxygen_fraction: quantity(0.21, 'fraction', ev, '0.21', 'fraction'),
         pressure: quantity(pressure * 133.322387, 'Pa', ev, String(pressure), 'mmHg'),
         airflow_speed: quantity(null, 'm_s'),
@@ -259,6 +263,9 @@ export const demoRuns: TestRun[] = [
     },
     conditions: {
       ...flexRuns[0]!.conditions,
+      nitrogen_fraction: quantity(null, 'fraction'),
+      co2_fraction: quantity(null, 'fraction'),
+      helium_fraction: quantity(null, 'fraction'),
       oxygen_fraction: quantity(null, 'fraction'),
       pressure: quantity(null, 'Pa'),
       airflow_speed: quantity(0, 'm_s', ['ev_demo_bass'], '0', 'm/s'),
@@ -289,6 +296,9 @@ export const demoRuns: TestRun[] = [
     },
     conditions: {
       ...flexRuns[0]!.conditions,
+      nitrogen_fraction: quantity(null, 'fraction'),
+      co2_fraction: quantity(null, 'fraction'),
+      helium_fraction: quantity(null, 'fraction'),
       oxygen_fraction: quantity(null, 'fraction'),
       pressure: quantity(null, 'Pa'),
     },
@@ -420,7 +430,7 @@ export const claims: Schema['Claim'][] = [
   },
 ];
 export const config: Schema['Config'] = {
-  contract_version: '1.0.0',
+  contract_version: '1.2.0',
   active_data_revision: REVISION,
   feature_flags: { analysis: true, reports: true, semantic_search: false, video_preview: false },
   limits: {
@@ -433,25 +443,26 @@ export const config: Schema['Config'] = {
     report_deadline_s: 30,
   },
   dictionaries: {
-    scopes: [
+    ...dictionaries,
+    scope: [
       { value: 'prevention', label: 'Предотвращение' },
       { value: 'detection', label: 'Обнаружение' },
       { value: 'suppression', label: 'Подавление' },
     ],
-    fuel_states: [
+    fuel_state: [
       { value: 'solid', label: 'Твёрдое' },
       { value: 'liquid', label: 'Жидкое' },
       { value: 'gas', label: 'Газ' },
       { value: 'aerosol', label: 'Аэрозоль' },
     ],
-    gravity_regimes: [
+    gravity_regime: [
       { value: 'microgravity', label: 'Микрогравитация' },
       { value: 'normal', label: 'Земная гравитация' },
       { value: 'partial', label: 'Частичная гравитация' },
       { value: 'simulated_partial', label: 'Имитация частичной' },
       { value: 'unknown', label: 'Неизвестно' },
     ],
-    materials,
+    materials: materials.map((m) => ({ value: m.id, label: m.label })),
   },
   measurement_axes: [
     {

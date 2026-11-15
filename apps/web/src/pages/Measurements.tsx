@@ -41,7 +41,7 @@ export function Measurements() {
             run_ids: [],
             x_metric: axes!.x_key,
             y_metric: axes!.y_key,
-            filters: emptyFilters(),
+            filters: { outcome_categories: [], material_ids: [] },
             cursor: params.get('cursor'),
             limit: 200,
           },
@@ -75,7 +75,7 @@ export function Measurements() {
   function pointShape(raw: unknown) {
     const { cx, cy, payload } = raw as { cx: number; cy: number; payload: Point };
     const active = payload.run_id === selected;
-    const testId = payload.run_id.replace('run_psi69_', '').toUpperCase();
+    const testId = payload.run_id.split('_').at(-1)!.toUpperCase();
     return (
       <g
         role="button"
@@ -212,9 +212,7 @@ export function Measurements() {
                             const point = payload?.[0]?.payload as Point | undefined;
                             return active && point ? (
                               <div className={s.tooltip}>
-                                <strong>
-                                  {point.run_id.replace('run_psi69_', '').toUpperCase()}
-                                </strong>
+                                <strong>{point.run_id.split('_').at(-1)!.toUpperCase()}</strong>
                                 <p>Диаметр: {number(point.x * 1000)} мм</p>
                                 <p>Время: {number(point.y)} с</p>
                               </div>
@@ -251,22 +249,28 @@ export function Measurements() {
                 <Notice tone="warning">
                   Исключено записей: {query.data.excluded_count}.
                   <ul className="tiny">
-                    {query.data.exclusions_by_reason.map((item) => (
-                      <li key={item.reason}>
-                        {
-                          (
-                            {
-                              missing_x: 'Нет координаты X',
-                              missing_y: 'Нет координаты Y',
-                              unusable_unit: 'Непригодная единица',
-                              unverified_record: 'Непроверенная запись',
-                              filtered_out: 'Не проходит фильтр',
-                            } as const
-                          )[item.reason]
-                        }
-                        : {item.count}
-                      </li>
-                    ))}
+                    {Object.entries(query.data.exclusions_by_reason)
+                      .filter(([, count]) => count > 0)
+                      .map(([reason, count]) => (
+                        <li
+                          key={
+                            reason as keyof Schema['MeasurementResponse']['exclusions_by_reason']
+                          }
+                        >
+                          {
+                            (
+                              {
+                                missing_x: 'Нет координаты X',
+                                missing_y: 'Нет координаты Y',
+                                unusable_unit: 'Непригодная единица',
+                                unverified_record: 'Непроверенная запись',
+                                filtered_out: 'Не проходит фильтр',
+                              } as const
+                            )[reason as keyof Schema['MeasurementResponse']['exclusions_by_reason']]
+                          }
+                          : {count}
+                        </li>
+                      ))}
                   </ul>
                 </Notice>
               )}
@@ -314,7 +318,7 @@ export function Measurements() {
                               aria-pressed={selected === point.run_id}
                               onClick={() => select(point.run_id)}
                             >
-                              {point.run_id.replace('run_psi69_', '').toUpperCase()}
+                              {point.run_id.split('_').at(-1)!.toUpperCase()}
                             </button>
                           </th>
                           <td>{number(point.x * 1000)}</td>

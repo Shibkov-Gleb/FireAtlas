@@ -12,7 +12,7 @@ describe('scientific fixture behavior', () => {
       run_ids: [],
       x_metric: 'sample.initial_diameter',
       y_metric: 'metrics.burn_duration',
-      filters: emptyFilters(),
+      filters: { outcome_categories: [], material_ids: [] },
       cursor: null,
       limit: 200,
     });
@@ -29,7 +29,7 @@ describe('scientific fixture behavior', () => {
   it('keeps hard ranges even when related work is requested', () => {
     const query = defaultSearch(REVISION);
     query.include_related = true;
-    query.filters.oxygen_range = { min: 0.9, max: 1, unit: 'fraction' };
+    query.filters!.oxygen_range = { min: 0.9, max: 1, unit: 'fraction' };
     expect(searchFixture(query).items).toHaveLength(0);
   });
   it('does not substitute a coordinate for missing data', () => {
@@ -39,7 +39,7 @@ describe('scientific fixture behavior', () => {
       run_ids: [],
       x_metric: 'sample.initial_diameter',
       y_metric: 'metrics.burn_duration',
-      filters: emptyFilters(),
+      filters: { outcome_categories: [], material_ids: [] },
       cursor: null,
       limit: 200,
     });
@@ -49,7 +49,7 @@ describe('scientific fixture behavior', () => {
   it('rejects cursors from a different query', () => {
     const query = { ...defaultSearch(REVISION), limit: 1 };
     const first = searchFixture(query);
-    expect(() => searchFixture({ ...query, cursor: first.next_cursor, sort: 'title' })).toThrow(
+    expect(() => searchFixture({ ...query, cursor: first.next_cursor, sort: 'acronym' })).toThrow(
       'INVALID_CURSOR',
     );
   });
