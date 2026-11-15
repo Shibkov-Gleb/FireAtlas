@@ -30,7 +30,7 @@
       },
       "meta": {
         "request_id": "req_demo02",
-        "contract_version": "1.1.0",
+        "contract_version": "1.2.0",
         "data_revision": "psi-20261115-r1",
         "warnings": []
       }

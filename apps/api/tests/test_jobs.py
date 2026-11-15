@@ -64,7 +64,15 @@ def test_at12_moon_scenario_insufficient_and_never_direct(guest):
     assert ans["follow_up_questions"]
 
 
+def test_new_guest_gets_orbital_scenario(guest):
+    """D-039: у нового гостя сценарий по умолчанию - пресет орбитальной станции (фронтенд не получает null)."""
+    sc = guest.get("/api/v1/workspaces/current").data["scenario"]
+    assert sc is not None and sc["scenario_id"] == "orbital_custom" and sc["gravity_regime"] == "microgravity"
+    assert all(a["origin"] == "preset_source" and a["source_ids"] for a in sc["assumptions"])
+
+
 def test_job_without_scenario_has_null_applicability(guest):
+    set_scenario(guest, None)  # null по-прежнему допустим (D-016)
     r, _ = start_analysis(guest)
     job = poll(guest, r.data["id"])
     assert guest.get(f"/api/v1/answers/{job['result_id']}").data["applicability"] is None

@@ -8,7 +8,7 @@
       "status": 200,
       "default": true,
       "fixture": true,
-      "file": "getConfig/ok.json",
+      "file": "getConfig\\ok.json",
       "description": "Конфигурация с активной ревизией"
     },
     {
@@ -17,7 +17,7 @@
       "status": 503,
       "default": false,
       "fixture": true,
-      "file": "getConfig/data_not_ready.json",
+      "file": "getConfig\\data_not_ready.json",
       "description": "Корпус еще не импортирован"
     },
     {
@@ -26,8 +26,8 @@
       "status": 201,
       "default": true,
       "fixture": true,
-      "file": "createWorkspace/created.json",
-      "description": "Новый гость"
+      "file": "createWorkspace\\created.json",
+      "description": "Новый гость: сценарий орбитальной станции по умолчанию (D-039)"
     },
     {
       "operation_id": "createWorkspace",
@@ -35,7 +35,7 @@
       "status": 200,
       "default": false,
       "fixture": true,
-      "file": "createWorkspace/existing_session.json",
+      "file": "createWorkspace\\existing_session.json",
       "description": "Сессия уже действует - выбор не очищается"
     },
     {
@@ -44,7 +44,7 @@
       "status": 200,
       "default": true,
       "fixture": true,
-      "file": "getCurrentWorkspace/ok.json",
+      "file": "getCurrentWorkspace\\ok.json",
       "description": "Текущее пространство"
     },
     {
@@ -53,7 +53,7 @@
       "status": 401,
       "default": false,
       "fixture": true,
-      "file": "getCurrentWorkspace/session_required.json",
+      "file": "getCurrentWorkspace\\session_required.json",
       "description": "Нет cookie сессии"
     },
     {
@@ -62,7 +62,7 @@
       "status": 200,
       "default": true,
       "fixture": true,
-      "file": "patchCurrentWorkspace/set_moon.json",
+      "file": "patchCurrentWorkspace\\set_moon.json",
       "description": "Смена сценария на лунную базу"
     },
     {
@@ -71,7 +71,7 @@
       "status": 200,
       "default": false,
       "fixture": true,
-      "file": "patchCurrentWorkspace/user_oxygen.json",
+      "file": "patchCurrentWorkspace\\user_oxygen.json",
       "description": "Пользователь задал долю кислорода 0.21"
     },
     {
@@ -80,7 +80,7 @@
       "status": 409,
       "default": false,
       "fixture": true,
-      "file": "patchCurrentWorkspace/conflict.json",
+      "file": "patchCurrentWorkspace\\conflict.json",
       "description": "Устаревшая revision (Б.5)"
     },
     {
@@ -89,7 +89,7 @@
       "status": 422,
       "default": false,
       "fixture": true,
-      "file": "patchCurrentWorkspace/fourth_selected.json",
+      "file": "patchCurrentWorkspace\\fourth_selected.json",
       "description": "Четвертое исследование в сравнении (AT-10)"
     },
     {
@@ -98,7 +98,7 @@
       "status": 200,
       "default": true,
       "fixture": true,
-      "file": "search/oxygen_021.json",
+      "file": "search\\oxygen_021.json",
       "description": "Вентиляция и твердые материалы, кислород 0.18-0.23 (Б.2, include_unknown=true)"
     },
     {
@@ -107,7 +107,7 @@
       "status": 200,
       "default": false,
       "fixture": true,
-      "file": "search/hard_range_empty.json",
+      "file": "search\\hard_range_empty.json",
       "description": "Жесткий диапазон без совпадений (AT-04): 200 и пустые items"
     },
     {
@@ -116,7 +116,7 @@
       "status": 200,
       "default": false,
       "fixture": true,
-      "file": "search/semantic_unavailable.json",
+      "file": "search\\semantic_unavailable.json",
       "description": "Семантический слой недоступен - lexical с предупреждением (FR-05)"
     },
     {
@@ -125,7 +125,7 @@
       "status": 422,
       "default": false,
       "fixture": true,
-      "file": "search/unexpected_field.json",
+      "file": "search\\unexpected_field.json",
       "description": "Неожиданное поле запроса -> 422"
     },
     {
@@ -134,7 +134,7 @@
       "status": 200,
       "default": true,
       "fixture": true,
-      "file": "getInvestigation/flex.json",
+      "file": "getInvestigation\\flex.json",
       "description": "Карточка FLEX"
     },
     {
@@ -143,7 +143,7 @@
       "status": 200,
       "default": false,
       "fixture": true,
-      "file": "getInvestigation/bass_with_hypothesis.json",
+      "file": "getInvestigation\\bass_with_hypothesis.json",
       "description": "BASS-II: наблюдение и отдельно гипотеза"
     },
     {
@@ -152,7 +152,7 @@
       "status": 404,
       "default": false,
       "fixture": true,
-      "file": "getInvestigation/not_found.json",
+      "file": "getInvestigation\\not_found.json",
       "description": "Нет такого исследования"
     },
     {
@@ -161,7 +161,7 @@
       "status": 410,
       "default": false,
       "fixture": true,
-      "file": "getInvestigation/revision_gone.json",
+      "file": "getInvestigation\\revision_gone.json",
       "description": "Ревизия удалена"
     },
     {
@@ -170,7 +170,7 @@
       "status": 200,
       "default": true,
       "fixture": true,
-      "file": "listInvestigationRuns/flex.json",
+      "file": "listInvestigationRuns\\flex.json",
       "description": "Опыты FLEX"
     },
     {
@@ -179,7 +179,7 @@
       "status": 422,
       "default": false,
       "fixture": true,
-      "file": "listInvestigationRuns/invalid_cursor.json",
+      "file": "listInvestigationRuns\\invalid_cursor.json",
       "description": "Недействительный курсор"
     },
     {
@@ -188,7 +188,7 @@
       "status": 200,
       "default": true,
       "fixture": true,
-      "file": "getRun/flex_30cal03.json",
+      "file": "getRun\\flex_30cal03.json",
       "description": "Контрольная запись FLEX 30CAL03 (приложение А)"
     },
     {
@@ -197,7 +197,7 @@
       "status": 200,
       "default": false,
       "fixture": true,
-      "file": "getRun/missing_pressure.json",
+      "file": "getRun\\missing_pressure.json",
       "description": "Неизвестное давление: null и причина (AT-05)"
     },
     {
@@ -206,7 +206,7 @@
       "status": 200,
       "default": true,
       "fixture": true,
-      "file": "queryMeasurements/flex_5_points.json",
+      "file": "queryMeasurements\\flex_5_points.json",
       "description": "График FLEX: пять контрольных точек (AT-07)"
     },
     {
@@ -215,7 +215,7 @@
       "status": 200,
       "default": false,
       "fixture": true,
-      "file": "queryMeasurements/no_points.json",
+      "file": "queryMeasurements\\no_points.json",
       "description": "Нет измерений: все записи исключены с причинами"
     },
     {
@@ -224,7 +224,7 @@
       "status": 422,
       "default": false,
       "fixture": true,
-      "file": "queryMeasurements/unsupported_axes.json",
+      "file": "queryMeasurements\\unsupported_axes.json",
       "description": "Неподдерживаемая пара осей"
     },
     {
@@ -233,7 +233,7 @@
       "status": 200,
       "default": true,
       "fixture": true,
-      "file": "compareInvestigations/different_methods.json",
+      "file": "compareInvestigations\\different_methods.json",
       "description": "Два исследования с разными методиками (AT-09)"
     },
     {
@@ -242,7 +242,7 @@
       "status": 422,
       "default": false,
       "fixture": true,
-      "file": "compareInvestigations/too_many.json",
+      "file": "compareInvestigations\\too_many.json",
       "description": "Четыре исследования -> 422"
     },
     {
@@ -251,7 +251,7 @@
       "status": 200,
       "default": true,
       "fixture": true,
-      "file": "assessApplicability/moon_no_direct.json",
+      "file": "assessApplicability\\moon_no_direct.json",
       "description": "Лунная база без прямых данных (AT-12)"
     },
     {
@@ -260,7 +260,7 @@
       "status": 200,
       "default": true,
       "fixture": true,
-      "file": "listScenarioPresets/ok.json",
+      "file": "listScenarioPresets\\ok.json",
       "description": "Пресеты сред [предложение D-007]"
     },
     {
@@ -269,7 +269,7 @@
       "status": 200,
       "default": true,
       "fixture": true,
-      "file": "getEvidence/flex_30cal03.json",
+      "file": "getEvidence\\flex_30cal03.json",
       "description": "Доказательство строки 30CAL03"
     },
     {
@@ -278,7 +278,7 @@
       "status": 200,
       "default": true,
       "fixture": true,
-      "file": "getSource/available.json",
+      "file": "getSource\\available.json",
       "description": "Источник с локальным файлом"
     },
     {
@@ -287,7 +287,7 @@
       "status": 200,
       "default": false,
       "fixture": true,
-      "file": "getSource/unavailable_file.json",
+      "file": "getSource\\unavailable_file.json",
       "description": "Файл недоступен, метаданные доступны (AT-26)"
     },
     {
@@ -296,7 +296,7 @@
       "status": 202,
       "default": true,
       "fixture": true,
-      "file": "createAnalysis/accepted.json",
+      "file": "createAnalysis\\accepted.json",
       "description": "Задача принята (Б.3)"
     },
     {
@@ -305,7 +305,7 @@
       "status": 409,
       "default": false,
       "fixture": true,
-      "file": "createAnalysis/workspace_conflict.json",
+      "file": "createAnalysis\\workspace_conflict.json",
       "description": "workspace_revision устарела"
     },
     {
@@ -314,7 +314,7 @@
       "status": 409,
       "default": false,
       "fixture": true,
-      "file": "createAnalysis/idempotency_conflict.json",
+      "file": "createAnalysis\\idempotency_conflict.json",
       "description": "Тот же ключ, другое тело"
     },
     {
@@ -323,7 +323,7 @@
       "status": 429,
       "default": false,
       "fixture": true,
-      "file": "createAnalysis/rate_limited.json",
+      "file": "createAnalysis\\rate_limited.json",
       "description": "Лимит запусков"
     },
     {
@@ -332,7 +332,7 @@
       "status": 200,
       "default": true,
       "fixture": true,
-      "file": "getJob/running.json",
+      "file": "getJob\\running.json",
       "description": "Выполняется: этап reasoning"
     },
     {
@@ -341,7 +341,7 @@
       "status": 200,
       "default": false,
       "fixture": true,
-      "file": "getJob/succeeded.json",
+      "file": "getJob\\succeeded.json",
       "description": "Готово"
     },
     {
@@ -350,7 +350,7 @@
       "status": 200,
       "default": false,
       "fixture": true,
-      "file": "getJob/provider_failed.json",
+      "file": "getJob\\provider_failed.json",
       "description": "Отказ провайдера модели (AT-14): failed + найденные материалы"
     },
     {
@@ -359,7 +359,7 @@
       "status": 200,
       "default": false,
       "fixture": true,
-      "file": "getJob/validation_failed.json",
+      "file": "getJob\\validation_failed.json",
       "description": "Ответ не прошел проверку"
     },
     {
@@ -368,7 +368,7 @@
       "status": 200,
       "default": false,
       "fixture": true,
-      "file": "getJob/cancelled.json",
+      "file": "getJob\\cancelled.json",
       "description": "Отменено пользователем (AT-17)"
     },
     {
@@ -377,7 +377,7 @@
       "status": 200,
       "default": false,
       "fixture": true,
-      "file": "getJob/expired.json",
+      "file": "getJob\\expired.json",
       "description": "Истек дедлайн"
     },
     {
@@ -386,7 +386,7 @@
       "status": 204,
       "default": true,
       "fixture": true,
-      "file": "cancelJob/cancelled.json",
+      "file": "cancelJob\\cancelled.json",
       "description": "Отмена принята"
     },
     {
@@ -395,7 +395,7 @@
       "status": 409,
       "default": false,
       "fixture": true,
-      "file": "cancelJob/already_finished.json",
+      "file": "cancelJob\\already_finished.json",
       "description": "Задача уже завершена"
     },
     {
@@ -404,7 +404,7 @@
       "status": 200,
       "default": true,
       "fixture": true,
-      "file": "getAnswer/answered.json",
+      "file": "getAnswer\\answered.json",
       "description": "Успешный ответ со ссылками (AT-11)"
     },
     {
@@ -413,7 +413,7 @@
       "status": 200,
       "default": false,
       "fixture": true,
-      "file": "getAnswer/insufficient_evidence.json",
+      "file": "getAnswer\\insufficient_evidence.json",
       "description": "Недостаток доказательств (AT-13, AT-12)"
     },
     {
@@ -422,7 +422,7 @@
       "status": 200,
       "default": false,
       "fixture": true,
-      "file": "getAnswer/conflicting_evidence.json",
+      "file": "getAnswer\\conflicting_evidence.json",
       "description": "Противоречие оснований [FIXTURE]"
     },
     {
@@ -431,7 +431,7 @@
       "status": 403,
       "default": false,
       "fixture": true,
-      "file": "getAnswer/access_denied.json",
+      "file": "getAnswer\\access_denied.json",
       "description": "Чужой ответ (AT-19)"
     },
     {
@@ -440,7 +440,7 @@
       "status": 202,
       "default": true,
       "fixture": true,
-      "file": "createReport/accepted.json",
+      "file": "createReport\\accepted.json",
       "description": "Экспорт принят"
     },
     {
@@ -449,7 +449,7 @@
       "status": 422,
       "default": false,
       "fixture": true,
-      "file": "createReport/foreign_answer.json",
+      "file": "createReport\\foreign_answer.json",
       "description": "Ответ из другой ревизии/пространства"
     },
     {
@@ -458,7 +458,7 @@
       "status": 200,
       "default": true,
       "fixture": true,
-      "file": "getReport/ready.json",
+      "file": "getReport\\ready.json",
       "description": "Отчет готов"
     },
     {
@@ -467,7 +467,7 @@
       "status": 200,
       "default": false,
       "fixture": true,
-      "file": "getReport/preparing.json",
+      "file": "getReport\\preparing.json",
       "description": "Отчет готовится"
     },
     {
@@ -476,7 +476,7 @@
       "status": 200,
       "default": false,
       "fixture": true,
-      "file": "getReport/expired.json",
+      "file": "getReport\\expired.json",
       "description": "Отчет истек (метаданные доступны)"
     },
     {
@@ -485,7 +485,7 @@
       "status": 410,
       "default": true,
       "fixture": true,
-      "file": "downloadReport/expired.json",
+      "file": "downloadReport\\expired.json",
       "description": "Скачивание истекшего отчета (AT-22)"
     },
     {
@@ -494,7 +494,7 @@
       "status": 409,
       "default": false,
       "fixture": true,
-      "file": "downloadReport/preparing.json",
+      "file": "downloadReport\\preparing.json",
       "description": "Отчет еще готовится"
     }
   ]
