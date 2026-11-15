@@ -57,26 +57,26 @@ export function Catalog() {
     set('q', draft.trim());
   }
   const groups = [
-    { name: 'scope', label: 'Направление', options: config.dictionaries.scope },
+    { name: 'scope', label: 'Research area', options: config.dictionaries.scope },
     {
       name: 'investigation',
-      label: 'Исследование',
+      label: 'Investigation',
       options: (options.data ?? []).map((i) => ({ value: i.id, label: i.acronym })),
     },
-    { name: 'fuel', label: 'Состояние топлива', options: config.dictionaries.fuel_state },
+    { name: 'fuel', label: 'Fuel state', options: config.dictionaries.fuel_state },
     {
       name: 'material',
-      label: 'Материал',
+      label: 'Material',
       options: config.dictionaries.materials.map((m) => ({ value: m.value, label: m.label })),
     },
-    { name: 'gravity', label: 'Гравитация', options: config.dictionaries.gravity_regime },
+    { name: 'gravity', label: 'Gravity', options: config.dictionaries.gravity_regime },
   ];
   const filters = (
     <div className={s.filterContents}>
       <div className="spaceBetween">
-        <h2>Условия поиска</h2>
+        <h2>Search conditions</h2>
         <button className="textLink" onClick={() => setParams(new URLSearchParams())}>
-          Сбросить
+          Reset
         </button>
       </div>
       {groups.map((group, index) => (
@@ -109,13 +109,13 @@ export function Catalog() {
           <div>
             {(['min', 'max'] as const).map((bound) => (
               <label className="field" key={bound}>
-                <span>{bound === 'min' ? 'От' : 'До'}</span>
+                <span>{bound === 'min' ? 'From' : 'To'}</span>
                 <input
                   type="number"
                   min="0"
                   max={range.max}
                   step="any"
-                  aria-label={`${range.name} ${bound === 'min' ? 'минимум' : 'максимум'}, ${range.label}`}
+                  aria-label={`${range.name} ${bound === 'min' ? 'minimum' : 'maximum'}, ${range.label}`}
                   value={
                     params.get(`${range.prefix}_${bound}`) === null
                       ? ''
@@ -140,14 +140,14 @@ export function Catalog() {
         </fieldset>
       ))}
       <label className="field">
-        Наличие измерений
+        Measurement availability
         <select
           value={params.get('measurements') ?? ''}
           onChange={(e) => set('measurements', e.target.value || null)}
         >
-          <option value="">Любое</option>
-          <option value="true">Есть измерения</option>
-          <option value="false">Нет измерений</option>
+          <option value="">Any</option>
+          <option value="true">Measurements available</option>
+          <option value="false">No measurements</option>
         </select>
       </label>
       <label className="checkLabel">
@@ -156,9 +156,9 @@ export function Catalog() {
           checked={params.get('unknown') === 'true'}
           onChange={(e) => set('unknown', e.target.checked ? 'true' : null)}
         />
-        Включать неизвестные значения
+        Include unknown values
       </label>
-      <p className="tiny muted">Неизвестное значение не отменяет остальные заданные ограничения.</p>
+      <p className="tiny muted">An unknown value does not remove any other selected constraints.</p>
     </div>
   );
   const data = results.data;
@@ -172,12 +172,12 @@ export function Catalog() {
           <div className="inline">
             <span className={s.psi}>{inv.psi_id}</span>
             <Badge tone={item.related ? 'cyan' : 'teal'}>
-              {item.related ? 'Связанная работа' : 'Прямое соответствие'}
+              {item.related ? 'Related work' : 'Direct match'}
             </Badge>
           </div>
           <button
             className="iconButton"
-            aria-label={`${saved ? 'Убрать из сохранённых' : 'Сохранить'} ${inv.acronym}`}
+            aria-label={`${saved ? 'Remove from saved' : 'Save'} ${inv.acronym}`}
             aria-pressed={saved}
             disabled={pending}
             onClick={() => void toggleSaved(inv.id)}
@@ -222,7 +222,7 @@ export function Catalog() {
         </div>
         <div className={s.resultFooter}>
           <Link className="textLink" to={`/investigations/${inv.id}`}>
-            Открыть условия и основания <ArrowRight size={13} />
+            Open conditions and evidence <ArrowRight size={13} />
           </Link>
           <Button
             variant="ghost"
@@ -231,7 +231,7 @@ export function Catalog() {
             onClick={() => void toggleComparison(inv.id)}
           >
             {compared ? <Check size={14} /> : <GitCompareArrows size={14} />}{' '}
-            {compared ? 'В сравнении' : 'Сравнить'}
+            {compared ? 'In comparison' : 'Compare'}
           </Button>
         </div>
       </article>
@@ -240,28 +240,28 @@ export function Catalog() {
   return (
     <>
       <PageHeader
-        eyebrow="КАТАЛОГ / NASA PSI"
-        title="Исследования"
-        description="Найдите работы под свою задачу. Причины соответствия и различия видны рядом с результатом."
+        eyebrow="CATALOG / NASA PSI"
+        title="Investigations"
+        description="Find research for your question. Match reasons and differences appear beside each result."
         action={
           <Link className="textLink" to="/compare">
-            Сравнение · {workspace.selected_investigation_ids.length}/3 <ArrowRight size={14} />
+            Comparison · {workspace.selected_investigation_ids.length}/3 <ArrowRight size={14} />
           </Link>
         }
       />
       <form className={s.search} onSubmit={submit}>
         <Search size={19} />
         <label className="srOnly" htmlFor="catalog-query">
-          Поисковый вопрос
+          Research query
         </label>
         <input
           id="catalog-query"
           value={draft}
           maxLength={config.limits.question_chars_max}
           onChange={(e) => setDraft(e.target.value)}
-          placeholder="Вопрос, материал или название исследования"
+          placeholder="Question, material or investigation title"
         />
-        <Button type="submit">Найти</Button>
+        <Button type="submit">Search</Button>
       </form>
       <div className={s.catalog}>
         <Panel className={s.filters}>{filters}</Panel>
@@ -273,29 +273,29 @@ export function Catalog() {
                 variant="secondary"
                 onClick={() => setMobileFilters(true)}
               >
-                <SlidersHorizontal size={15} /> Фильтры
+                <SlidersHorizontal size={15} /> Filters
               </Button>
               <span className={s.resultCount} role="status">
-                {results.isFetching ? 'Обновляем выдачу…' : `Исследований: ${data?.total ?? '—'}`}
+                {results.isFetching ? 'Updating results…' : `Investigations: ${data?.total ?? '—'}`}
               </span>
             </div>
             <label className={s.sort}>
-              Сортировка
+              Sort by
               <select
                 value={params.get('sort') ?? 'relevance'}
                 onChange={(e) => set('sort', e.target.value)}
               >
-                <option value="relevance">По соответствию</option>
-                <option value="acronym">По названию</option>
+                <option value="relevance">Relevance</option>
+                <option value="acronym">Name</option>
               </select>
             </label>
           </div>
           <div className={s.searchMode}>
             <span className={s.statusDot} />
             {data?.retrieval_mode === 'hybrid'
-              ? 'Текстовый и семантический поиск'
-              : 'Поиск по тексту и фильтрам'}
-            <span>Ревизия {workspace.data_revision}</span>
+              ? 'Text and semantic search'
+              : 'Text search and filters'}
+            <span>Revision {workspace.data_revision}</span>
           </div>
           {parsed.error && <Notice tone="error">{parsed.error}</Notice>}
           {results.isPending && !parsed.error ? (
@@ -314,30 +314,31 @@ export function Catalog() {
                 {data.items.filter((item) => !item.related).map(renderItem)}
                 {data.items.some((item) => item.related) && (
                   <>
-                    <h2 className={s.relatedTitle}>Связанные работы</h2>
+                    <h2 className={s.relatedTitle}>Related work</h2>
                     <p className="tiny muted">
-                      Эти работы отличаются от вопроса; заданные жёсткие фильтры сохраняются.
+                      These studies differ from the question; all selected hard filters remain in
+                      force.
                     </p>
                     {data.items.filter((item) => item.related).map(renderItem)}
                   </>
                 )}
                 {!data.items.length && (
                   <EmptyState
-                    title="Нет исследований с такими условиями"
+                    title="No investigations match these conditions"
                     action={
                       <Button variant="secondary" onClick={() => set('related', 'true')}>
-                        Показать связанные материалы
+                        Show related materials
                       </Button>
                     }
                   >
-                    Ограничения сохранены. Измените диапазон или явно включите связанные работы.
-                    Пустая выдача не означает безопасность.
+                    Constraints are preserved. Adjust the range or explicitly include related work.
+                    An empty result does not establish safety.
                   </EmptyState>
                 )}
                 <div className={s.pagination}>
                   {params.has('cursor') && (
                     <Button variant="ghost" onClick={() => set('cursor', null)}>
-                      К началу выдачи
+                      Back to the first page
                     </Button>
                   )}
                   {data.next_cursor && (
@@ -349,7 +350,7 @@ export function Catalog() {
                         setParams(next);
                       }}
                     >
-                      Следующая страница <ArrowRight size={14} />
+                      Next page <ArrowRight size={14} />
                     </Button>
                   )}
                 </div>
@@ -362,19 +363,19 @@ export function Catalog() {
               checked={params.get('related') === 'true'}
               onChange={(e) => set('related', e.target.checked ? 'true' : null)}
             />
-            Показывать связанные работы отдельной группой
+            Show related work in a separate group
           </label>
         </div>
       </div>
       <Drawer
         open={mobileFilters}
         onOpenChange={setMobileFilters}
-        title="Фильтры исследований"
-        description="Условия применяются к текущему поиску и сохраняются в адресе страницы."
+        title="Investigation filters"
+        description="Conditions apply to the current search and are saved in the page URL."
       >
         {filters}
         <Button onClick={() => setMobileFilters(false)}>
-          <X size={14} /> Закрыть фильтры
+          <X size={14} /> Close filters
         </Button>
       </Drawer>
     </>

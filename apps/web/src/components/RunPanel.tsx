@@ -24,7 +24,7 @@ export function QuantityValue({
         title={
           quantity.raw_value === null
             ? statusLabels[quantity.status]
-            : `Источник: ${quantity.raw_value} ${quantity.raw_unit ?? ''}`
+            : `Source: ${quantity.raw_value} ${quantity.raw_unit ?? ''}`
         }
       >
         {text}
@@ -33,12 +33,10 @@ export function QuantityValue({
   return (
     <div className={s.quantity}>
       <span className={quantity.value === null ? s.unknown : ''}>{text}</span>
-      {quantity.status === 'derived' && (
-        <small>Вычислено · {quantity.derivation?.formula_id}</small>
-      )}
+      {quantity.status === 'derived' && <small>Derived · {quantity.derivation?.formula_id}</small>}
       {quantity.raw_value !== null && (
         <details>
-          <summary>Исходное значение</summary>
+          <summary>Original value</summary>
           <div>
             {quantity.raw_value} {quantity.raw_unit ?? ''}
             <br />
@@ -71,8 +69,8 @@ export function RunPanel({
   });
   if (!runId)
     return (
-      <EmptyState title="Выберите опыт">
-        Нажмите на запись в таблице или точку графика, чтобы увидеть условия.
+      <EmptyState title="Select a test run">
+        Select a table row or chart point to view the conditions.
       </EmptyState>
     );
   if (query.isPending)
@@ -84,23 +82,25 @@ export function RunPanel({
   if (query.isError) return <ErrorState error={query.error} onRetry={() => void query.refetch()} />;
   const run = query.data;
   if (investigationId && run.investigation_id !== investigationId)
-    return <Notice tone="warning">Выбранная запись относится к другому исследованию.</Notice>;
+    return (
+      <Notice tone="warning">The selected record belongs to a different investigation.</Notice>
+    );
   const conditions = [
-    ['Доля кислорода', run.conditions.oxygen_fraction, 'fraction'],
-    ['Доля азота', run.conditions.nitrogen_fraction, 'fraction'],
-    ['Доля CO₂', run.conditions.co2_fraction, 'fraction'],
-    ['Доля гелия', run.conditions.helium_fraction, 'fraction'],
-    ['Общее давление', run.conditions.pressure, 'Pa'],
-    ['Калиброванная скорость', run.conditions.airflow_speed, 'm_s'],
-    ['Температура', run.conditions.ambient_temperature, 'K'],
-    ['Уровень гравитации', run.conditions.gravity_level, 'g_fraction'],
+    ['Oxygen fraction', run.conditions.oxygen_fraction, 'fraction'],
+    ['Nitrogen fraction', run.conditions.nitrogen_fraction, 'fraction'],
+    ['CO₂ fraction', run.conditions.co2_fraction, 'fraction'],
+    ['Helium fraction', run.conditions.helium_fraction, 'fraction'],
+    ['Total pressure', run.conditions.pressure, 'Pa'],
+    ['Calibrated airflow speed', run.conditions.airflow_speed, 'm_s'],
+    ['Temperature', run.conditions.ambient_temperature, 'K'],
+    ['Gravity level', run.conditions.gravity_level, 'g_fraction'],
   ] as const;
   return (
     <Panel className={s.panel}>
       <div className="spaceBetween">
-        <span className={s.label}>ВЫБРАННЫЙ ОПЫТ</span>
+        <span className={s.label}>SELECTED TEST RUN</span>
         {onClose && (
-          <button className="iconButton" onClick={onClose} aria-label="Снять выбор опыта">
+          <button className="iconButton" onClick={onClose} aria-label="Clear selected test run">
             <X size={16} />
           </button>
         )}
@@ -112,30 +112,30 @@ export function RunPanel({
         </Badge>
       </div>
       <p className={s.rawOutcome}>
-        Исход источника: <span>{run.terminal_outcome.raw_label}</span>
+        Original outcome: <span>{run.terminal_outcome.raw_label}</span>
       </p>
       <div className={s.section}>
-        <h3>Образец</h3>
+        <h3>Sample</h3>
         <dl>
           <div>
-            <dt>Материал</dt>
+            <dt>Material</dt>
             <dd>
               {config.dictionaries.materials.find((m) => m.value === run.material_id)?.label ??
-                'Не сообщено'}
+                'Not reported'}
             </dd>
           </div>
           <div>
-            <dt>Геометрия</dt>
+            <dt>Geometry</dt>
             <dd>{geometryLabels[run.sample.geometry]}</dd>
           </div>
           <div>
-            <dt>Начальный диаметр</dt>
+            <dt>Initial diameter</dt>
             <dd>
               <QuantityValue quantity={run.sample.initial_diameter} expectedUnit="m" />
             </dd>
           </div>
           <div>
-            <dt>Толщина</dt>
+            <dt>Thickness</dt>
             <dd>
               <QuantityValue quantity={run.sample.thickness} expectedUnit="m" />
             </dd>
@@ -143,10 +143,10 @@ export function RunPanel({
         </dl>
       </div>
       <div className={s.section}>
-        <h3>Условия</h3>
+        <h3>Conditions</h3>
         <dl>
           <div>
-            <dt>Режим</dt>
+            <dt>Regime</dt>
             <dd>
               {config.dictionaries.gravity_regime.find(
                 (g) => g.value === run.conditions.gravity_regime,
@@ -162,15 +162,15 @@ export function RunPanel({
             </div>
           ))}
           <div>
-            <dt>Направление потока</dt>
+            <dt>Flow configuration</dt>
             <dd>
               {
                 {
-                  concurrent: 'По направлению',
-                  opposed: 'Навстречу',
-                  quiescent: 'Неподвижная среда',
-                  other: 'Другое',
-                  unknown: 'Не сообщено',
+                  concurrent: 'Concurrent flow',
+                  opposed: 'Opposed flow',
+                  quiescent: 'Quiescent',
+                  other: 'Other',
+                  unknown: 'Not reported',
                 }[run.conditions.flow_configuration]
               }
             </dd>
@@ -178,7 +178,7 @@ export function RunPanel({
         </dl>
       </div>
       <div className={s.section}>
-        <h3>Измерения</h3>
+        <h3>Measurements</h3>
         {run.metrics.length ? (
           <dl>
             {run.metrics.map((metric) => (
@@ -186,10 +186,10 @@ export function RunPanel({
                 <dt>
                   {
                     {
-                      burn_duration: 'Время горения',
-                      visible_extinction_diameter: 'Диаметр при видимом погасании',
-                      flame_spread_rate: 'Скорость распространения',
-                      particle_diameter: 'Диаметр частиц',
+                      burn_duration: 'Burn duration',
+                      visible_extinction_diameter: 'Visible extinction diameter',
+                      flame_spread_rate: 'Spread rate',
+                      particle_diameter: 'Particle diameter',
                     }[metric.metric_key]
                   }
                 </dt>
@@ -209,7 +209,7 @@ export function RunPanel({
             ))}
           </dl>
         ) : (
-          <p className="tiny muted">Измерения не добавлены.</p>
+          <p className="tiny muted">No measurements have been added.</p>
         )}
       </div>
       {run.quality_notes.map((note) => (
@@ -220,7 +220,7 @@ export function RunPanel({
       <div className={s.evidenceButtons}>
         {run.evidence_ids.map((id, index) => (
           <button className="textLink" key={id} onClick={() => onEvidence(id)}>
-            Основание {index + 1} <ArrowUpRight size={13} />
+            Evidence {index + 1} <ArrowUpRight size={13} />
           </button>
         ))}
       </div>

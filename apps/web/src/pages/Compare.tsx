@@ -35,19 +35,19 @@ export function Compare() {
   return (
     <>
       <PageHeader
-        eyebrow="СОПОСТАВЛЕНИЕ / МЕТОДИКИ И УСЛОВИЯ"
-        title="Сравнение исследований"
-        description="Сначала — задачи и методы. Численные результаты можно объединять только при совместимых определениях показателей."
+        eyebrow="COMPARISON / METHODS AND CONDITIONS"
+        title="Compare investigations"
+        description="Start with goals and methods. Numerical results can only be combined when metric definitions are compatible."
         action={
           <Badge tone="cyan">
-            <GitCompareArrows size={12} /> {ids.length}/3 выбрано
+            <GitCompareArrows size={12} /> {ids.length}/3 selected
           </Badge>
         }
       />
       <Panel className={s.selection}>
         <div className="spaceBetween">
-          <h2>Выберите два или три исследования</h2>
-          <span className="tiny muted">Выбор сохраняется в пространстве</span>
+          <h2>Select two or three investigations</h2>
+          <span className="tiny muted">Your selection is saved in the workspace</span>
         </div>
         {options.isPending ? (
           <Loading />
@@ -60,7 +60,7 @@ export function Compare() {
                 key={inv.id}
                 className={`${s.option} ${ids.includes(inv.id) ? s.selected : ''}`}
                 aria-pressed={ids.includes(inv.id)}
-                aria-label={`${ids.includes(inv.id) ? 'Убрать' : 'Добавить'} ${inv.acronym} в сравнение`}
+                aria-label={`${ids.includes(inv.id) ? 'Remove' : 'Add'} ${inv.acronym} to comparison`}
                 disabled={pending}
                 onClick={() => void toggleComparison(inv.id)}
               >
@@ -76,14 +76,14 @@ export function Compare() {
       </Panel>
       {ids.length < 2 ? (
         <EmptyState
-          title="Нужно хотя бы два исследования"
+          title="At least two investigations are required"
           action={
             <Link className="textLink" to="/investigations">
-              Открыть каталог <ArrowRight size={13} />
+              Open catalog <ArrowRight size={13} />
             </Link>
           }
         >
-          Выберите карточки выше или добавьте исследования из каталога.
+          Select cards above or add investigations from the catalog.
         </EmptyState>
       ) : query.isPending ? (
         <Loading />
@@ -98,7 +98,7 @@ export function Compare() {
                   {inv.acronym}
                   <button
                     className="iconButton"
-                    aria-label={`Убрать ${inv.acronym}`}
+                    aria-label={`Remove ${inv.acronym}`}
                     onClick={() => void toggleComparison(inv.id)}
                   >
                     <X size={12} />
@@ -110,12 +110,12 @@ export function Compare() {
               className={`${s.matrix} tableScroll`}
               tabIndex={0}
               role="region"
-              aria-label="Матрица сравнения исследований"
+              aria-label="Investigation comparison matrix"
             >
               <table>
                 <thead>
                   <tr>
-                    <th scope="col">Признак</th>
+                    <th scope="col">Attribute</th>
                     {data.investigations.map((inv) => (
                       <th scope="col" key={inv.id}>
                         <Link to={`/investigations/${inv.id}`}>{inv.acronym}</Link>
@@ -134,11 +134,11 @@ export function Compare() {
                           <td key={inv.id}>
                             <p>
                               {!cell
-                                ? 'Не сообщено'
+                                ? 'Not reported'
                                 : cell.status === 'not_applicable'
-                                  ? 'Неприменимо'
+                                  ? 'Not applicable'
                                   : cell.status === 'not_reported'
-                                    ? 'Не сообщено'
+                                    ? 'Not reported'
                                     : cell.value_text}
                             </p>
                             {cell?.evidence_ids.map((id, index) => (
@@ -147,7 +147,7 @@ export function Compare() {
                                 className="textLink"
                                 onClick={() => setEvidenceId(id)}
                               >
-                                Основание {index + 1}
+                                Evidence {index + 1}
                               </button>
                             ))}
                           </td>
@@ -177,10 +177,10 @@ export function Compare() {
             />
             <div className="spaceBetween">
               <span className="tiny muted">
-                Рейтинг релевантности не является оценкой пожарной опасности.
+                Relevance ranking is not an assessment of fire hazard.
               </span>
               <Link className="textLink" to="/ask">
-                Задать вопрос по выбранным работам <ArrowRight size={13} />
+                Ask about the selected studies <ArrowRight size={13} />
               </Link>
             </div>
           </div>

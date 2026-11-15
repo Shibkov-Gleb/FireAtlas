@@ -3,8 +3,8 @@ import { afterEach, expect, it, vi } from 'vitest';
 import { useJobSubmission } from './jobs';
 import type { Schema } from './types';
 const body = (): Schema['AnalysisRequest'] => ({
-  question: 'Влияние вентиляции на горение',
-  locale: 'ru',
+  question: 'Ventilation effects on combustion',
+  locale: 'en',
   workspace_revision: 3,
   data_revision: 'test-r1',
   selected_investigation_ids: [],
@@ -62,7 +62,7 @@ it('replays the original key and body after a lost response', async () => {
   await act(async () => {
     await result.current.start(original);
   });
-  original.question = 'Другой вопрос после ошибки';
+  original.question = 'Another question after an error';
   await act(async () => {
     await result.current.retry();
   });
@@ -71,5 +71,5 @@ it('replays the original key and body after a lost response', async () => {
     second = fetch.mock.calls[1]![1];
   expect(first.headers.get('Idempotency-Key')).toBe(second.headers.get('Idempotency-Key'));
   expect(first.body).toBe(second.body);
-  expect(JSON.parse(second.body).question).toBe('Влияние вентиляции на горение');
+  expect(JSON.parse(second.body).question).toBe('Ventilation effects on combustion');
 });

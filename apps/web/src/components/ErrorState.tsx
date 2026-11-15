@@ -15,7 +15,7 @@ export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () =>
   }, [apiError]);
   return (
     <Notice tone="error">
-      <strong>{apiError?.message ?? 'Не удалось загрузить данные.'}</strong>
+      <strong>{apiError?.message ?? 'Unable to load data.'}</strong>
       {apiError?.details.map((detail, index) => (
         <p key={index} className="tiny">
           {detail.field}: {detail.reason}
@@ -24,21 +24,21 @@ export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () =>
       <div className="inline" style={{ marginTop: 12 }}>
         {onRetry && apiError?.retryable && (
           <Button variant="secondary" onClick={onRetry} disabled={remaining > 0}>
-            {remaining ? `Повтор через ${remaining} с` : 'Повторить'}
+            {remaining ? `Retry in ${remaining} s` : 'Retry'}
           </Button>
         )}
         {apiError?.code === 'INVALID_CURSOR' && onRetry && (
           <Button variant="secondary" onClick={onRetry}>
-            Начать выдачу заново
+            Restart results
           </Button>
         )}
         {[403, 404, 410].includes(apiError?.status ?? 0) && (
-          <Link to="/investigations">К исследованиям</Link>
+          <Link to="/investigations">Back to investigations</Link>
         )}
       </div>
       {apiError?.requestId && (
         <details className="tiny" style={{ marginTop: 12 }}>
-          <summary>Детали запроса</summary>
+          <summary>Request details</summary>
           <code className="wordBreak">{apiError.requestId}</code>
         </details>
       )}

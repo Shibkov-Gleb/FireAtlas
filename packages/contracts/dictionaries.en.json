@@ -1,0 +1,478 @@
+{
+  "unit": [
+    {
+      "value": "Pa",
+      "label": "Pa"
+    },
+    {
+      "value": "m_s",
+      "label": "m/s"
+    },
+    {
+      "value": "m",
+      "label": "m"
+    },
+    {
+      "value": "s",
+      "label": "s"
+    },
+    {
+      "value": "K",
+      "label": "K"
+    },
+    {
+      "value": "fraction",
+      "label": "fraction"
+    },
+    {
+      "value": "g_fraction",
+      "label": "g fraction"
+    },
+    {
+      "value": "count",
+      "label": "count"
+    },
+    {
+      "value": "dimensionless",
+      "label": "dimensionless"
+    }
+  ],
+  "quantity_status": [
+    {
+      "value": "measured",
+      "label": "Measured"
+    },
+    {
+      "value": "reported",
+      "label": "Reported"
+    },
+    {
+      "value": "derived",
+      "label": "Derived"
+    },
+    {
+      "value": "not_reported",
+      "label": "Not reported"
+    },
+    {
+      "value": "not_applicable",
+      "label": "Not applicable"
+    },
+    {
+      "value": "unusable",
+      "label": "Unusable"
+    }
+  ],
+  "scope": [
+    {
+      "value": "prevention",
+      "label": "Prevention"
+    },
+    {
+      "value": "detection",
+      "label": "Detection"
+    },
+    {
+      "value": "suppression",
+      "label": "Suppression"
+    }
+  ],
+  "fuel_state": [
+    {
+      "value": "solid",
+      "label": "Solid"
+    },
+    {
+      "value": "liquid",
+      "label": "Liquid"
+    },
+    {
+      "value": "gas",
+      "label": "Gas"
+    },
+    {
+      "value": "aerosol",
+      "label": "Aerosol"
+    }
+  ],
+  "gravity_regime": [
+    {
+      "value": "normal",
+      "label": "Normal gravity"
+    },
+    {
+      "value": "microgravity",
+      "label": "Microgravity"
+    },
+    {
+      "value": "partial",
+      "label": "Partial gravity"
+    },
+    {
+      "value": "simulated_partial",
+      "label": "Simulated partial gravity"
+    },
+    {
+      "value": "unknown",
+      "label": "Unknown"
+    }
+  ],
+  "geometry": [
+    {
+      "value": "film",
+      "label": "Film"
+    },
+    {
+      "value": "sheet",
+      "label": "Sheet"
+    },
+    {
+      "value": "slab",
+      "label": "Slab"
+    },
+    {
+      "value": "rod",
+      "label": "Rod"
+    },
+    {
+      "value": "sphere",
+      "label": "Sphere"
+    },
+    {
+      "value": "droplet",
+      "label": "Droplet"
+    },
+    {
+      "value": "fabric",
+      "label": "Fabric"
+    },
+    {
+      "value": "other",
+      "label": "Other"
+    },
+    {
+      "value": "unknown",
+      "label": "Unknown"
+    }
+  ],
+  "flow_configuration": [
+    {
+      "value": "concurrent",
+      "label": "Concurrent"
+    },
+    {
+      "value": "opposed",
+      "label": "Opposed"
+    },
+    {
+      "value": "quiescent",
+      "label": "Quiescent"
+    },
+    {
+      "value": "other",
+      "label": "Other"
+    },
+    {
+      "value": "unknown",
+      "label": "Unknown"
+    }
+  ],
+  "metric_key": [
+    {
+      "value": "burn_duration",
+      "label": "Burn duration"
+    },
+    {
+      "value": "visible_extinction_diameter",
+      "label": "Visible extinction diameter"
+    },
+    {
+      "value": "flame_spread_rate",
+      "label": "Flame spread rate"
+    },
+    {
+      "value": "particle_diameter",
+      "label": "Particle diameter"
+    }
+  ],
+  "outcome_category": [
+    {
+      "value": "no_ignition",
+      "label": "No ignition"
+    },
+    {
+      "value": "extinction",
+      "label": "Extinction"
+    },
+    {
+      "value": "burn_to_completion",
+      "label": "Burn to completion"
+    },
+    {
+      "value": "disruption",
+      "label": "Disruption"
+    },
+    {
+      "value": "ongoing_at_stop",
+      "label": "Ongoing at stop"
+    },
+    {
+      "value": "smoke_measurement",
+      "label": "Smoke measurement"
+    },
+    {
+      "value": "unknown",
+      "label": "Unknown"
+    }
+  ],
+  "interpretation_status": [
+    {
+      "value": "source_explicit",
+      "label": "Explicit in source"
+    },
+    {
+      "value": "reviewed_mapping",
+      "label": "Reviewed mapping"
+    },
+    {
+      "value": "unmapped",
+      "label": "Not mapped"
+    }
+  ],
+  "source_kind": [
+    {
+      "value": "repository",
+      "label": "Repository"
+    },
+    {
+      "value": "report",
+      "label": "Report"
+    },
+    {
+      "value": "publication",
+      "label": "Publication"
+    },
+    {
+      "value": "experimental_table",
+      "label": "Experimental table"
+    },
+    {
+      "value": "video",
+      "label": "Video"
+    },
+    {
+      "value": "image",
+      "label": "Image"
+    },
+    {
+      "value": "calibration",
+      "label": "Calibration"
+    }
+  ],
+  "source_availability": [
+    {
+      "value": "available",
+      "label": "Available"
+    },
+    {
+      "value": "metadata_only",
+      "label": "Metadata only"
+    },
+    {
+      "value": "unavailable",
+      "label": "Unavailable"
+    }
+  ],
+  "claim_kind": [
+    {
+      "value": "observation",
+      "label": "Observation"
+    },
+    {
+      "value": "synthesis",
+      "label": "Synthesis"
+    },
+    {
+      "value": "hypothesis",
+      "label": "Hypothesis"
+    }
+  ],
+  "environment": [
+    {
+      "value": "orbital_habitat",
+      "label": "Orbital station"
+    },
+    {
+      "value": "surface_habitat",
+      "label": "Surface habitat"
+    },
+    {
+      "value": "pressurized_rover",
+      "label": "Pressurized rover"
+    },
+    {
+      "value": "custom",
+      "label": "Custom"
+    }
+  ],
+  "celestial_body": [
+    {
+      "value": "earth",
+      "label": "Earth"
+    },
+    {
+      "value": "moon",
+      "label": "Moon"
+    },
+    {
+      "value": "mars",
+      "label": "Mars"
+    },
+    {
+      "value": "other",
+      "label": "Other"
+    }
+  ],
+  "relevance_category": [
+    {
+      "value": "direct",
+      "label": "Direct"
+    },
+    {
+      "value": "related",
+      "label": "Related"
+    },
+    {
+      "value": "contextual",
+      "label": "Contextual"
+    }
+  ],
+  "retrieval_mode": [
+    {
+      "value": "hybrid",
+      "label": "Hybrid search"
+    },
+    {
+      "value": "lexical",
+      "label": "Lexical search"
+    },
+    {
+      "value": "curated",
+      "label": "Curated selection"
+    }
+  ],
+  "cell_status": [
+    {
+      "value": "known",
+      "label": "Known"
+    },
+    {
+      "value": "not_reported",
+      "label": "Not reported"
+    },
+    {
+      "value": "not_applicable",
+      "label": "Not applicable"
+    }
+  ],
+  "comparability_status": [
+    {
+      "value": "compatible",
+      "label": "Comparable"
+    },
+    {
+      "value": "partially_compatible",
+      "label": "Partially comparable"
+    },
+    {
+      "value": "incompatible",
+      "label": "Not comparable"
+    }
+  ],
+  "applicability_overall": [
+    {
+      "value": "direct_evidence",
+      "label": "Direct evidence"
+    },
+    {
+      "value": "related_evidence",
+      "label": "Related evidence"
+    },
+    {
+      "value": "insufficient_evidence",
+      "label": "Insufficient evidence"
+    }
+  ],
+  "factor_status": [
+    {
+      "value": "match",
+      "label": "Match"
+    },
+    {
+      "value": "mismatch",
+      "label": "Mismatch"
+    },
+    {
+      "value": "unknown",
+      "label": "Unknown"
+    },
+    {
+      "value": "not_covered",
+      "label": "No direct coverage"
+    }
+  ],
+  "answer_status": [
+    {
+      "value": "answered",
+      "label": "Answered"
+    },
+    {
+      "value": "insufficient_evidence",
+      "label": "Insufficient evidence"
+    },
+    {
+      "value": "conflicting_evidence",
+      "label": "Conflicting evidence"
+    }
+  ],
+  "answer_block_kind": [
+    {
+      "value": "summary",
+      "label": "Summary"
+    },
+    {
+      "value": "observation",
+      "label": "Observation"
+    },
+    {
+      "value": "synthesis",
+      "label": "Synthesis"
+    },
+    {
+      "value": "limitation",
+      "label": "Limitation"
+    }
+  ],
+  "exclusion_reason": [
+    {
+      "value": "missing_x",
+      "label": "Missing x"
+    },
+    {
+      "value": "missing_y",
+      "label": "Missing y"
+    },
+    {
+      "value": "unusable_unit",
+      "label": "Unusable unit"
+    },
+    {
+      "value": "unverified_record",
+      "label": "Unverified record"
+    },
+    {
+      "value": "filtered_out",
+      "label": "Filtered out"
+    }
+  ]
+}

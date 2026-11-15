@@ -36,7 +36,7 @@ export function Drawer({
               <Dialog.Title className={s.title}>{title}</Dialog.Title>
               <Dialog.Description className={s.description}>{description}</Dialog.Description>
             </div>
-            <Dialog.Close className="iconButton" aria-label="Закрыть панель">
+            <Dialog.Close className="iconButton" aria-label="Close panel">
               <X size={20} />
             </Dialog.Close>
           </div>

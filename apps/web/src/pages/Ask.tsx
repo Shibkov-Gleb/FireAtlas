@@ -42,13 +42,13 @@ export function Ask() {
     event.preventDefault();
     const value = question.trim();
     if (value.length < 3 || value.length > config.limits.question_chars_max) {
-      setValidation(`Введите вопрос от 3 до ${config.limits.question_chars_max} символов.`);
+      setValidation(`Enter a question with 3 to ${config.limits.question_chars_max} characters.`);
       return;
     }
     setValidation('');
     const job = await action.start({
       question: value,
-      locale: 'ru',
+      locale: 'en',
       workspace_revision: workspace.revision,
       data_revision: workspace.data_revision,
       selected_investigation_ids: workspace.selected_investigation_ids,
@@ -65,31 +65,30 @@ export function Ask() {
   return (
     <>
       <PageHeader
-        eyebrow="AI / ОБЪЯСНЕНИЕ С ОСНОВАНИЯМИ"
-        title="Спросить по исследованиям"
-        description="Вопрос связывается с текущей миссией и выбранными исследованиями. Наблюдения, обобщения и ограничения показываются отдельно."
+        eyebrow="AI / EVIDENCE-BASED EXPLANATION"
+        title="Ask about the research"
+        description="Your question uses the current mission and selected investigations. Observations, syntheses and limitations are shown separately."
         action={
           <Badge tone="purple">
-            <Sparkles size={12} />{' '}
-            {IS_DEMO ? 'Подготовленный AI-пример' : 'Ответ по доказательствам'}
+            <Sparkles size={12} /> {IS_DEMO ? 'Prepared AI example' : 'Evidence-based answer'}
           </Badge>
         }
       />
       {!config.feature_flags.analysis ? (
         <Notice tone="warning">
-          AI сейчас недоступен.{' '}
-          <Link to="/investigations">Каталог и источники продолжают работать.</Link>
+          AI is currently unavailable.{' '}
+          <Link to="/investigations">The catalog and sources remain available.</Link>
         </Notice>
       ) : (
         <>
           <Panel className={s.questionPanel}>
             <div className="spaceBetween">
-              <h2>Ваш вопрос</h2>
-              <Badge tone="cyan">{workspace.scenario?.name ?? 'Без сценария'}</Badge>
+              <h2>Your question</h2>
+              <Badge tone="cyan">{workspace.scenario?.name ?? 'No scenario'}</Badge>
             </div>
             <form onSubmit={(event) => void submit(event)}>
               <label className="srOnly" htmlFor="analysis-question">
-                Вопрос для AI
+                Question for AI
               </label>
               <textarea
                 id="analysis-question"
@@ -99,14 +98,14 @@ export function Ask() {
                   setQuestion(event.target.value);
                   setValidation('');
                 }}
-                placeholder="Почему слабая вентиляция может поддерживать горение в невесомости?"
+                placeholder="Why can weak ventilation sustain combustion in microgravity?"
                 aria-invalid={!!validation}
                 aria-describedby="analysis-hint"
                 disabled={!!jobId}
               />
               <div className={s.questionMeta}>
                 <span id="analysis-hint">
-                  Условия: {workspace.scenario?.name ?? 'Без сценария'} · снимок{' '}
+                  Conditions: {workspace.scenario?.name ?? 'No scenario'} · snapshot{' '}
                   {workspace.revision}
                 </span>
                 <span>
@@ -119,7 +118,7 @@ export function Ask() {
                 </p>
               )}
               <fieldset className={s.selection} disabled={workspacePending || !!jobId}>
-                <legend>Исследования для контекста · необязательно</legend>
+                <legend>Investigations for context · optional</legend>
                 <div className="inline">
                   {options.data?.map((inv) => (
                     <label className="checkLabel" key={inv.id}>
@@ -135,13 +134,13 @@ export function Ask() {
               </fieldset>
               {!jobId && (
                 <div className={s.submitRow}>
-                  <span>Генерация запускается только этой кнопкой.</span>
+                  <span>Only this button starts answer generation.</span>
                   <Button
                     type="submit"
                     busy={action.submitting}
                     disabled={workspacePending || !!action.pending}
                   >
-                    <Sparkles size={14} /> Получить ответ <ArrowRight size={14} />
+                    <Sparkles size={14} /> Get answer <ArrowRight size={14} />
                   </Button>
                 </div>
               )}
@@ -150,8 +149,9 @@ export function Ask() {
           {Boolean(action.error) && <ErrorState error={action.error} />}{' '}
           {action.pending && (
             <Notice tone="warning">
-              <strong>Исход предыдущего запроса не подтверждён.</strong> Повтор использует тот же
-              ключ и исходное тело, включая снимок {action.pending.body.workspace_revision}.
+              <strong>The outcome of the previous request is unconfirmed.</strong> A retry uses the
+              same key and original request body, including snapshot{' '}
+              {action.pending.body.workspace_revision}.
               <div className="inline" style={{ marginTop: 13 }}>
                 <Button
                   variant="secondary"
@@ -167,10 +167,10 @@ export function Ask() {
                     });
                   }}
                 >
-                  Повторить тот же запрос
+                  Retry the same request
                 </Button>
                 <Button variant="ghost" onClick={newAction}>
-                  Явно начать новое действие
+                  Start a new action explicitly
                 </Button>
               </div>
             </Notice>
@@ -192,31 +192,30 @@ export function Ask() {
               )}
               <div style={{ marginTop: 20 }}>
                 <Button variant="ghost" onClick={newAction}>
-                  Подготовить другой вопрос
+                  Prepare another question
                 </Button>
               </div>
             </>
           ) : (
             <div className={s.examples}>
-              <span>Можно начать с вопроса</span>
-              <button
-                onClick={() => setQuestion('Как вентиляция влияет на горение твёрдых материалов?')}
-              >
-                Как влияет вентиляция? <ArrowRight size={12} />
-              </button>
+              <span>Start with a question</span>
               <button
                 onClick={() =>
-                  setQuestion('Какие ограничения есть при переносе результатов на лунную базу?')
+                  setQuestion('How does ventilation affect the combustion of solid materials?')
                 }
               >
-                Что известно для лунной базы? <ArrowRight size={12} />
+                How does ventilation affect combustion? <ArrowRight size={12} />
+              </button>
+              <button
+                onClick={() => setQuestion('What limits the transfer of findings to a lunar base?')}
+              >
+                What do we know about a lunar base? <ArrowRight size={12} />
               </button>
             </div>
           )}
           {IS_DEMO && (
             <p className={s.demoNote}>
-              Демонстрационный режим: показывается заранее подготовленный пример. Запрос к модели не
-              выполняется.
+              Demo mode shows a prepared example. No model request is made.
             </p>
           )}
         </>

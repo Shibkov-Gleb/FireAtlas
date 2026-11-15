@@ -15,10 +15,10 @@ export function SourceCard({ source }: { source: Source }) {
         <FileText size={18} />
         <Badge tone={source.availability === 'unavailable' ? 'orange' : 'cyan'}>
           {source.availability === 'unavailable'
-            ? 'Файл недоступен'
+            ? 'File unavailable'
             : source.availability === 'metadata_only'
-              ? 'Только метаданные'
-              : 'Источник'}
+              ? 'Metadata only'
+              : 'Source'}
         </Badge>
       </div>
       <h3>{source.title}</h3>
@@ -28,21 +28,21 @@ export function SourceCard({ source }: { source: Source }) {
       {source.doi && <p className="tiny wordBreak">DOI: {source.doi}</p>}
       {source.local_asset_id && source.availability === 'available' && (
         <a className="textLink" href={api.sourceAssetUrl(source.id, source.data_revision)}>
-          Скачать файл источника <FileText size={14} />
+          Download source file <FileText size={14} />
         </a>
       )}
       {source.availability === 'unavailable' && (
         <p className="tiny muted">
-          Вложение недоступно. Метаданные и посадочная страница остаются доступными.
+          The attachment is unavailable. Its metadata and landing page remain accessible.
         </p>
       )}
       {url ? (
         <a className="textLink" href={url} target="_blank" rel="noopener noreferrer">
-          Открыть первоисточник <ArrowUpRight size={14} />
-          <span className="srOnly">в новой вкладке</span>
+          Open original source <ArrowUpRight size={14} />
+          <span className="srOnly">in a new tab</span>
         </a>
       ) : (
-        <Notice tone="warning">Ссылка на источник недоступна.</Notice>
+        <Notice tone="warning">The source link is unavailable.</Notice>
       )}
     </article>
   );
@@ -69,8 +69,8 @@ export function EvidenceDrawer({
       onOpenChange={(open) => {
         if (!open) onClose();
       }}
-      title="Основание вывода"
-      description="Проверьте источник, точное положение и исходное представление данных."
+      title="Supporting evidence"
+      description="Check the source, exact location and original data."
     >
       {query.isPending ? (
         <Loading />
@@ -82,31 +82,29 @@ export function EvidenceDrawer({
             <div className="inline">
               <Badge tone={data.evidence.verified ? 'teal' : 'orange'}>
                 {data.evidence.verified
-                  ? 'Контрольная запись'
-                  : 'Не проверено для научного выпуска'}
+                  ? 'Verified record'
+                  : 'Not verified for the scientific release'}
               </Badge>
               <span className="tiny mono muted">{data.evidence.kind}</span>
             </div>
             {!data.evidence.verified && (
               <Notice tone="warning">
-                Демонстрационная карточка. Это основание не прошло научную приёмку.
+                Demo record. This evidence has not undergone scientific acceptance.
               </Notice>
             )}
             <div className={s.locator}>
               <Link2 size={15} />
               <span>
                 {[
-                  data.evidence.locator.page !== null
-                    ? `Страница ${data.evidence.locator.page}`
-                    : null,
+                  data.evidence.locator.page !== null ? `Page ${data.evidence.locator.page}` : null,
                   data.evidence.locator.section,
-                  data.evidence.locator.row_key ? `Запись ${data.evidence.locator.row_key}` : null,
+                  data.evidence.locator.row_key ? `Record ${data.evidence.locator.row_key}` : null,
                   data.evidence.locator.start_s !== null
-                    ? `${data.evidence.locator.start_s}–${data.evidence.locator.end_s} с`
+                    ? `${data.evidence.locator.start_s}–${data.evidence.locator.end_s} s`
                     : null,
                 ]
                   .filter(Boolean)
-                  .join(' · ') || 'Положение не сообщено'}
+                  .join(' · ') || 'Location not reported'}
               </span>
             </div>
             {data.evidence.excerpt && (
@@ -117,15 +115,15 @@ export function EvidenceDrawer({
                 className="tableScroll"
                 tabIndex={0}
                 role="region"
-                aria-label="Исходная строка доказательства"
+                aria-label="Original evidence row"
               >
                 <table>
-                  <caption className="srOnly">Исходные значения и единицы</caption>
+                  <caption className="srOnly">Original values and units</caption>
                   <thead>
                     <tr>
-                      <th scope="col">Поле</th>
-                      <th scope="col">Значение</th>
-                      <th scope="col">Единица</th>
+                      <th scope="col">Field</th>
+                      <th scope="col">Value</th>
+                      <th scope="col">Unit</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -145,7 +143,7 @@ export function EvidenceDrawer({
             )}
             <SourceCard source={data.source} />
             <details className={s.raw}>
-              <summary>Исходная запись API</summary>
+              <summary>Original API record</summary>
               <pre>{JSON.stringify(data.evidence, null, 2)}</pre>
             </details>
           </div>

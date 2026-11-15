@@ -13,7 +13,7 @@ export function useInvestigationOptions() {
           {
             query: '',
             sort: 'acronym',
-            locale: 'ru',
+            locale: 'en',
             data_revision: workspace.data_revision,
             filters: { ...emptyFilters(), scopes: ['prevention', 'detection', 'suppression'] },
             scenario: null,

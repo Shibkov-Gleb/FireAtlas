@@ -24,22 +24,22 @@ import s from './Overview.module.css';
 const directions = [
   {
     value: 'prevention',
-    label: 'Предотвращение',
-    description: 'Материалы и условия горения',
+    label: 'Prevention',
+    description: 'Materials and combustion conditions',
     icon: ShieldCheck,
     color: 'orange',
   },
   {
     value: 'detection',
-    label: 'Обнаружение',
-    description: 'Дым и чувствительность датчиков',
+    label: 'Detection',
+    description: 'Smoke and detector sensitivity',
     icon: ScanEye,
     color: 'cyan',
   },
   {
     value: 'suppression',
-    label: 'Подавление',
-    description: 'Погасание и подавляющие газы',
+    label: 'Suppression',
+    description: 'Extinction and suppressants',
     icon: Wind,
     color: 'purple',
   },
@@ -59,7 +59,7 @@ export function Overview() {
           {
             query: '',
             sort: 'acronym',
-            locale: 'ru',
+            locale: 'en',
             data_revision: workspace.data_revision,
             filters: { ...emptyFilters(), scopes: ['prevention', 'detection', 'suppression'] },
             scenario: null,
@@ -75,11 +75,11 @@ export function Overview() {
     event.preventDefault();
     const value = question.trim();
     if (!direction && value.length < 3) {
-      setError('Введите вопрос от 3 символов или выберите направление.');
+      setError('Enter a question of at least 3 characters or select a research area.');
       return;
     }
     if (value.length > config.limits.question_chars_max) {
-      setError(`Максимальная длина вопроса — ${config.limits.question_chars_max} символов.`);
+      setError(`Maximum question length: ${config.limits.question_chars_max} characters.`);
       return;
     }
     const params = new URLSearchParams();
@@ -93,26 +93,26 @@ export function Overview() {
         <div className={s.eyebrow}>
           <span /> NASA SPACE APPS · FLAME IN FREEFALL
         </div>
-        <Badge tone="teal">Открытые источники NASA PSI</Badge>
+        <Badge tone="teal">NASA PSI open sources</Badge>
       </div>
       <section className={s.hero} aria-labelledby="overview-title">
         <div className={s.heroContent}>
-          <div className={s.kicker}>МИКРОГРАВИТАЦИЯ. ИЗМЕРЕНИЯ. ДОКАЗАТЕЛЬСТВА.</div>
+          <div className={s.kicker}>MICROGRAVITY. MEASUREMENTS. EVIDENCE.</div>
           <h1 id="overview-title">
-            Понять огонь
+            Understand fire
             <br />
-            <span>в невесомости.</span>
+            <span>in microgravity.</span>
           </h1>
           <p>
-            Находите исследования NASA, изучайте условия опытов и проверяйте каждый вывод по
-            первоисточнику.
+            Find NASA research, explore test conditions and trace every finding to its original
+            source.
           </p>
           <div className={s.heroPoints}>
             <span>
-              <Check size={12} /> От вопроса к источнику
+              <Check size={12} /> From question to source
             </span>
             <span>
-              <Check size={12} /> С учётом условий миссии
+              <Check size={12} /> With mission conditions in mind
             </span>
           </div>
         </div>
@@ -133,13 +133,13 @@ export function Overview() {
       </section>
       <form className={s.questionPanel} onSubmit={submit}>
         <div className="spaceBetween">
-          <h2 className="sectionTitle">Что вы хотите выяснить?</h2>
-          <span className={s.stepLabel}>01 / ПОСТАНОВКА ЗАДАЧИ</span>
+          <h2 className="sectionTitle">What do you want to explore?</h2>
+          <span className={s.stepLabel}>01 / DEFINE THE QUESTION</span>
         </div>
         <div className={s.searchRow}>
           <Search size={20} />
           <label className="srOnly" htmlFor="overview-question">
-            Ваш вопрос об исследованиях
+            Your research question
           </label>
           <input
             id="overview-question"
@@ -148,13 +148,13 @@ export function Overview() {
               setQuestion(event.target.value);
               setError('');
             }}
-            placeholder="Как вентиляция влияет на горение твёрдых материалов?"
+            placeholder="How does ventilation affect the combustion of solid materials?"
             maxLength={config.limits.question_chars_max}
             aria-invalid={!!error}
             aria-describedby={error ? 'overview-error' : 'overview-hint'}
           />
           <Button type="submit">
-            Исследовать <ArrowRight size={16} />
+            Explore <ArrowRight size={16} />
           </Button>
         </div>
         {error && (
@@ -163,7 +163,8 @@ export function Overview() {
           </p>
         )}
         <p id="overview-hint" className={s.searchHint}>
-          Начните со своего вопроса или выберите направление. Поиск не запускает генерацию AI.
+          Start with your question or select a research area. Searching does not start AI
+          generation.
         </p>
         <div className={s.directions}>
           {directions.map(({ value, label, description, icon: Icon, color }) => (
@@ -189,11 +190,11 @@ export function Overview() {
       <section>
         <div className={s.sectionHeading}>
           <div>
-            <span className={s.miniLabel}>НАЧНИТЕ ЗНАКОМСТВО</span>
-            <h2>Три направления исследований</h2>
+            <span className={s.miniLabel}>START EXPLORING</span>
+            <h2>Three research areas</h2>
           </div>
           <Link className="textLink" to="/investigations">
-            Открыть каталог <ArrowRight size={14} />
+            Open catalog <ArrowRight size={14} />
           </Link>
         </div>
         {starter.isPending ? (
@@ -222,7 +223,7 @@ export function Overview() {
                 </div>
                 <p>{inv.title}</p>
                 <div className={s.researchFooter}>
-                  <span>Микрогравитация</span>
+                  <span>Microgravity</span>
                   <span>
                     NASA PSI <ExternalLink size={10} />
                   </span>
@@ -237,20 +238,20 @@ export function Overview() {
           <BookOpen size={22} strokeWidth={1.4} />
         </span>
         <div>
-          <h2>У каждого вывода есть основание</h2>
+          <h2>Every finding has evidence</h2>
           <p>
-            Проверяйте опыт, исходную строку и ограничения. Отсутствие данных не означает
-            безопасность.
+            Check the test run, original record and limitations. Missing data does not establish
+            safety.
           </p>
         </div>
         <Link className="textLink" to="/measurements">
-          Изучить измерения <ArrowRight size={14} />
+          Explore measurements <ArrowRight size={14} />
         </Link>
       </Panel>
       {IS_DEMO && (
         <p className={s.demoNote}>
-          Демонстрационный режим · подготовленные примеры интерфейса · научная приёмка корпуса
-          выполняется отдельно.
+          Demo mode · prepared interface examples · scientific acceptance of the corpus is performed
+          separately.
         </p>
       )}
     </div>

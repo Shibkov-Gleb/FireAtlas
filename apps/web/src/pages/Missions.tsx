@@ -73,7 +73,7 @@ export function Missions() {
     }
     setNextPreset(null);
     if (await update({ scenario: preset }))
-      notify('Миссия изменена. Применимость пересчитана для нового контекста.');
+      notify('Mission changed. Applicability has been recalculated for the new context.');
   }
   function choose(id: string) {
     if (
@@ -92,7 +92,7 @@ export function Missions() {
       return;
     }
     setError('');
-    if (await update({ scenario: parsed.scenario })) notify('Условия сценария сохранены.');
+    if (await update({ scenario: parsed.scenario })) notify('Scenario conditions saved.');
   }
   function field<K extends keyof MissionDraft>(key: K, value: MissionDraft[K]) {
     setDraft((current) => ({ ...current, [key]: value }));
@@ -101,10 +101,10 @@ export function Missions() {
   return (
     <>
       <PageHeader
-        eyebrow="КОНТЕКСТ / ПРИМЕНИМОСТЬ ДОКАЗАТЕЛЬСТВ"
-        title="Сценарии миссий"
-        description="Изменение среды меняет применимость исследований. Оно не создаёт отсутствующие измерения."
-        action={<Badge tone="cyan">{workspace.scenario?.name ?? 'Без сценария'}</Badge>}
+        eyebrow="CONTEXT / EVIDENCE APPLICABILITY"
+        title="Mission scenarios"
+        description="Changing the environment affects research applicability. It does not create missing measurements."
+        action={<Badge tone="cyan">{workspace.scenario?.name ?? 'No scenario'}</Badge>}
       />
       <div className={s.presets}>
         {presetDefinitions.map((preset, index) => {
@@ -131,12 +131,12 @@ export function Missions() {
       </div>
       <Panel className={s.editor}>
         <div className="spaceBetween">
-          <h2>Известные условия сценария</h2>
-          <span className="tiny muted">Неизвестные поля можно оставить пустыми</span>
+          <h2>Known scenario conditions</h2>
+          <span className="tiny muted">Leave unknown fields blank</span>
         </div>
         <form onSubmit={(event) => void submit(event)} className={s.form}>
           <label className="field">
-            Название миссии
+            Mission name
             <input
               value={draft.name}
               maxLength={100}
@@ -146,7 +146,7 @@ export function Missions() {
             />
           </label>
           <label className="field">
-            Задача
+            Task
             <select
               value={draft.safety_task}
               onChange={(e) => field('safety_task', e.target.value as MissionDraft['safety_task'])}
@@ -159,7 +159,7 @@ export function Missions() {
             </select>
           </label>
           <label className="field">
-            Режим гравитации
+            Gravity regime
             <select
               value={draft.gravity_regime}
               onChange={(e) =>
@@ -174,7 +174,7 @@ export function Missions() {
             </select>
           </label>
           <label className="field">
-            Кислород, %
+            Oxygen, %
             <input
               type="number"
               min="0"
@@ -182,38 +182,38 @@ export function Missions() {
               step="any"
               value={draft.oxygen}
               onChange={(e) => field('oxygen', e.target.value)}
-              placeholder="Не задано"
+              placeholder="Not specified"
             />
           </label>
           <label className="field">
-            Общее давление, кПа
+            Total pressure, kPa
             <input
               type="number"
               min="0"
               step="any"
               value={draft.pressure}
               onChange={(e) => field('pressure', e.target.value)}
-              placeholder="Не задано"
+              placeholder="Not specified"
             />
           </label>
           <label className="field">
-            Калиброванная скорость воздуха, см/с
+            Calibrated airflow speed, cm/s
             <input
               type="number"
               min="0"
               step="any"
               value={draft.airflow}
               onChange={(e) => field('airflow', e.target.value)}
-              placeholder="Не задано"
+              placeholder="Not specified"
             />
           </label>
           <label className="field">
-            Геометрия образца
+            Sample geometry
             <select
               value={draft.geometry}
               onChange={(e) => field('geometry', e.target.value as MissionDraft['geometry'])}
             >
-              <option value="">Не задана</option>
+              <option value="">Not specified</option>
               {Object.entries(geometryLabels).map(([value, label]) => (
                 <option key={value} value={value}>
                   {label}
@@ -222,7 +222,7 @@ export function Missions() {
             </select>
           </label>
           <fieldset className={s.materials}>
-            <legend>Материалы</legend>
+            <legend>Materials</legend>
             {config.dictionaries.materials.map((material) => (
               <label className="checkLabel" key={material.value}>
                 <input
@@ -248,20 +248,20 @@ export function Missions() {
           )}
           <div className={`${s.full} spaceBetween`}>
             <span className="tiny muted">
-              Численные условия — пользовательские допущения, отдельно от измерений NASA.
+              Numerical conditions are user assumptions, kept separate from NASA measurements.
             </span>
             <Button type="submit" busy={pending}>
-              Применить условия <ArrowRight size={14} />
+              Apply conditions <ArrowRight size={14} />
             </Button>
           </div>
         </form>
       </Panel>
       {!workspace.scenario ? (
-        <Notice>Выберите пресет миссии для оценки применимости.</Notice>
+        <Notice>Choose a mission preset to assess applicability.</Notice>
       ) : options.isError ? (
         <ErrorState error={options.error} onRetry={() => void options.refetch()} />
       ) : applicability.isPending ? (
-        <Loading>Проверяем применимость к миссии…</Loading>
+        <Loading>Assessing mission applicability…</Loading>
       ) : applicability.isError ? (
         <ErrorState error={applicability.error} onRetry={() => void applicability.refetch()} />
       ) : (
@@ -275,10 +275,10 @@ export function Missions() {
       )}
       <div className={s.next}>
         <Link className="textLink" to="/investigations?related=true">
-          Найти связанные исследования <ArrowRight size={14} />
+          Find related investigations <ArrowRight size={14} />
         </Link>
         <Link className="textLink" to="/ask">
-          Задать вопрос в этом контексте <ArrowRight size={14} />
+          Ask a question in this context <ArrowRight size={14} />
         </Link>
       </div>
       <Drawer
@@ -286,22 +286,22 @@ export function Missions() {
         onOpenChange={(open) => {
           if (!open) setNextPreset(null);
         }}
-        title="Условия новой миссии"
-        description="Выберите, что делать с введёнными условиями. Перенос не выполняется автоматически."
+        title="New mission conditions"
+        description="Choose what to do with your entered conditions. They are not transferred automatically."
       >
         <div className="stack">
           <Notice>
-            Новый пресет задаёт среду и гравитацию. Кислород, давление и скорость воздуха в нём не
-            заданы.
+            The new preset defines the environment and gravity. Oxygen, pressure and airflow are not
+            specified.
           </Notice>
           <Button onClick={() => void applyPreset(nextPreset!, false)}>
-            Начать без введённых условий
+            Start without entered conditions
           </Button>
           <Button variant="secondary" onClick={() => void applyPreset(nextPreset!, true)}>
-            Явно перенести мои условия
+            Transfer my conditions explicitly
           </Button>
           <Button variant="ghost" onClick={() => setNextPreset(null)}>
-            Отмена
+            Cancel
           </Button>
         </div>
       </Drawer>

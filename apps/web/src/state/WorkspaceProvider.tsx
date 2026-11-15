@@ -89,11 +89,12 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
         setConflict(patch);
         await client.invalidateQueries({ queryKey: ['workspace'] });
         notify(
-          'Контекст обновлён из другой вкладки. Ваш выбор сохранён для повторного применения.',
+          'The context was updated in another tab. Your selection is preserved so you can apply it again.',
           'warning',
         );
       } else if (error instanceof ApiError && error.status === 401) setSessionLost(true);
-      else notify(error instanceof Error ? error.message : 'Не удалось сохранить выбор.', 'error');
+      else
+        notify(error instanceof Error ? error.message : 'Unable to save the selection.', 'error');
       return false;
     }
   }
@@ -107,13 +108,13 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       localStorage.setItem('fireatlas:has-workspace', '1');
       setSessionLost(false);
       setConflict(null);
-      notify('Гостевое пространство доступно.');
+      notify('Guest workspace is available.');
     } catch (error) {
-      notify(error instanceof Error ? error.message : 'Не удалось создать пространство.', 'error');
+      notify(error instanceof Error ? error.message : 'Unable to create a workspace.', 'error');
     }
   }
   if (configQuery.isPending || workspaceQuery.isPending)
-    return <Loading>Открываем рабочее пространство…</Loading>;
+    return <Loading>Opening workspace…</Loading>;
   if (
     (workspaceQuery.error instanceof ApiError && workspaceQuery.error.status === 401) ||
     sessionLost
@@ -121,9 +122,9 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     return (
       <div style={{ maxWidth: 650, margin: '12vh auto', padding: 24 }}>
         <Notice tone="warning">
-          Сессия гостевого пространства истекла. Для продолжения создайте новое пространство.
+          Your guest session has expired. Create a new workspace to continue.
         </Notice>
-        <Button onClick={() => void createNewWorkspace()}>Создать гостевое пространство</Button>
+        <Button onClick={() => void createNewWorkspace()}>Create guest workspace</Button>
       </div>
     );
   if (configQuery.isError)
@@ -152,7 +153,10 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       const current = client.getQueryData<Workspace>(['workspace'])!;
       const selected = current.selected_investigation_ids;
       if (!selected.includes(id) && selected.length >= configQuery.data!.limits.comparison_max) {
-        notify('Можно сравнить не более трёх исследований. Уберите одно из выбранных.', 'warning');
+        notify(
+          'You can compare up to three investigations. Remove one of the selected studies.',
+          'warning',
+        );
         return false;
       }
       return update({
@@ -164,7 +168,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     toggleSaved: (id) => {
       const saved = client.getQueryData<Workspace>(['workspace'])!.saved_investigation_ids;
       if (!saved.includes(id) && saved.length >= 100) {
-        notify('Можно сохранить не более 100 исследований.', 'warning');
+        notify('You can save up to 100 investigations.', 'warning');
         return Promise.resolve(false);
       }
       return update({
@@ -177,7 +181,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       const saved = client.getQueryData<Workspace>(['workspace'])!.saved_answer_ids;
       if (saved.includes(id)) return Promise.resolve(true);
       if (saved.length >= 30) {
-        notify('Можно сохранить не более 30 ответов.', 'warning');
+        notify('You can save up to 30 answers.', 'warning');
         return Promise.resolve(false);
       }
       return update({ saved_answer_ids: [...saved, id] });
@@ -192,7 +196,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
             <span>{notification.message}</span>
             <button
               className="iconButton"
-              aria-label="Закрыть уведомление"
+              aria-label="Dismiss notification"
               onClick={() => setNotification(null)}
             >
               ×
@@ -208,14 +212,14 @@ export function WorkspaceBanners() {
   if (!conflict) return null;
   return (
     <Notice tone="warning">
-      <strong>Рабочий контекст изменился.</strong> Проверьте обновлённую миссию и выбор перед
-      повтором.
+      <strong>The workspace context has changed.</strong> Review the updated mission and selection
+      before retrying.
       <div className="inline" style={{ marginTop: 10 }}>
         <Button variant="secondary" busy={pending} onClick={() => void retryConflict()}>
-          Применить мой выбор
+          Apply my selection
         </Button>
         <Button variant="ghost" onClick={clearConflict}>
-          Оставить обновлённый контекст
+          Keep the updated context
         </Button>
       </div>
     </Notice>

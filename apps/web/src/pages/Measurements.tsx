@@ -23,7 +23,7 @@ import s from './Measurements.module.css';
 
 type Point = Schema['MeasurementResponse']['points'][number];
 const number = (value: number) =>
-  new Intl.NumberFormat('ru-RU', { maximumSignificantDigits: 6, useGrouping: false }).format(value);
+  new Intl.NumberFormat('en-US', { maximumSignificantDigits: 6, useGrouping: false }).format(value);
 export function Measurements() {
   const { workspace, config } = useWorkspace();
   const [params, setParams] = useSearchParams();
@@ -77,8 +77,8 @@ export function Measurements() {
   if (!axes)
     return (
       <>
-        <PageHeader title="Измерения" />
-        <EmptyState title="В этой ревизии нет поддерживаемых графиков" />
+        <PageHeader title="Measurements" />
+        <EmptyState title="No supported charts in this revision" />
       </>
     );
   const correctUnits = query.data?.x_axis.unit === 'm' && query.data?.y_axis.unit === 's';
@@ -90,7 +90,7 @@ export function Measurements() {
       <g
         role="button"
         tabIndex={0}
-        aria-label={`Выбрать точку ${testId}`}
+        aria-label={`Select point ${testId}`}
         aria-pressed={active}
         onClick={() => select(payload.run_id)}
         onKeyDown={(event) => {
@@ -125,9 +125,9 @@ export function Measurements() {
   return (
     <>
       <PageHeader
-        eyebrow="ИЗМЕРЕНИЯ / FLEX · PSI-69"
-        title="От точки — к отдельному опыту"
-        description="Начальный диаметр капли и время горения. Каждая точка открывает условия, исход и источник."
+        eyebrow="MEASUREMENTS / FLEX · PSI-69"
+        title="From a point to a test run"
+        description="Initial droplet diameter and burn duration. Each point opens its conditions, outcome and source."
         action={
           <Badge tone="cyan">
             <ChartScatter size={12} /> Scatter plot
@@ -136,14 +136,14 @@ export function Measurements() {
       />
       <div className={s.conditions}>
         <div className="inline">
-          <Badge>FLEX · капли жидкого топлива</Badge>
-          <Badge>Условия зависят от опыта</Badge>
+          <Badge>FLEX · liquid-fuel droplets</Badge>
+          <Badge>Conditions vary by test run</Badge>
           <Badge tone="teal">
-            {allRuns ? 'Корпус измерений FLEX' : 'Пять контрольных записей FLEX'}
+            {allRuns ? 'FLEX measurement corpus' : 'Five FLEX control records'}
           </Badge>
         </div>
         <label className={s.outcomeFilter}>
-          Выборка
+          Dataset
           <select
             value={allRuns ? 'all' : 'control'}
             onChange={(event) => {
@@ -155,12 +155,12 @@ export function Measurements() {
               setParams(next);
             }}
           >
-            <option value="control">Пять контрольных опытов</option>
-            <option value="all">Все опыты FLEX</option>
+            <option value="control">Five control test runs</option>
+            <option value="all">All FLEX test runs</option>
           </select>
         </label>
         <label className={s.outcomeFilter}>
-          Исход
+          Outcome
           <select
             value={outcome}
             onChange={(event) => {
@@ -170,13 +170,13 @@ export function Measurements() {
               setParams(next);
             }}
           >
-            <option value="">Все исходы</option>
-            <option value="extinction">Погасание</option>
-            <option value="disruption">Разрушение капли</option>
-            <option value="burn_to_completion">Догорание</option>
-            <option value="no_ignition">Нет воспламенения</option>
-            <option value="ongoing_at_stop">Горение при остановке</option>
-            <option value="unknown">Исход не сообщён</option>
+            <option value="">All outcomes</option>
+            <option value="extinction">Extinction</option>
+            <option value="disruption">Droplet disruption</option>
+            <option value="burn_to_completion">Burn to completion</option>
+            <option value="no_ignition">No ignition</option>
+            <option value="ongoing_at_stop">Burning at shutdown</option>
+            <option value="unknown">Outcome not reported</option>
           </select>
         </label>
       </div>
@@ -190,12 +190,13 @@ export function Measurements() {
             <div className="stack">
               <Panel className={s.chartPanel}>
                 <div className="spaceBetween">
-                  <h2>Наблюдаемые измерения</h2>
-                  <span className="tiny mono muted">{points.length} ТОЧЕК</span>
+                  <h2>Observed measurements</h2>
+                  <span className="tiny mono muted">{points.length} POINTS</span>
                 </div>
                 {!correctUnits ? (
                   <Notice tone="warning">
-                    Единицы осей несовместимы с этим графиком. Измерения не преобразованы.
+                    The axis units are incompatible with this chart. Measurements have not been
+                    converted.
                   </Notice>
                 ) : points.length ? (
                   <div className={s.chart}>
@@ -208,14 +209,14 @@ export function Measurements() {
                         <XAxis
                           type="number"
                           dataKey="x"
-                          name="Диаметр"
+                          name="Diameter"
                           domain={['dataMin - 0.0001', 'dataMax + 0.0001']}
                           tickFormatter={(value) => number(Number(value) * 1000)}
                           tick={{ fill: '#8fa5c0', fontSize: 10 }}
                           axisLine={{ stroke: '#344157' }}
                           tickLine={false}
                           label={{
-                            value: 'Начальный диаметр капли, мм',
+                            value: 'Initial droplet diameter, mm',
                             position: 'bottom',
                             offset: 10,
                             fill: '#9db0ca',
@@ -225,14 +226,14 @@ export function Measurements() {
                         <YAxis
                           type="number"
                           dataKey="y"
-                          name="Время"
+                          name="Time"
                           domain={[0, 'auto']}
                           tick={{ fill: '#8fa5c0', fontSize: 10 }}
                           axisLine={false}
                           tickLine={false}
                           width={45}
                           label={{
-                            value: 'Время горения, с',
+                            value: 'Burn duration, s',
                             angle: -90,
                             position: 'insideLeft',
                             fill: '#9db0ca',
@@ -246,8 +247,8 @@ export function Measurements() {
                             return active && point ? (
                               <div className={s.tooltip}>
                                 <strong>{point.run_id.split('_').at(-1)!.toUpperCase()}</strong>
-                                <p>Диаметр: {number(point.x * 1000)} мм</p>
-                                <p>Время: {number(point.y)} с</p>
+                                <p>Diameter: {number(point.x * 1000)} mm</p>
+                                <p>Time: {number(point.y)} s</p>
                               </div>
                             ) : null;
                           }}
@@ -262,25 +263,25 @@ export function Measurements() {
                     </ResponsiveContainer>
                   </div>
                 ) : (
-                  <EmptyState title="Нет измерений для этого выбора">
-                    Измените фильтр исхода. Отсутствующие координаты не заменяются нулями.
+                  <EmptyState title="No measurements for this selection">
+                    Change the outcome filter. Missing coordinates are not replaced with zeroes.
                   </EmptyState>
                 )}
                 <div className={s.legend}>
                   <span>
-                    <i /> Погасание · Extinction
+                    <i /> Extinction
                   </span>
                   <span>
-                    <b>×</b> Разрушение · Disruption
+                    <b>×</b> Disruption
                   </span>
                 </div>
                 <p className={s.chartNote}>
-                  Точки не устанавливают причинную зависимость. Линия тренда и прогноз не строятся.
+                  These points do not establish causality. No trend line or prediction is shown.
                 </p>
               </Panel>
               {query.data.excluded_count > 0 && (
                 <Notice tone="warning">
-                  Исключено записей: {query.data.excluded_count}.
+                  Excluded records: {query.data.excluded_count}.
                   <ul className="tiny">
                     {Object.entries(query.data.exclusions_by_reason)
                       .filter(([, count]) => count > 0)
@@ -293,11 +294,11 @@ export function Measurements() {
                           {
                             (
                               {
-                                missing_x: 'Нет координаты X',
-                                missing_y: 'Нет координаты Y',
-                                unusable_unit: 'Непригодная единица',
-                                unverified_record: 'Непроверенная запись',
-                                filtered_out: 'Не проходит фильтр',
+                                missing_x: 'Missing X value',
+                                missing_y: 'Missing Y value',
+                                unusable_unit: 'Unusable unit',
+                                unverified_record: 'Unverified record',
+                                filtered_out: 'Excluded by filters',
                               } as const
                             )[reason as keyof Schema['MeasurementResponse']['exclusions_by_reason']]
                           }
@@ -309,7 +310,7 @@ export function Measurements() {
               )}
               {query.data.truncated && (
                 <Notice tone="warning">
-                  Показана часть набора. Загрузите следующую страницу для остальных измерений.
+                  Only part of the dataset is shown. Load the next page for more measurements.
                   {query.data.next_cursor && (
                     <Button
                       variant="secondary"
@@ -320,26 +321,26 @@ export function Measurements() {
                         setParams(next);
                       }}
                     >
-                      Следующие измерения <ArrowRight size={13} />
+                      Next measurements <ArrowRight size={13} />
                     </Button>
                   )}
                 </Notice>
               )}
               <section>
-                <h2 className="sectionTitle">Табличный эквивалент</h2>
+                <h2 className="sectionTitle">Data table</h2>
                 <div
                   className="tableScroll"
                   role="region"
                   tabIndex={0}
-                  aria-label="Таблица измерений FLEX"
+                  aria-label="FLEX measurements table"
                 >
                   <table>
                     <thead>
                       <tr>
-                        <th scope="col">Опыт</th>
-                        <th scope="col">Диаметр, мм</th>
-                        <th scope="col">Время, с</th>
-                        <th scope="col">Исход</th>
+                        <th scope="col">Test run</th>
+                        <th scope="col">Diameter, mm</th>
+                        <th scope="col">Time, s</th>
+                        <th scope="col">Outcome</th>
                       </tr>
                     </thead>
                     <tbody>

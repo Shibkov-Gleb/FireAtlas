@@ -1,15 +1,15 @@
-import dictionaries from '../../../../packages/contracts/dictionaries.ru.json';
+import dictionaries from '../../../../packages/contracts/dictionaries.en.json';
 import type { Investigation, Quantity, Scenario, Schema, Source, TestRun } from '../api/types';
 
 export const REVISION = 'demo-20261104-r1';
 export const FIXTURE_METADATA = {
   fixture: true,
   description:
-    'Демонстрационный набор UI. Не является опубликованным научным корпусом. Пять FLEX-точек перенесены из приложения А ТЗ.',
+    'Demo UI dataset. Not a published scientific corpus. Five FLEX points come from the specification control records.',
 };
 export const orbitalScenario: Scenario = {
   scenario_id: 'orbital_custom',
-  name: 'Орбитальная станция',
+  name: 'Orbital station',
   environment: 'orbital_habitat',
   celestial_body: 'earth',
   safety_task: 'prevention',
@@ -22,15 +22,15 @@ export const orbitalScenario: Scenario = {
   assumptions: [],
 };
 export const materials: Schema['Material'][] = [
-  { id: 'mat_solid', label: 'Твёрдые образцы', state: 'solid', composition: null, aliases: [] },
+  { id: 'mat_solid', label: 'Solid samples', state: 'solid', composition: null, aliases: [] },
   {
     id: 'mat_methanol',
-    label: 'Метанол',
+    label: 'Methanol',
     state: 'liquid',
     composition: 'CH₃OH',
     aliases: ['Methanol'],
   },
-  { id: 'mat_smoke', label: 'Дымовые частицы', state: 'aerosol', composition: null, aliases: [] },
+  { id: 'mat_smoke', label: 'Smoke particles', state: 'aerosol', composition: null, aliases: [] },
 ];
 const makeSource = (
   id: string,
@@ -60,13 +60,13 @@ export const sources: Source[] = [
   ),
   makeSource(
     'src_bass_report',
-    'BASS-II · результаты исследований',
+    'BASS-II · research findings',
     'https://ntrs.nasa.gov/citations/20160000593',
     'report',
   ),
   makeSource(
     'src_psi69',
-    'FLEX · Experimental Table, версия 5',
+    'FLEX · Experimental Table, version 5',
     'https://psi.nasa.gov/physci/repo/data/investigations/PSI-69',
     'experimental_table',
   ),
@@ -77,13 +77,13 @@ export const sources: Source[] = [
   ),
   makeSource(
     'src_nasa_combustion',
-    'NASA · горение и пожарная безопасность на МКС',
+    'NASA · combustion and fire safety on the ISS',
     'https://www.nasa.gov/missions/station/iss-research/studying-combustion-and-fire-safety/',
     'report',
   ),
   makeSource(
     'src_unavailable',
-    'Пример недоступного вложения BASS-II',
+    'Example unavailable BASS-II attachment',
     'https://psi.nasa.gov/physci/repo/data/investigations/PSI-25',
     'video',
     'unavailable',
@@ -122,56 +122,59 @@ export const investigations: Investigation[] = [
     'inv_psi25',
     'PSI-25',
     'BASS-II',
-    'Горение твёрдых материалов в микрогравитации',
+    'Solid-material combustion in microgravity',
     'prevention',
     'solid',
     'mat_solid',
     ['src_psi25', 'src_bass_report', 'src_unavailable'],
     [
-      'Изучить распространение и погасание пламени на твёрдых образцах.',
-      'Сопоставить влияние потока воздуха, атмосферы и геометрии.',
+      'Study flame spread and extinction on solid samples.',
+      'Compare the effects of airflow, atmosphere and geometry.',
     ],
-    'Исследования твёрдых образцов в условиях микрогравитации. Детали установки и методики сверяются с первоисточником.',
+    'Research on solid samples in microgravity. Check setup and methods against the original source.',
   ),
   makeInvestigation(
     'inv_psi69',
     'PSI-69',
     'FLEX',
-    'Горение и погасание капель жидкого топлива',
+    'Liquid-fuel droplet combustion and extinction',
     'suppression',
     'liquid',
     'mat_methanol',
     ['src_psi69'],
     [
-      'Изучить горение и погасание капель.',
-      'Проверить измерения вместе с атмосферой, давлением и начальным размером.',
+      'Study droplet combustion and extinction.',
+      'Review measurements alongside atmosphere, pressure and initial size.',
     ],
-    'Капельные эксперименты. В демонстрации представлены пять контрольных записей метанола из ТЗ.',
+    'Droplet experiments. This demo contains five methanol control records from the specification.',
   ),
   makeInvestigation(
     'inv_psi101',
     'PSI-101',
     'SAME-R',
-    'Свойства дыма для обнаружения пожара',
+    'Smoke properties for fire detection',
     'detection',
     'aerosol',
     'mat_smoke',
     ['src_psi101'],
-    ['Изучить характеристики частиц дыма.', 'Сопоставить условия образования и измерения дыма.'],
-    'Измерения дымовых частиц. Записи дыма не трактуются как исходы испытаний пламени.',
+    [
+      'Study smoke particle characteristics.',
+      'Compare smoke generation and measurement conditions.',
+    ],
+    'Smoke particle measurements. Smoke records are not interpreted as flame test outcomes.',
   ),
 ];
 export const extraInvestigation = makeInvestigation(
   'inv_demo04',
   'DEMO-04',
   'DEMO-04',
-  'Тестовая карточка для проверки лимита сравнения',
+  'Test card for the comparison limit',
   'prevention',
   'solid',
   'mat_solid',
   [],
-  ['Синтетическая карточка интерфейса. Научных результатов нет.'],
-  'Только тестовый сценарий comparison_limit.',
+  ['Synthetic interface card. Contains no scientific findings.'],
+  'Only used in the comparison_limit test scenario.',
 );
 export function quantity<U extends Quantity['unit']>(
   value: number | null,
@@ -244,7 +247,7 @@ export const flexRuns: TestRun[] = controlRows.map(
       regime_tags: [],
       evidence_ids: ev,
       quality_notes: [
-        'Контрольная запись из приложения А ТЗ; демонстрационный набор не заменяет проверенный выпуск корпуса.',
+        'Control record from Appendix A; the demo dataset does not replace a verified corpus release.',
       ],
     };
   },
@@ -274,14 +277,12 @@ export const demoRuns: TestRun[] = [
     metrics: [],
     terminal_outcome: {
       category: 'unknown',
-      raw_label: 'Не сообщено',
+      raw_label: 'Not reported',
       interpretation_status: 'unmapped',
       evidence_ids: [],
     },
     evidence_ids: ['ev_demo_bass'],
-    quality_notes: [
-      'Синтетическая запись UI для проверки нуля и неизвестных значений. Не результат NASA.',
-    ],
+    quality_notes: ['Synthetic UI record for zero and unknown values. Not a NASA result.'],
   },
   {
     ...flexRuns[0]!,
@@ -309,7 +310,7 @@ export const demoRuns: TestRun[] = [
           ...quantity(null, 'm'),
           status: 'unusable',
           raw_value: 'unknown',
-          raw_unit: 'неизвестно',
+          raw_unit: 'unknown',
         },
       },
     ],
@@ -320,13 +321,13 @@ export const demoRuns: TestRun[] = [
       evidence_ids: ['ev_demo_smoke'],
     },
     evidence_ids: ['ev_demo_smoke'],
-    quality_notes: ['Синтетическая запись UI. Единицы непригодны для графика. Не результат NASA.'],
+    quality_notes: ['Synthetic UI record. Units are unusable for this chart. Not a NASA result.'],
   },
 ];
 export const runs = [...flexRuns, ...demoRuns];
 const locator = (row: string | null = null): Schema['Locator'] => ({
   page: null,
-  section: row ? 'Experimental Table FLEX, v5' : 'Описание исследования',
+  section: row ? 'Experimental Table FLEX, v5' : 'Investigation description',
   row_key: row,
   start_s: null,
   end_s: null,
@@ -351,7 +352,7 @@ export const evidence: Schema['Evidence'][] = [
     ],
     verified: true,
     verification_note:
-      'Перенесено из контрольного примера предоставленного ТЗ. Перед научной публикацией требуется независимая проверка источника.',
+      'Copied from a specification control record. Independent source verification is required before scientific publication.',
   })),
   {
     id: 'ev_demo_bass',
@@ -360,10 +361,10 @@ export const evidence: Schema['Evidence'][] = [
     kind: 'metadata',
     locator: locator(),
     excerpt:
-      'Демонстрационная карточка доказательства. Исследование посвящено горению твёрдых образцов и влиянию условий. Точная строка и страница проверяются при подготовке корпуса.',
+      'Demo evidence record. This investigation studies solid-sample combustion and the effects of conditions. Exact rows and pages are verified during corpus preparation.',
     table_values: [],
     verified: false,
-    verification_note: 'UI fixture; не прошедшее научную проверку доказательство.',
+    verification_note: 'UI fixture; not scientifically verified evidence.',
   },
   {
     id: 'ev_demo_smoke',
@@ -371,10 +372,10 @@ export const evidence: Schema['Evidence'][] = [
     source_id: 'src_psi101',
     kind: 'metadata',
     locator: locator(),
-    excerpt: 'Демонстрационная карточка метаданных SAME-R для просмотра измерений дыма.',
+    excerpt: 'Demo SAME-R metadata record for exploring smoke measurements.',
     table_values: [],
     verified: false,
-    verification_note: 'UI fixture; не научный вывод.',
+    verification_note: 'UI fixture; not a scientific finding.',
   },
 ];
 export const claims: Schema['Claim'][] = [
@@ -383,12 +384,12 @@ export const claims: Schema['Claim'][] = [
     data_revision: REVISION,
     investigation_ids: ['inv_psi25'],
     kind: 'synthesis',
-    text: 'Влияние вентиляции следует изучать вместе с материалом, геометрией и атмосферой опыта.',
+    text: 'Ventilation effects must be considered alongside material, geometry and test atmosphere.',
     supporting_evidence_ids: ['ev_demo_bass'],
     contradicting_evidence_ids: [],
     applicable_run_ids: [],
     limitations: [
-      'Демонстрационная формулировка из продуктового сценария. Требуется проверенный пакет доказательств.',
+      'Demo wording from the product scenario. A verified evidence bundle is required.',
     ],
     review_status: 'pending',
   },
@@ -397,11 +398,11 @@ export const claims: Schema['Claim'][] = [
     data_revision: REVISION,
     investigation_ids: ['inv_psi25'],
     kind: 'hypothesis',
-    text: 'Можно ли перенести наблюдения на условия конкретной лунной базы?',
+    text: 'Can these observations be transferred to the conditions of a specific lunar base?',
     supporting_evidence_ids: [],
     contradicting_evidence_ids: [],
     applicable_run_ids: [],
-    limitations: ['Это вопрос для проверки, а не установленный результат.'],
+    limitations: ['This is a question to investigate, not an established finding.'],
     review_status: 'pending',
   },
   {
@@ -409,11 +410,13 @@ export const claims: Schema['Claim'][] = [
     data_revision: REVISION,
     investigation_ids: ['inv_psi69'],
     kind: 'observation',
-    text: 'В контрольной записи 30CAL03 время горения составляет 6,34 с при начальном диаметре 1,92 мм.',
+    text: 'Control record 30CAL03 reports a burn duration of 6.34 s at an initial diameter of 1.92 mm.',
     supporting_evidence_ids: ['ev_psi69_30cal03'],
     contradicting_evidence_ids: [],
     applicable_run_ids: ['run_psi69_30cal03'],
-    limitations: ['Один опыт не устанавливает причинную зависимость. Контрольный пример из ТЗ.'],
+    limitations: [
+      'One test run does not establish causality. Control example from the specification.',
+    ],
     review_status: 'reviewed',
   },
   {
@@ -421,16 +424,16 @@ export const claims: Schema['Claim'][] = [
     data_revision: REVISION,
     investigation_ids: ['inv_psi101'],
     kind: 'synthesis',
-    text: 'Данные о частицах дыма отвечают задаче обнаружения; они не являются испытаниями погасания пламени.',
+    text: 'Smoke particle data address detection; they are not flame extinction tests.',
     supporting_evidence_ids: ['ev_demo_smoke'],
     contradicting_evidence_ids: [],
     applicable_run_ids: [],
-    limitations: ['Демонстрационное описание направления исследования.'],
+    limitations: ['Demo description of a research area.'],
     review_status: 'pending',
   },
 ];
 export const config: Schema['Config'] = {
-  contract_version: '1.2.0',
+  contract_version: '1.3.0',
   active_data_revision: REVISION,
   feature_flags: { analysis: true, reports: true, semantic_search: false, video_preview: false },
   limits: {
@@ -445,22 +448,22 @@ export const config: Schema['Config'] = {
   dictionaries: {
     ...dictionaries,
     scope: [
-      { value: 'prevention', label: 'Предотвращение' },
-      { value: 'detection', label: 'Обнаружение' },
-      { value: 'suppression', label: 'Подавление' },
+      { value: 'prevention', label: 'Prevention' },
+      { value: 'detection', label: 'Detection' },
+      { value: 'suppression', label: 'Suppression' },
     ],
     fuel_state: [
-      { value: 'solid', label: 'Твёрдое' },
-      { value: 'liquid', label: 'Жидкое' },
-      { value: 'gas', label: 'Газ' },
-      { value: 'aerosol', label: 'Аэрозоль' },
+      { value: 'solid', label: 'Solid' },
+      { value: 'liquid', label: 'Liquid' },
+      { value: 'gas', label: 'Gas' },
+      { value: 'aerosol', label: 'Aerosol' },
     ],
     gravity_regime: [
-      { value: 'microgravity', label: 'Микрогравитация' },
-      { value: 'normal', label: 'Земная гравитация' },
-      { value: 'partial', label: 'Частичная гравитация' },
-      { value: 'simulated_partial', label: 'Имитация частичной' },
-      { value: 'unknown', label: 'Неизвестно' },
+      { value: 'microgravity', label: 'Microgravity' },
+      { value: 'normal', label: 'Earth gravity' },
+      { value: 'partial', label: 'Partial gravity' },
+      { value: 'simulated_partial', label: 'Simulated partial gravity' },
+      { value: 'unknown', label: 'Unknown' },
     ],
     materials: materials.map((m) => ({ value: m.id, label: m.label })),
   },
@@ -479,24 +482,24 @@ export function applicability(scenario: Scenario): Schema['ApplicabilityResult']
     overall: partial ? 'related_evidence' : 'direct_evidence',
     factors: [
       {
-        field: 'Гравитация',
+        field: 'Gravity',
         status: partial ? 'not_covered' : 'match',
         explanation: partial
-          ? 'В демонстрационном наборе нет прямых опытов частичной гравитации. Перенос требует обоснования.'
-          : 'Доступны исследования микрогравитации.',
+          ? 'The demo dataset has no direct partial-gravity tests. Transfer requires justification.'
+          : 'Microgravity investigations are available.',
         evidence_ids: [],
       },
       {
-        field: 'Кислород и давление',
+        field: 'Oxygen and pressure',
         status: 'unknown',
         explanation:
-          'Проверяйте концентрацию кислорода и общее давление отдельно; отсутствие значения не означает совпадение.',
+          'Check oxygen concentration and total pressure separately; a missing value does not imply a match.',
         evidence_ids: [],
       },
       {
-        field: 'Материал и геометрия',
+        field: 'Material and geometry',
         status: 'unknown',
-        explanation: 'Проверьте состав, толщину и геометрию конкретного образца.',
+        explanation: 'Check the composition, thickness and geometry of the specific sample.',
         evidence_ids: [],
       },
     ],
@@ -504,8 +507,8 @@ export function applicability(scenario: Scenario): Schema['ApplicabilityResult']
       ? [
           {
             field: 'gravity_regime',
-            description: 'Нет прямых измерений для целевого режима.',
-            suggested_next_step: 'Сохранить ограничение и уточнить необходимые испытания.',
+            description: 'No direct measurements for the target regime.',
+            suggested_next_step: 'Keep this limitation and clarify the required tests.',
           },
         ]
       : [],

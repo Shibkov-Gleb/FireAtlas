@@ -14,10 +14,10 @@ import { ApplicabilityView } from './ApplicabilityView';
 import s from './AnswerView.module.css';
 
 const blockLabels = {
-  summary: 'Краткий ответ',
-  observation: 'Наблюдение',
-  synthesis: 'Обобщение',
-  limitation: 'Ограничение',
+  summary: 'Summary',
+  observation: 'Observation',
+  synthesis: 'Synthesis',
+  limitation: 'Limitation',
 } as const;
 export function AnswerBlocks({
   answer,
@@ -39,7 +39,7 @@ export function AnswerBlocks({
                 return (
                   <button key={id} className="textLink" onClick={() => onEvidence(id)}>
                     <span>[{answer.citations.findIndex((c) => c.evidence_id === id) + 1}]</span>{' '}
-                    {citation?.label ?? 'Основание'} <ArrowUpRight size={11} />
+                    {citation?.label ?? 'Evidence'} <ArrowUpRight size={11} />
                   </button>
                 );
               })}
@@ -47,20 +47,20 @@ export function AnswerBlocks({
           )}
           {block.quantities.length > 0 && (
             <details className={s.quantities}>
-              <summary>Числа и исходные значения</summary>
+              <summary>Numbers and original values</summary>
               {block.quantities.map((entry, index) => (
                 <div key={index}>
                   <span>
                     {{
-                      burn_duration: 'Время горения',
-                      initial_diameter: 'Начальный диаметр',
-                      pressure: 'Давление',
+                      burn_duration: 'Burn duration',
+                      initial_diameter: 'Initial diameter',
+                      pressure: 'Pressure',
                     }[entry.name as 'burn_duration'] ?? entry.name}
                   </span>
                   <QuantityValue quantity={entry.quantity} />
                   {entry.evidence_ids.map((id) => (
                     <button className="textLink" key={id} onClick={() => onEvidence(id)}>
-                      Исходная строка
+                      Source row
                     </button>
                   ))}
                 </div>
@@ -88,12 +88,14 @@ export function AnswerView({
     queryFn: ({ signal }) => api.answer(id, signal).then((r) => r.data),
     staleTime: Infinity,
   });
-  if (query.isPending) return <Loading>Открываем результат…</Loading>;
+  if (query.isPending) return <Loading>Opening result…</Loading>;
   if (query.isError) return <ErrorState error={query.error} onRetry={() => void query.refetch()} />;
   const answer = query.data;
   if (!Object.values(answer.validation_summary).every(Boolean))
     return (
-      <Notice tone="error">Ответ не прошёл обязательную проверку. Текст не опубликован.</Notice>
+      <Notice tone="error">
+        The answer failed the required validation and has not been published.
+      </Notice>
     );
   const oldContext = answer.workspace_revision !== workspace.revision;
   const saved = workspace.saved_answer_ids.includes(answer.id);
@@ -103,14 +105,14 @@ export function AnswerView({
         <div className="inline">
           <Badge tone={answer.status === 'answered' ? 'teal' : 'orange'}>
             {answer.status === 'answered'
-              ? 'Ответ готов'
+              ? 'Answer ready'
               : answer.status === 'insufficient_evidence'
-                ? 'Недостаточно доказательств'
-                : 'Есть противоречия'}
+                ? 'Insufficient evidence'
+                : 'Conflicting evidence'}
           </Badge>
           {IS_DEMO && (
             <Badge tone="purple">
-              <Sparkles size={12} /> Подготовленный пример
+              <Sparkles size={12} /> Prepared example
             </Badge>
           )}
         </div>
@@ -119,39 +121,39 @@ export function AnswerView({
           disabled={pending || saved}
           onClick={() =>
             void saveAnswer(answer.id).then((ok) => {
-              if (ok) notify('Ответ сохранён вместе с исходным контекстом.');
+              if (ok) notify('Answer saved with its original context.');
             })
           }
         >
           {saved ? <Check size={14} /> : <Bookmark size={14} />}{' '}
-          {saved ? 'Ответ сохранён' : 'Сохранить ответ'}
+          {saved ? 'Answer saved' : 'Save answer'}
         </Button>
       </div>
       <Panel className={s.context}>
-        <h2>Контекст ответа: {answer.scenario_snapshot?.name ?? 'Без сценария'}</h2>
+        <h2>Answer context: {answer.scenario_snapshot?.name ?? 'No scenario'}</h2>
         <p>{answer.question}</p>
         <div className={s.metadata}>
           <span>{formatDate(answer.created_at)}</span>
-          <span>Пространство: {answer.workspace_revision}</span>
-          <span>Корпус: {answer.data_revision}</span>
+          <span>Workspace: {answer.workspace_revision}</span>
+          <span>Corpus: {answer.data_revision}</span>
         </div>
         <details>
-          <summary>Зафиксированные условия</summary>
+          <summary>Captured conditions</summary>
           <dl>
             <div>
-              <dt>Гравитация</dt>
+              <dt>Gravity</dt>
               <dd>{answer.scenario_snapshot?.gravity_regime}</dd>
             </div>
             {(
               [
-                ['Кислород', answer.scenario_snapshot?.oxygen_fraction],
-                ['Давление', answer.scenario_snapshot?.pressure],
-                ['Скорость воздуха', answer.scenario_snapshot?.airflow_speed],
+                ['Oxygen', answer.scenario_snapshot?.oxygen_fraction],
+                ['Pressure', answer.scenario_snapshot?.pressure],
+                ['Airflow speed', answer.scenario_snapshot?.airflow_speed],
               ] as const
             ).map(([label, value]) => (
               <div key={label}>
                 <dt>{label}</dt>
-                <dd>{value ? <QuantityValue quantity={value} /> : 'Не задано пользователем'}</dd>
+                <dd>{value ? <QuantityValue quantity={value} /> : 'Not specified by the user'}</dd>
               </div>
             ))}
           </dl>
@@ -159,33 +161,33 @@ export function AnswerView({
       </Panel>
       {oldContext && (
         <Notice tone="warning">
-          Ответ получен на предыдущем снимке пространства:{' '}
-          <strong>{answer.scenario_snapshot?.name ?? 'Без сценария'}</strong>. Текущий контекст:{' '}
-          <strong>{workspace.scenario?.name ?? 'Без сценария'}</strong>. Сохранение и отчёт сохранят
-          исходные условия.
+          This answer uses an earlier workspace snapshot:{' '}
+          <strong>{answer.scenario_snapshot?.name ?? 'No scenario'}</strong>. Current context:{' '}
+          <strong>{workspace.scenario?.name ?? 'No scenario'}</strong>. Saving and exporting will
+          preserve the original conditions.
           <div style={{ marginTop: 12 }}>
             <Button variant="secondary" onClick={() => onAsk(answer.question)}>
-              Подготовить новый вопрос в текущем контексте
+              Prepare a new question in the current context
             </Button>
           </div>
         </Notice>
       )}
       {answer.status === 'insufficient_evidence' && (
         <Notice tone="warning">
-          Данных недостаточно для полного ответа. Ниже показаны доступные наблюдения, пробелы и
-          уточняющие вопросы.
+          There is not enough evidence for a complete answer. Available observations, gaps and
+          follow-up questions are shown below.
         </Notice>
       )}
       {answer.status === 'conflicting_evidence' && (
         <Notice tone="warning">
-          Основания расходятся. Сравните условия и методики, прежде чем объединять выводы.
+          The evidence conflicts. Compare conditions and methods before combining findings.
         </Notice>
       )}
       <div className={s.layout}>
         <AnswerBlocks answer={answer} onEvidence={setEvidenceId} />
-        <aside className={s.sources} aria-label="Основания ответа">
+        <aside className={s.sources} aria-label="Answer evidence">
           <h3>
-            <FileText size={16} /> Основания ответа
+            <FileText size={16} /> Answer evidence
           </h3>
           {answer.citations.map((citation, index) => (
             <button key={citation.evidence_id} onClick={() => setEvidenceId(citation.evidence_id)}>
@@ -195,7 +197,7 @@ export function AnswerView({
                 <small>
                   {[
                     citation.locator.row_key,
-                    citation.locator.page ? `Стр. ${citation.locator.page}` : null,
+                    citation.locator.page ? `p. ${citation.locator.page}` : null,
                     citation.locator.section,
                   ]
                     .filter(Boolean)
@@ -205,15 +207,12 @@ export function AnswerView({
               <ArrowUpRight size={12} />
             </button>
           ))}
-          <p>
-            Ссылки ведут к зарегистрированным источникам. Свободный текст ответа не используется как
-            ссылка.
-          </p>
+          <p>Links open registered sources. Free-form answer text is never used as a link.</p>
         </aside>
       </div>
       {answer.limitations.length > 0 && (
         <Panel className={s.limitations}>
-          <h3>Границы вывода</h3>
+          <h3>Limits of the answer</h3>
           <ul>
             {answer.limitations.map((text) => (
               <li key={text}>{text}</li>
@@ -230,7 +229,7 @@ export function AnswerView({
       />
       {answer.follow_up_questions.length > 0 && (
         <div className={s.followup}>
-          <h3>Что уточнить дальше</h3>
+          <h3>Questions to explore next</h3>
           {answer.follow_up_questions.map((question) => (
             <button className="textLink" key={question} onClick={() => onAsk(question)}>
               {question} <ArrowUpRight size={13} />
@@ -239,11 +238,11 @@ export function AnswerView({
         </div>
       )}
       <details className={s.audit}>
-        <summary>Версии и проверка ответа</summary>
+        <summary>Versions and validation</summary>
         <p>
-          Поиск: {answer.retrieval_mode} · reasoning: {answer.reasoning_revision}
+          Retrieval: {answer.retrieval_mode} · reasoning: {answer.reasoning_revision}
         </p>
-        <p>Схема, ссылки, числа и область вывода проверены согласно ответу API.</p>
+        <p>The API reports that the schema, citations, numbers and scope have been validated.</p>
       </details>
       <EvidenceDrawer
         id={evidenceId}
