@@ -1,0 +1,3816 @@
+{
+ "bundle_id": "bnd_req_water_mist",
+ "data_revision": "psi-20261115-r2",
+ "question": "насколько эффективен водяной туман для тушения пожара на МКС",
+ "scenario": null,
+ "items": [
+  {
+   "evidence": {
+    "id": "ev_poster_p13_quench",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_ntrs_20160000593",
+    "kind": "text_excerpt",
+    "locator": {
+     "page": 13,
+     "section": null,
+     "row_key": null,
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": "Comparison of flame extinction at low opposing flow velocity (radiative quenching) vs. at high flow velocities (blow off extinction) for 0.1 mm thick sample. Sequence of top views showing radiative quenching when flow velocity goes below 2 cm/s. Flame nearing blow off extinction as the flow velocity crosses 40 cm/s.",
+    "table_values": [],
+    "verified": true,
+    "verification_note": "Sentence copied from the text layer of the original PDF (pdftotext); page number as printed by the reader."
+   },
+   "source_metadata": {
+    "id": "src_ntrs_20160000593",
+    "data_revision": "psi-20261115-r2",
+    "title": "Combustion of Solids in Microgravity: Results from the BASS-II Experiment (Ferkul et al., NTRS 20160000593)",
+    "kind": "publication",
+    "canonical_url": "https://ntrs.nasa.gov/citations/20160000593",
+    "doi": null,
+    "publication_date": "2014-10-23",
+    "retrieved_at": "2026-11-14T15:09:45Z",
+    "license": null,
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "9f2c89db9e1954c3c44409364ed6764f7e7466250264c28ff2d425350287546c"
+   },
+   "investigation_ids": [
+    "inv_psi25_bass2"
+   ],
+   "run_ids": [],
+   "normalized_facts": [
+    {
+     "field": "claim.text",
+     "quantity": null,
+     "text_value": "A 0.1 mm PMMA film in opposed flow was extinguished in two ways: radiative quenching when the flow dropped below about 2 cm/s, and blowoff when it rose above about 40 cm/s.",
+     "evidence_ids": [
+      "ev_poster_p13_quench"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_psi69_196f001",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_psi69_experimental_table",
+    "kind": "table_row",
+    "locator": {
+     "page": null,
+     "section": null,
+     "row_key": "FLEX Test # 19 (196F001)",
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": null,
+    "table_values": [
+     {
+      "field": "FLEX Test #",
+      "raw_value": "19",
+      "raw_unit": null
+     },
+     {
+      "field": "FLEX Identifier",
+      "raw_value": "196F001",
+      "raw_unit": null
+     },
+     {
+      "field": "Test Date",
+      "raw_value": "8/26/2009",
+      "raw_unit": null
+     },
+     {
+      "field": "Test GMT",
+      "raw_value": "19:07:28",
+      "raw_unit": null
+     },
+     {
+      "field": "Fuel",
+      "raw_value": "Heptane",
+      "raw_unit": null
+     },
+     {
+      "field": "Ambient pressure; mmHg",
+      "raw_value": "539.1",
+      "raw_unit": "mmHg"
+     },
+     {
+      "field": "O initial ambient composition; mole fraction",
+      "raw_value": "0.34",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "N initial ambient composition; mole fraction",
+      "raw_value": "0.66",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "CO initial ambient composition; mole fraction",
+      "raw_value": "0",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "He initial ambient composition; mole fraction",
+      "raw_value": "0",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "Droplet initial diameter; mm",
+      "raw_value": "3.39",
+      "raw_unit": "mm"
+     },
+     {
+      "field": "Visible flame extinction diameter; mm",
+      "raw_value": null,
+      "raw_unit": "mm"
+     },
+     {
+      "field": "Burning rate; mm",
+      "raw_value": "0.9",
+      "raw_unit": null
+     },
+     {
+      "field": "Burn time; s",
+      "raw_value": "4.2",
+      "raw_unit": "s"
+     },
+     {
+      "field": "Test end",
+      "raw_value": "Disruption",
+      "raw_unit": null
+     }
+    ],
+    "verified": true,
+    "verification_note": "Row parsed from the original PSI-69 experimental table CSV (sha256 in sources.jsonl); raw values copied without change."
+   },
+   "source_metadata": {
+    "id": "src_psi69_experimental_table",
+    "data_revision": "psi-20261115-r2",
+    "title": "PSI-69 Experimental table, FLEX (CSV)",
+    "kind": "experimental_table",
+    "canonical_url": "https://doi.org/10.60555/mbq8-0451",
+    "doi": "10.60555/mbq8-0451",
+    "publication_date": "2016-07-31",
+    "retrieved_at": "2026-11-14T14:25:21Z",
+    "license": "CC0-1.0",
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "37c88ce8ae9391b7544ff630a45ce87543d04d317cdbfbed104fe7d5c27e1b96"
+   },
+   "investigation_ids": [
+    "inv_psi69_flex"
+   ],
+   "run_ids": [
+    "run_psi69_196f001"
+   ],
+   "normalized_facts": [
+    {
+     "field": "material_id",
+     "quantity": null,
+     "text_value": "mat_heptane",
+     "evidence_ids": [
+      "ev_psi69_196f001"
+     ]
+    },
+    {
+     "field": "terminal_outcome.category",
+     "quantity": null,
+     "text_value": "disruption",
+     "evidence_ids": [
+      "ev_psi69_196f001"
+     ]
+    },
+    {
+     "field": "conditions.oxygen_fraction",
+     "quantity": {
+      "value": 0.34,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.34",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_196f001"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_196f001"
+     ]
+    },
+    {
+     "field": "conditions.nitrogen_fraction",
+     "quantity": {
+      "value": 0.66,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.66",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_196f001"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_196f001"
+     ]
+    },
+    {
+     "field": "conditions.co2_fraction",
+     "quantity": {
+      "value": 0.0,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_196f001"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_196f001"
+     ]
+    },
+    {
+     "field": "conditions.helium_fraction",
+     "quantity": {
+      "value": 0.0,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_196f001"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_196f001"
+     ]
+    },
+    {
+     "field": "conditions.pressure",
+     "quantity": {
+      "value": 71874.0988317,
+      "unit": "Pa",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "539.1",
+      "raw_unit": "mmHg",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_196f001"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_196f001"
+     ]
+    },
+    {
+     "field": "metrics.burn_duration",
+     "quantity": {
+      "value": 4.2,
+      "unit": "s",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "4.2",
+      "raw_unit": "s",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_196f001"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_196f001"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_psi69_192f001",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_psi69_experimental_table",
+    "kind": "table_row",
+    "locator": {
+     "page": null,
+     "section": null,
+     "row_key": "FLEX Test # 20 (192F001)",
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": null,
+    "table_values": [
+     {
+      "field": "FLEX Test #",
+      "raw_value": "20",
+      "raw_unit": null
+     },
+     {
+      "field": "FLEX Identifier",
+      "raw_value": "192F001",
+      "raw_unit": null
+     },
+     {
+      "field": "Test Date",
+      "raw_value": "10/24/09",
+      "raw_unit": null
+     },
+     {
+      "field": "Test GMT",
+      "raw_value": "14:09:04",
+      "raw_unit": null
+     },
+     {
+      "field": "Fuel",
+      "raw_value": "Methanol",
+      "raw_unit": null
+     },
+     {
+      "field": "Ambient pressure; mmHg",
+      "raw_value": "539.5",
+      "raw_unit": "mmHg"
+     },
+     {
+      "field": "O initial ambient composition; mole fraction",
+      "raw_value": "0.34",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "N initial ambient composition; mole fraction",
+      "raw_value": "0.66",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "CO initial ambient composition; mole fraction",
+      "raw_value": "0",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "He initial ambient composition; mole fraction",
+      "raw_value": "0",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "Droplet initial diameter; mm",
+      "raw_value": "3.4",
+      "raw_unit": "mm"
+     },
+     {
+      "field": "Visible flame extinction diameter; mm",
+      "raw_value": "1.56",
+      "raw_unit": "mm"
+     },
+     {
+      "field": "Burning rate; mm",
+      "raw_value": "0.53",
+      "raw_unit": null
+     },
+     {
+      "field": "Burn time; s",
+      "raw_value": "17.4",
+      "raw_unit": "s"
+     },
+     {
+      "field": "Test end",
+      "raw_value": "Completion",
+      "raw_unit": null
+     }
+    ],
+    "verified": true,
+    "verification_note": "Row parsed from the original PSI-69 experimental table CSV (sha256 in sources.jsonl); raw values copied without change."
+   },
+   "source_metadata": {
+    "id": "src_psi69_experimental_table",
+    "data_revision": "psi-20261115-r2",
+    "title": "PSI-69 Experimental table, FLEX (CSV)",
+    "kind": "experimental_table",
+    "canonical_url": "https://doi.org/10.60555/mbq8-0451",
+    "doi": "10.60555/mbq8-0451",
+    "publication_date": "2016-07-31",
+    "retrieved_at": "2026-11-14T14:25:21Z",
+    "license": "CC0-1.0",
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "37c88ce8ae9391b7544ff630a45ce87543d04d317cdbfbed104fe7d5c27e1b96"
+   },
+   "investigation_ids": [
+    "inv_psi69_flex"
+   ],
+   "run_ids": [
+    "run_psi69_192f001"
+   ],
+   "normalized_facts": [
+    {
+     "field": "material_id",
+     "quantity": null,
+     "text_value": "mat_methanol",
+     "evidence_ids": [
+      "ev_psi69_192f001"
+     ]
+    },
+    {
+     "field": "terminal_outcome.category",
+     "quantity": null,
+     "text_value": "burn_to_completion",
+     "evidence_ids": [
+      "ev_psi69_192f001"
+     ]
+    },
+    {
+     "field": "conditions.oxygen_fraction",
+     "quantity": {
+      "value": 0.34,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.34",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_192f001"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_192f001"
+     ]
+    },
+    {
+     "field": "conditions.nitrogen_fraction",
+     "quantity": {
+      "value": 0.66,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.66",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_192f001"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_192f001"
+     ]
+    },
+    {
+     "field": "conditions.co2_fraction",
+     "quantity": {
+      "value": 0.0,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_192f001"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_192f001"
+     ]
+    },
+    {
+     "field": "conditions.helium_fraction",
+     "quantity": {
+      "value": 0.0,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_192f001"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_192f001"
+     ]
+    },
+    {
+     "field": "conditions.pressure",
+     "quantity": {
+      "value": 71927.42778649999,
+      "unit": "Pa",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "539.5",
+      "raw_unit": "mmHg",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_192f001"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_192f001"
+     ]
+    },
+    {
+     "field": "metrics.burn_duration",
+     "quantity": {
+      "value": 17.4,
+      "unit": "s",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "17.4",
+      "raw_unit": "s",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_192f001"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_192f001"
+     ]
+    },
+    {
+     "field": "metrics.visible_extinction_diameter",
+     "quantity": {
+      "value": 0.0015600000000000002,
+      "unit": "m",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "1.56",
+      "raw_unit": "mm",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_192f001"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_192f001"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_poster_p18_o2_margin",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_ntrs_20160000593",
+    "kind": "text_excerpt",
+    "locator": {
+     "page": 18,
+     "section": null,
+     "row_key": null,
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": "The 1g blowoff for the 1/4\" rod is at 16% oxygen, whereas we obtained steady spreading at 13.6% oxygen in BASS-II. Thus the material has a negative Oxygen Margin of Safety of 2.4% O2, and the normal gravity flammability limits should be de-rated by at least that much.",
+    "table_values": [],
+    "verified": true,
+    "verification_note": "Sentence copied from the text layer of the original PDF (pdftotext); page number as printed by the reader."
+   },
+   "source_metadata": {
+    "id": "src_ntrs_20160000593",
+    "data_revision": "psi-20261115-r2",
+    "title": "Combustion of Solids in Microgravity: Results from the BASS-II Experiment (Ferkul et al., NTRS 20160000593)",
+    "kind": "publication",
+    "canonical_url": "https://ntrs.nasa.gov/citations/20160000593",
+    "doi": null,
+    "publication_date": "2014-10-23",
+    "retrieved_at": "2026-11-14T15:09:45Z",
+    "license": null,
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "9f2c89db9e1954c3c44409364ed6764f7e7466250264c28ff2d425350287546c"
+   },
+   "investigation_ids": [
+    "inv_psi25_bass2"
+   ],
+   "run_ids": [],
+   "normalized_facts": [
+    {
+     "field": "claim.text",
+     "quantity": null,
+     "text_value": "A 1/4-inch PMMA rod kept spreading steadily in microgravity at 13.6 % O2, while in normal gravity the flame blew off at 16 % O2: a negative oxygen margin of safety of 2.4 % O2. Normal-gravity flammability limits should be de-rated by at least that much.",
+     "evidence_ids": [
+      "ev_poster_p18_o2_margin"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_psi69_metadata_cool_flames",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_psi69_repository",
+    "kind": "metadata",
+    "locator": {
+     "page": null,
+     "section": "Research Impacts/Earth Benefits",
+     "row_key": null,
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": "Additionally, the study of ''cool flames'' and low-temperature combustion processes observed in microgravity can inform the design of advanced combustion engines",
+    "table_values": [],
+    "verified": true,
+    "verification_note": "Copied from the PSI-69 investigation page as displayed on 2026-11-14."
+   },
+   "source_metadata": {
+    "id": "src_psi69_repository",
+    "data_revision": "psi-20261115-r2",
+    "title": "Flame Extinguishment Experiment (FLEX), PSI-69, version 5",
+    "kind": "repository",
+    "canonical_url": "https://doi.org/10.60555/mbq8-0451",
+    "doi": "10.60555/mbq8-0451",
+    "publication_date": "2016-07-31",
+    "retrieved_at": "2026-11-14T14:25:21Z",
+    "license": "CC0-1.0",
+    "availability": "metadata_only",
+    "local_asset_id": null,
+    "sha256": null
+   },
+   "investigation_ids": [
+    "inv_psi69_flex"
+   ],
+   "run_ids": [],
+   "normalized_facts": [
+    {
+     "field": "claim.text",
+     "quantity": null,
+     "text_value": "FLEX observed 'cool flames': low-temperature combustion processes in microgravity.",
+     "evidence_ids": [
+      "ev_psi69_metadata_cool_flames"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_same2_p8_lowflow",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_ntrs_20130000422",
+    "kind": "text_excerpt",
+    "locator": {
+     "page": 8,
+     "section": null,
+     "row_key": null,
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": "These figures show a strong trend of increased particle size at low flow rates.",
+    "table_values": [],
+    "verified": true,
+    "verification_note": "Sentence copied from the text layer of the original PDF (pdftotext); page number as printed by the reader."
+   },
+   "source_metadata": {
+    "id": "src_ntrs_20130000422",
+    "data_revision": "psi-20261115-r2",
+    "title": "Particle Morphology and Size Results from the Smoke Aerosol Measurement Experiment-2 (Urban et al., AIAA 2012-3536, NTRS 20130000422)",
+    "kind": "publication",
+    "canonical_url": "https://ntrs.nasa.gov/citations/20130000422",
+    "doi": null,
+    "publication_date": "2012-07-15",
+    "retrieved_at": "2026-11-14T14:36:58Z",
+    "license": null,
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "bdc5e7e0d65f569c2c4a0b8899870d2d47e8f0d644cfe033a450d9fd892375aa"
+   },
+   "investigation_ids": [
+    "inv_psi101_samer"
+   ],
+   "run_ids": [],
+   "normalized_facts": [
+    {
+     "field": "claim.text",
+     "quantity": null,
+     "text_value": "Because microgravity smoke can stay in still air and particles grow at low flow, spacecraft smoke detectors should be designed and tested for larger particles than in flowing air.",
+     "evidence_ids": [
+      "ev_same2_p8_lowflow"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_same2_p12_detection",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_ntrs_20130000422",
+    "kind": "text_excerpt",
+    "locator": {
+     "page": 12,
+     "section": null,
+     "row_key": null,
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": "So the larger particle diameters observed in these zero-flow conditions are important to consider in the development of improved fire detection equipment for space vehicles.",
+    "table_values": [],
+    "verified": true,
+    "verification_note": "Sentence copied from the text layer of the original PDF (pdftotext); page number as printed by the reader."
+   },
+   "source_metadata": {
+    "id": "src_ntrs_20130000422",
+    "data_revision": "psi-20261115-r2",
+    "title": "Particle Morphology and Size Results from the Smoke Aerosol Measurement Experiment-2 (Urban et al., AIAA 2012-3536, NTRS 20130000422)",
+    "kind": "publication",
+    "canonical_url": "https://ntrs.nasa.gov/citations/20130000422",
+    "doi": null,
+    "publication_date": "2012-07-15",
+    "retrieved_at": "2026-11-14T14:36:58Z",
+    "license": null,
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "bdc5e7e0d65f569c2c4a0b8899870d2d47e8f0d644cfe033a450d9fd892375aa"
+   },
+   "investigation_ids": [
+    "inv_psi101_samer"
+   ],
+   "run_ids": [],
+   "normalized_facts": [
+    {
+     "field": "claim.text",
+     "quantity": null,
+     "text_value": "Because microgravity smoke can stay in still air and particles grow at low flow, spacecraft smoke detectors should be designed and tested for larger particles than in flowing air.",
+     "evidence_ids": [
+      "ev_same2_p12_detection"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_poster_p18_boundary",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_ntrs_20160000593",
+    "kind": "text_excerpt",
+    "locator": {
+     "page": 18,
+     "section": null,
+     "row_key": null,
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": "The minimum in the flammability boundary is at low speed, on the order of diffusive flows.",
+    "table_values": [],
+    "verified": true,
+    "verification_note": "Sentence copied from the text layer of the original PDF (pdftotext); page number as printed by the reader."
+   },
+   "source_metadata": {
+    "id": "src_ntrs_20160000593",
+    "data_revision": "psi-20261115-r2",
+    "title": "Combustion of Solids in Microgravity: Results from the BASS-II Experiment (Ferkul et al., NTRS 20160000593)",
+    "kind": "publication",
+    "canonical_url": "https://ntrs.nasa.gov/citations/20160000593",
+    "doi": null,
+    "publication_date": "2014-10-23",
+    "retrieved_at": "2026-11-14T15:09:45Z",
+    "license": null,
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "9f2c89db9e1954c3c44409364ed6764f7e7466250264c28ff2d425350287546c"
+   },
+   "investigation_ids": [
+    "inv_psi25_bass2"
+   ],
+   "run_ids": [],
+   "normalized_facts": [
+    {
+     "field": "claim.text",
+     "quantity": null,
+     "text_value": "For PMMA rods the flammability boundary has its minimum at very low airflow, on the order of diffusive flows, and the flow needed to blow the flame off becomes slower as oxygen decreases.",
+     "evidence_ids": [
+      "ev_poster_p18_boundary"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_poster_p18_blowoff_o2",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_ntrs_20160000593",
+    "kind": "text_excerpt",
+    "locator": {
+     "page": 18,
+     "section": null,
+     "row_key": null,
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": "Thus the flow needed to blow off the flame becomes slower as oxygen decreases and the flame temperature is reduced.",
+    "table_values": [],
+    "verified": true,
+    "verification_note": "Sentence copied from the text layer of the original PDF (pdftotext); page number as printed by the reader."
+   },
+   "source_metadata": {
+    "id": "src_ntrs_20160000593",
+    "data_revision": "psi-20261115-r2",
+    "title": "Combustion of Solids in Microgravity: Results from the BASS-II Experiment (Ferkul et al., NTRS 20160000593)",
+    "kind": "publication",
+    "canonical_url": "https://ntrs.nasa.gov/citations/20160000593",
+    "doi": null,
+    "publication_date": "2014-10-23",
+    "retrieved_at": "2026-11-14T15:09:45Z",
+    "license": null,
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "9f2c89db9e1954c3c44409364ed6764f7e7466250264c28ff2d425350287546c"
+   },
+   "investigation_ids": [
+    "inv_psi25_bass2"
+   ],
+   "run_ids": [],
+   "normalized_facts": [
+    {
+     "field": "claim.text",
+     "quantity": null,
+     "text_value": "For PMMA rods the flammability boundary has its minimum at very low airflow, on the order of diffusive flows, and the flow needed to blow the flame off becomes slower as oxygen decreases.",
+     "evidence_ids": [
+      "ev_poster_p18_blowoff_o2"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_poster_p20_sibal",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_ntrs_20160000593",
+    "kind": "text_excerpt",
+    "locator": {
+     "page": 20,
+     "section": null,
+     "row_key": null,
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": "29 tests were conducted in total mostly with cotton-fiberglass fabric (SIBAL) and two with a plastic (PMMA; polymethyl methacrylate) spherical section. 6 quenching cases (reducing flow) and 1 blow-off case (increasing flow, 1.2-cm wide sample).",
+    "table_values": [],
+    "verified": true,
+    "verification_note": "Sentence copied from the text layer of the original PDF (pdftotext); page number as printed by the reader."
+   },
+   "source_metadata": {
+    "id": "src_ntrs_20160000593",
+    "data_revision": "psi-20261115-r2",
+    "title": "Combustion of Solids in Microgravity: Results from the BASS-II Experiment (Ferkul et al., NTRS 20160000593)",
+    "kind": "publication",
+    "canonical_url": "https://ntrs.nasa.gov/citations/20160000593",
+    "doi": null,
+    "publication_date": "2014-10-23",
+    "retrieved_at": "2026-11-14T15:09:45Z",
+    "license": null,
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "9f2c89db9e1954c3c44409364ed6764f7e7466250264c28ff2d425350287546c"
+   },
+   "investigation_ids": [
+    "inv_psi25_bass2"
+   ],
+   "run_ids": [],
+   "normalized_facts": [
+    {
+     "field": "claim.text",
+     "quantity": null,
+     "text_value": "Of 29 tests on SIBAL cotton-fiberglass fabric and a PMMA spherical section in purely forced concurrent flow, 6 ended in quenching while the flow was reduced and 1 in blowoff while it was increased.",
+     "evidence_ids": [
+      "ev_poster_p20_sibal"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_psi69_304f002",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_psi69_experimental_table",
+    "kind": "table_row",
+    "locator": {
+     "page": null,
+     "section": null,
+     "row_key": "FLEX Test # 83 (304F002)",
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": null,
+    "table_values": [
+     {
+      "field": "FLEX Test #",
+      "raw_value": "83",
+      "raw_unit": null
+     },
+     {
+      "field": "FLEX Identifier",
+      "raw_value": "304F002",
+      "raw_unit": null
+     },
+     {
+      "field": "Test Date",
+      "raw_value": "4/19/2010",
+      "raw_unit": null
+     },
+     {
+      "field": "Test GMT",
+      "raw_value": "21:18:05",
+      "raw_unit": null
+     },
+     {
+      "field": "Fuel",
+      "raw_value": "Methanol",
+      "raw_unit": null
+     },
+     {
+      "field": "Ambient pressure; mmHg",
+      "raw_value": "772",
+      "raw_unit": "mmHg"
+     },
+     {
+      "field": "O initial ambient composition; mole fraction",
+      "raw_value": "0.12",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "N initial ambient composition; mole fraction",
+      "raw_value": "0.87",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "CO initial ambient composition; mole fraction",
+      "raw_value": "0",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "He initial ambient composition; mole fraction",
+      "raw_value": "0",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "Droplet initial diameter; mm",
+      "raw_value": "–",
+      "raw_unit": "mm"
+     },
+     {
+      "field": "Visible flame extinction diameter; mm",
+      "raw_value": null,
+      "raw_unit": "mm"
+     },
+     {
+      "field": "Burning rate; mm",
+      "raw_value": null,
+      "raw_unit": null
+     },
+     {
+      "field": "Burn time; s",
+      "raw_value": "5.45",
+      "raw_unit": "s"
+     },
+     {
+      "field": "Test end",
+      "raw_value": "Extinction",
+      "raw_unit": null
+     }
+    ],
+    "verified": true,
+    "verification_note": "Row parsed from the original PSI-69 experimental table CSV (sha256 in sources.jsonl); raw values copied without change."
+   },
+   "source_metadata": {
+    "id": "src_psi69_experimental_table",
+    "data_revision": "psi-20261115-r2",
+    "title": "PSI-69 Experimental table, FLEX (CSV)",
+    "kind": "experimental_table",
+    "canonical_url": "https://doi.org/10.60555/mbq8-0451",
+    "doi": "10.60555/mbq8-0451",
+    "publication_date": "2016-07-31",
+    "retrieved_at": "2026-11-14T14:25:21Z",
+    "license": "CC0-1.0",
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "37c88ce8ae9391b7544ff630a45ce87543d04d317cdbfbed104fe7d5c27e1b96"
+   },
+   "investigation_ids": [
+    "inv_psi69_flex"
+   ],
+   "run_ids": [
+    "run_psi69_304f002"
+   ],
+   "normalized_facts": [
+    {
+     "field": "material_id",
+     "quantity": null,
+     "text_value": "mat_methanol",
+     "evidence_ids": [
+      "ev_psi69_304f002"
+     ]
+    },
+    {
+     "field": "terminal_outcome.category",
+     "quantity": null,
+     "text_value": "extinction",
+     "evidence_ids": [
+      "ev_psi69_304f002"
+     ]
+    },
+    {
+     "field": "conditions.oxygen_fraction",
+     "quantity": {
+      "value": 0.12,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.12",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_304f002"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_304f002"
+     ]
+    },
+    {
+     "field": "conditions.nitrogen_fraction",
+     "quantity": {
+      "value": 0.87,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.87",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_304f002"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_304f002"
+     ]
+    },
+    {
+     "field": "conditions.co2_fraction",
+     "quantity": {
+      "value": 0.0,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_304f002"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_304f002"
+     ]
+    },
+    {
+     "field": "conditions.helium_fraction",
+     "quantity": {
+      "value": 0.0,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_304f002"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_304f002"
+     ]
+    },
+    {
+     "field": "conditions.pressure",
+     "quantity": {
+      "value": 102924.882764,
+      "unit": "Pa",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "772",
+      "raw_unit": "mmHg",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_304f002"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_304f002"
+     ]
+    },
+    {
+     "field": "metrics.burn_duration",
+     "quantity": {
+      "value": 5.45,
+      "unit": "s",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "5.45",
+      "raw_unit": "s",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_304f002"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_304f002"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_psi69_c07m101",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_psi69_experimental_table",
+    "kind": "table_row",
+    "locator": {
+     "page": null,
+     "section": null,
+     "row_key": "FLEX Test # 166 (C07M101)",
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": null,
+    "table_values": [
+     {
+      "field": "FLEX Test #",
+      "raw_value": "166",
+      "raw_unit": null
+     },
+     {
+      "field": "FLEX Identifier",
+      "raw_value": "C07M101",
+      "raw_unit": null
+     },
+     {
+      "field": "Test Date",
+      "raw_value": "1/12/2011",
+      "raw_unit": null
+     },
+     {
+      "field": "Test GMT",
+      "raw_value": "21:56:45",
+      "raw_unit": null
+     },
+     {
+      "field": "Fuel",
+      "raw_value": "Methanol",
+      "raw_unit": null
+     },
+     {
+      "field": "Ambient pressure; mmHg",
+      "raw_value": "760.8",
+      "raw_unit": "mmHg"
+     },
+     {
+      "field": "O initial ambient composition; mole fraction",
+      "raw_value": "0.14",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "N initial ambient composition; mole fraction",
+      "raw_value": "0.5",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "CO initial ambient composition; mole fraction",
+      "raw_value": "0.36",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "He initial ambient composition; mole fraction",
+      "raw_value": "0",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "Droplet initial diameter; mm",
+      "raw_value": "3.22",
+      "raw_unit": "mm"
+     },
+     {
+      "field": "Visible flame extinction diameter; mm",
+      "raw_value": "3.08",
+      "raw_unit": "mm"
+     },
+     {
+      "field": "Burning rate; mm",
+      "raw_value": "0.28",
+      "raw_unit": null
+     },
+     {
+      "field": "Burn time; s",
+      "raw_value": "3.4",
+      "raw_unit": "s"
+     },
+     {
+      "field": "Test end",
+      "raw_value": "Extinction",
+      "raw_unit": null
+     }
+    ],
+    "verified": true,
+    "verification_note": "Row parsed from the original PSI-69 experimental table CSV (sha256 in sources.jsonl); raw values copied without change."
+   },
+   "source_metadata": {
+    "id": "src_psi69_experimental_table",
+    "data_revision": "psi-20261115-r2",
+    "title": "PSI-69 Experimental table, FLEX (CSV)",
+    "kind": "experimental_table",
+    "canonical_url": "https://doi.org/10.60555/mbq8-0451",
+    "doi": "10.60555/mbq8-0451",
+    "publication_date": "2016-07-31",
+    "retrieved_at": "2026-11-14T14:25:21Z",
+    "license": "CC0-1.0",
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "37c88ce8ae9391b7544ff630a45ce87543d04d317cdbfbed104fe7d5c27e1b96"
+   },
+   "investigation_ids": [
+    "inv_psi69_flex"
+   ],
+   "run_ids": [
+    "run_psi69_c07m101"
+   ],
+   "normalized_facts": [
+    {
+     "field": "material_id",
+     "quantity": null,
+     "text_value": "mat_methanol",
+     "evidence_ids": [
+      "ev_psi69_c07m101"
+     ]
+    },
+    {
+     "field": "terminal_outcome.category",
+     "quantity": null,
+     "text_value": "extinction",
+     "evidence_ids": [
+      "ev_psi69_c07m101"
+     ]
+    },
+    {
+     "field": "conditions.oxygen_fraction",
+     "quantity": {
+      "value": 0.14,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.14",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_c07m101"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_c07m101"
+     ]
+    },
+    {
+     "field": "conditions.nitrogen_fraction",
+     "quantity": {
+      "value": 0.5,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.5",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_c07m101"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_c07m101"
+     ]
+    },
+    {
+     "field": "conditions.co2_fraction",
+     "quantity": {
+      "value": 0.36,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.36",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_c07m101"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_c07m101"
+     ]
+    },
+    {
+     "field": "conditions.helium_fraction",
+     "quantity": {
+      "value": 0.0,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_c07m101"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_c07m101"
+     ]
+    },
+    {
+     "field": "conditions.pressure",
+     "quantity": {
+      "value": 101431.67202959998,
+      "unit": "Pa",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "760.8",
+      "raw_unit": "mmHg",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_c07m101"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_c07m101"
+     ]
+    },
+    {
+     "field": "metrics.burn_duration",
+     "quantity": {
+      "value": 3.4,
+      "unit": "s",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "3.4",
+      "raw_unit": "s",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_c07m101"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_c07m101"
+     ]
+    },
+    {
+     "field": "metrics.visible_extinction_diameter",
+     "quantity": {
+      "value": 0.0030800000000000003,
+      "unit": "m",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "3.08",
+      "raw_unit": "mm",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_c07m101"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_c07m101"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_psi69_20cal08",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_psi69_experimental_table",
+    "kind": "table_row",
+    "locator": {
+     "page": null,
+     "section": null,
+     "row_key": "FLEX Test # 1 (20CAL08)",
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": null,
+    "table_values": [
+     {
+      "field": "FLEX Test #",
+      "raw_value": "1",
+      "raw_unit": null
+     },
+     {
+      "field": "FLEX Identifier",
+      "raw_value": "20CAL08",
+      "raw_unit": null
+     },
+     {
+      "field": "Test Date",
+      "raw_value": "3/5/2009",
+      "raw_unit": null
+     },
+     {
+      "field": "Test GMT",
+      "raw_value": "17:22:03",
+      "raw_unit": null
+     },
+     {
+      "field": "Fuel",
+      "raw_value": "Methanol",
+      "raw_unit": null
+     },
+     {
+      "field": "Ambient pressure; mmHg",
+      "raw_value": "757.7",
+      "raw_unit": "mmHg"
+     },
+     {
+      "field": "O initial ambient composition; mole fraction",
+      "raw_value": "0.21",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "N initial ambient composition; mole fraction",
+      "raw_value": "0.79",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "CO initial ambient composition; mole fraction",
+      "raw_value": "0",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "He initial ambient composition; mole fraction",
+      "raw_value": "0",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "Droplet initial diameter; mm",
+      "raw_value": "1.69",
+      "raw_unit": "mm"
+     },
+     {
+      "field": "Visible flame extinction diameter; mm",
+      "raw_value": "0.89",
+      "raw_unit": "mm"
+     },
+     {
+      "field": "Burning rate; mm",
+      "raw_value": "0.52",
+      "raw_unit": null
+     },
+     {
+      "field": "Burn time; s",
+      "raw_value": "4.3",
+      "raw_unit": "s"
+     },
+     {
+      "field": "Test end",
+      "raw_value": "Disruption",
+      "raw_unit": null
+     }
+    ],
+    "verified": true,
+    "verification_note": "Row parsed from the original PSI-69 experimental table CSV (sha256 in sources.jsonl); raw values copied without change."
+   },
+   "source_metadata": {
+    "id": "src_psi69_experimental_table",
+    "data_revision": "psi-20261115-r2",
+    "title": "PSI-69 Experimental table, FLEX (CSV)",
+    "kind": "experimental_table",
+    "canonical_url": "https://doi.org/10.60555/mbq8-0451",
+    "doi": "10.60555/mbq8-0451",
+    "publication_date": "2016-07-31",
+    "retrieved_at": "2026-11-14T14:25:21Z",
+    "license": "CC0-1.0",
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "37c88ce8ae9391b7544ff630a45ce87543d04d317cdbfbed104fe7d5c27e1b96"
+   },
+   "investigation_ids": [
+    "inv_psi69_flex"
+   ],
+   "run_ids": [
+    "run_psi69_20cal08"
+   ],
+   "normalized_facts": [
+    {
+     "field": "material_id",
+     "quantity": null,
+     "text_value": "mat_methanol",
+     "evidence_ids": [
+      "ev_psi69_20cal08"
+     ]
+    },
+    {
+     "field": "terminal_outcome.category",
+     "quantity": null,
+     "text_value": "disruption",
+     "evidence_ids": [
+      "ev_psi69_20cal08"
+     ]
+    },
+    {
+     "field": "conditions.oxygen_fraction",
+     "quantity": {
+      "value": 0.21,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.21",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal08"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal08"
+     ]
+    },
+    {
+     "field": "conditions.nitrogen_fraction",
+     "quantity": {
+      "value": 0.79,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.79",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal08"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal08"
+     ]
+    },
+    {
+     "field": "conditions.co2_fraction",
+     "quantity": {
+      "value": 0.0,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal08"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal08"
+     ]
+    },
+    {
+     "field": "conditions.helium_fraction",
+     "quantity": {
+      "value": 0.0,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal08"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal08"
+     ]
+    },
+    {
+     "field": "conditions.pressure",
+     "quantity": {
+      "value": 101018.3726299,
+      "unit": "Pa",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "757.7",
+      "raw_unit": "mmHg",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal08"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal08"
+     ]
+    },
+    {
+     "field": "metrics.burn_duration",
+     "quantity": {
+      "value": 4.3,
+      "unit": "s",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "4.3",
+      "raw_unit": "s",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal08"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal08"
+     ]
+    },
+    {
+     "field": "metrics.visible_extinction_diameter",
+     "quantity": {
+      "value": 0.0008900000000000001,
+      "unit": "m",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.89",
+      "raw_unit": "mm",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal08"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal08"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_psi69_20cal10",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_psi69_experimental_table",
+    "kind": "table_row",
+    "locator": {
+     "page": null,
+     "section": null,
+     "row_key": "FLEX Test # 2 (20CAL10)",
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": null,
+    "table_values": [
+     {
+      "field": "FLEX Test #",
+      "raw_value": "2",
+      "raw_unit": null
+     },
+     {
+      "field": "FLEX Identifier",
+      "raw_value": "20CAL10",
+      "raw_unit": null
+     },
+     {
+      "field": "Test Date",
+      "raw_value": "3/5/2009",
+      "raw_unit": null
+     },
+     {
+      "field": "Test GMT",
+      "raw_value": "19:20:06",
+      "raw_unit": null
+     },
+     {
+      "field": "Fuel",
+      "raw_value": "Methanol",
+      "raw_unit": null
+     },
+     {
+      "field": "Ambient pressure; mmHg",
+      "raw_value": "762",
+      "raw_unit": "mmHg"
+     },
+     {
+      "field": "O initial ambient composition; mole fraction",
+      "raw_value": "0.21",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "N initial ambient composition; mole fraction",
+      "raw_value": "0.79",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "CO initial ambient composition; mole fraction",
+      "raw_value": "0",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "He initial ambient composition; mole fraction",
+      "raw_value": "0",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "Droplet initial diameter; mm",
+      "raw_value": "1.86",
+      "raw_unit": "mm"
+     },
+     {
+      "field": "Visible flame extinction diameter; mm",
+      "raw_value": "0.94",
+      "raw_unit": "mm"
+     },
+     {
+      "field": "Burning rate; mm",
+      "raw_value": "0.6",
+      "raw_unit": null
+     },
+     {
+      "field": "Burn time; s",
+      "raw_value": "5",
+      "raw_unit": "s"
+     },
+     {
+      "field": "Test end",
+      "raw_value": "Extinction",
+      "raw_unit": null
+     }
+    ],
+    "verified": true,
+    "verification_note": "Row parsed from the original PSI-69 experimental table CSV (sha256 in sources.jsonl); raw values copied without change."
+   },
+   "source_metadata": {
+    "id": "src_psi69_experimental_table",
+    "data_revision": "psi-20261115-r2",
+    "title": "PSI-69 Experimental table, FLEX (CSV)",
+    "kind": "experimental_table",
+    "canonical_url": "https://doi.org/10.60555/mbq8-0451",
+    "doi": "10.60555/mbq8-0451",
+    "publication_date": "2016-07-31",
+    "retrieved_at": "2026-11-14T14:25:21Z",
+    "license": "CC0-1.0",
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "37c88ce8ae9391b7544ff630a45ce87543d04d317cdbfbed104fe7d5c27e1b96"
+   },
+   "investigation_ids": [
+    "inv_psi69_flex"
+   ],
+   "run_ids": [
+    "run_psi69_20cal10"
+   ],
+   "normalized_facts": [
+    {
+     "field": "material_id",
+     "quantity": null,
+     "text_value": "mat_methanol",
+     "evidence_ids": [
+      "ev_psi69_20cal10"
+     ]
+    },
+    {
+     "field": "terminal_outcome.category",
+     "quantity": null,
+     "text_value": "extinction",
+     "evidence_ids": [
+      "ev_psi69_20cal10"
+     ]
+    },
+    {
+     "field": "conditions.oxygen_fraction",
+     "quantity": {
+      "value": 0.21,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.21",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal10"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal10"
+     ]
+    },
+    {
+     "field": "conditions.nitrogen_fraction",
+     "quantity": {
+      "value": 0.79,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.79",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal10"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal10"
+     ]
+    },
+    {
+     "field": "conditions.co2_fraction",
+     "quantity": {
+      "value": 0.0,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal10"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal10"
+     ]
+    },
+    {
+     "field": "conditions.helium_fraction",
+     "quantity": {
+      "value": 0.0,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal10"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal10"
+     ]
+    },
+    {
+     "field": "conditions.pressure",
+     "quantity": {
+      "value": 101591.658894,
+      "unit": "Pa",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "762",
+      "raw_unit": "mmHg",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal10"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal10"
+     ]
+    },
+    {
+     "field": "metrics.burn_duration",
+     "quantity": {
+      "value": 5.0,
+      "unit": "s",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "5",
+      "raw_unit": "s",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal10"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal10"
+     ]
+    },
+    {
+     "field": "metrics.visible_extinction_diameter",
+     "quantity": {
+      "value": 0.00094,
+      "unit": "m",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.94",
+      "raw_unit": "mm",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal10"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal10"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_psi69_20cal12",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_psi69_experimental_table",
+    "kind": "table_row",
+    "locator": {
+     "page": null,
+     "section": null,
+     "row_key": "FLEX Test # 3 (20CAL12)",
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": null,
+    "table_values": [
+     {
+      "field": "FLEX Test #",
+      "raw_value": "3",
+      "raw_unit": null
+     },
+     {
+      "field": "FLEX Identifier",
+      "raw_value": "20CAL12",
+      "raw_unit": null
+     },
+     {
+      "field": "Test Date",
+      "raw_value": "3/5/2009",
+      "raw_unit": null
+     },
+     {
+      "field": "Test GMT",
+      "raw_value": "21:17:46",
+      "raw_unit": null
+     },
+     {
+      "field": "Fuel",
+      "raw_value": "Methanol",
+      "raw_unit": null
+     },
+     {
+      "field": "Ambient pressure; mmHg",
+      "raw_value": "764.2",
+      "raw_unit": "mmHg"
+     },
+     {
+      "field": "O initial ambient composition; mole fraction",
+      "raw_value": "0.21",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "N initial ambient composition; mole fraction",
+      "raw_value": "0.79",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "CO initial ambient composition; mole fraction",
+      "raw_value": "0",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "He initial ambient composition; mole fraction",
+      "raw_value": "0",
+      "raw_unit": "mole fraction"
+     },
+     {
+      "field": "Droplet initial diameter; mm",
+      "raw_value": "1.61",
+      "raw_unit": "mm"
+     },
+     {
+      "field": "Visible flame extinction diameter; mm",
+      "raw_value": "0.92",
+      "raw_unit": "mm"
+     },
+     {
+      "field": "Burning rate; mm",
+      "raw_value": "0.58",
+      "raw_unit": null
+     },
+     {
+      "field": "Burn time; s",
+      "raw_value": "3.2",
+      "raw_unit": "s"
+     },
+     {
+      "field": "Test end",
+      "raw_value": "Extinction",
+      "raw_unit": null
+     }
+    ],
+    "verified": true,
+    "verification_note": "Row parsed from the original PSI-69 experimental table CSV (sha256 in sources.jsonl); raw values copied without change."
+   },
+   "source_metadata": {
+    "id": "src_psi69_experimental_table",
+    "data_revision": "psi-20261115-r2",
+    "title": "PSI-69 Experimental table, FLEX (CSV)",
+    "kind": "experimental_table",
+    "canonical_url": "https://doi.org/10.60555/mbq8-0451",
+    "doi": "10.60555/mbq8-0451",
+    "publication_date": "2016-07-31",
+    "retrieved_at": "2026-11-14T14:25:21Z",
+    "license": "CC0-1.0",
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "37c88ce8ae9391b7544ff630a45ce87543d04d317cdbfbed104fe7d5c27e1b96"
+   },
+   "investigation_ids": [
+    "inv_psi69_flex"
+   ],
+   "run_ids": [
+    "run_psi69_20cal12"
+   ],
+   "normalized_facts": [
+    {
+     "field": "material_id",
+     "quantity": null,
+     "text_value": "mat_methanol",
+     "evidence_ids": [
+      "ev_psi69_20cal12"
+     ]
+    },
+    {
+     "field": "terminal_outcome.category",
+     "quantity": null,
+     "text_value": "extinction",
+     "evidence_ids": [
+      "ev_psi69_20cal12"
+     ]
+    },
+    {
+     "field": "conditions.oxygen_fraction",
+     "quantity": {
+      "value": 0.21,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.21",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal12"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal12"
+     ]
+    },
+    {
+     "field": "conditions.nitrogen_fraction",
+     "quantity": {
+      "value": 0.79,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.79",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal12"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal12"
+     ]
+    },
+    {
+     "field": "conditions.co2_fraction",
+     "quantity": {
+      "value": 0.0,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal12"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal12"
+     ]
+    },
+    {
+     "field": "conditions.helium_fraction",
+     "quantity": {
+      "value": 0.0,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0",
+      "raw_unit": "mole fraction",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal12"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal12"
+     ]
+    },
+    {
+     "field": "conditions.pressure",
+     "quantity": {
+      "value": 101884.9681454,
+      "unit": "Pa",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "764.2",
+      "raw_unit": "mmHg",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal12"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal12"
+     ]
+    },
+    {
+     "field": "metrics.burn_duration",
+     "quantity": {
+      "value": 3.2,
+      "unit": "s",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "3.2",
+      "raw_unit": "s",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal12"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal12"
+     ]
+    },
+    {
+     "field": "metrics.visible_extinction_diameter",
+     "quantity": {
+      "value": 0.00092,
+      "unit": "m",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "0.92",
+      "raw_unit": "mm",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi69_20cal12"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi69_20cal12"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_psi25_b1",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_psi25_experimental_table",
+    "kind": "table_row",
+    "locator": {
+     "page": null,
+     "section": null,
+     "row_key": "Test # B1",
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": null,
+    "table_values": [
+     {
+      "field": "PI",
+      "raw_value": "Bhattacharjee",
+      "raw_unit": null
+     },
+     {
+      "field": "Test #",
+      "raw_value": "B1",
+      "raw_unit": null
+     },
+     {
+      "field": "Date",
+      "raw_value": "2/19/2014",
+      "raw_unit": null
+     },
+     {
+      "field": "GMT",
+      "raw_value": "50",
+      "raw_unit": null
+     },
+     {
+      "field": "Sample #",
+      "raw_value": "147",
+      "raw_unit": null
+     },
+     {
+      "field": "Fuel Sample Material",
+      "raw_value": "100 micron PMMA film   2 cm wide",
+      "raw_unit": null
+     },
+     {
+      "field": "Flow restrictor",
+      "raw_value": "2",
+      "raw_unit": null
+     },
+     {
+      "field": "Fan display",
+      "raw_value": "62",
+      "raw_unit": null
+     },
+     {
+      "field": "Air display",
+      "raw_value": "5",
+      "raw_unit": "cm/s"
+     },
+     {
+      "field": "Radiometer gain   (1000   250   50   10)",
+      "raw_value": "50",
+      "raw_unit": null
+     },
+     {
+      "field": "Total Frames Shot",
+      "raw_value": "57",
+      "raw_unit": null
+     },
+     {
+      "field": "Calibrated  initial O2 % by vol",
+      "raw_value": "22.2",
+      "raw_unit": "%"
+     },
+     {
+      "field": "Calibrated final O2 % by vol",
+      "raw_value": "22.2",
+      "raw_unit": "%"
+     },
+     {
+      "field": "Initial CO2 % by vol",
+      "raw_value": "0.44",
+      "raw_unit": "%"
+     },
+     {
+      "field": "Final CO2 % by vol",
+      "raw_value": "0.44",
+      "raw_unit": "%"
+     },
+     {
+      "field": "Initial CO (ppm)",
+      "raw_value": "0",
+      "raw_unit": "ppm"
+     },
+     {
+      "field": "Final CO (ppm)",
+      "raw_value": "6",
+      "raw_unit": "ppm"
+     }
+    ],
+    "verified": true,
+    "verification_note": "Row parsed from the original PSI-25 experimental table CSV (sha256 in sources.jsonl); raw values copied without change."
+   },
+   "source_metadata": {
+    "id": "src_psi25_experimental_table",
+    "data_revision": "psi-20261115-r2",
+    "title": "PSI-25 Experimental table, BASS-II (CSV)",
+    "kind": "experimental_table",
+    "canonical_url": "https://doi.org/10.60555/4qc4-de67",
+    "doi": "10.60555/4qc4-de67",
+    "publication_date": null,
+    "retrieved_at": "2026-11-14T15:09:45Z",
+    "license": "CC0-1.0",
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "71e792bf6b5fb5ea620c5dd70fbbac05515992e12aefcf5dff47312caa48c042"
+   },
+   "investigation_ids": [
+    "inv_psi25_bass2"
+   ],
+   "run_ids": [
+    "run_psi25_b1"
+   ],
+   "normalized_facts": [
+    {
+     "field": "material_id",
+     "quantity": null,
+     "text_value": "mat_pmma",
+     "evidence_ids": [
+      "ev_psi25_b1"
+     ]
+    },
+    {
+     "field": "terminal_outcome.category",
+     "quantity": null,
+     "text_value": "unknown",
+     "evidence_ids": [
+      "ev_psi25_b1"
+     ]
+    },
+    {
+     "field": "conditions.oxygen_fraction",
+     "quantity": {
+      "value": 0.222,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "22.2",
+      "raw_unit": "%",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi25_b1",
+       "ev_psi25_faq_o2"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi25_b1"
+     ]
+    },
+    {
+     "field": "conditions.airflow_speed",
+     "quantity": {
+      "value": 0.05,
+      "unit": "m_s",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "5",
+      "raw_unit": "cm/s",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi25_b1",
+       "ev_psi25_faq_air_display"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi25_b1"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_psi25_b2",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_psi25_experimental_table",
+    "kind": "table_row",
+    "locator": {
+     "page": null,
+     "section": null,
+     "row_key": "Test # B2",
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": null,
+    "table_values": [
+     {
+      "field": "PI",
+      "raw_value": "Bhattacharjee",
+      "raw_unit": null
+     },
+     {
+      "field": "Test #",
+      "raw_value": "B2",
+      "raw_unit": null
+     },
+     {
+      "field": "Date",
+      "raw_value": "2/19/2014",
+      "raw_unit": null
+     },
+     {
+      "field": "GMT",
+      "raw_value": "50",
+      "raw_unit": null
+     },
+     {
+      "field": "Sample #",
+      "raw_value": "155",
+      "raw_unit": null
+     },
+     {
+      "field": "Fuel Sample Material",
+      "raw_value": "200 micron PMMA film   2 cm wide",
+      "raw_unit": null
+     },
+     {
+      "field": "Flow restrictor",
+      "raw_value": "2",
+      "raw_unit": null
+     },
+     {
+      "field": "Fan display",
+      "raw_value": "62",
+      "raw_unit": null
+     },
+     {
+      "field": "Air display",
+      "raw_value": "5",
+      "raw_unit": "cm/s"
+     },
+     {
+      "field": "Radiometer gain   (1000   250   50   10)",
+      "raw_value": "50",
+      "raw_unit": null
+     },
+     {
+      "field": "Total Frames Shot",
+      "raw_value": "none",
+      "raw_unit": null
+     },
+     {
+      "field": "Calibrated  initial O2 % by vol",
+      "raw_value": "22.2",
+      "raw_unit": "%"
+     },
+     {
+      "field": "Calibrated final O2 % by vol",
+      "raw_value": "1.6",
+      "raw_unit": "%"
+     },
+     {
+      "field": "Initial CO2 % by vol",
+      "raw_value": "0.44",
+      "raw_unit": "%"
+     },
+     {
+      "field": "Final CO2 % by vol",
+      "raw_value": null,
+      "raw_unit": "%"
+     },
+     {
+      "field": "Initial CO (ppm)",
+      "raw_value": "6",
+      "raw_unit": "ppm"
+     },
+     {
+      "field": "Final CO (ppm)",
+      "raw_value": null,
+      "raw_unit": "ppm"
+     }
+    ],
+    "verified": true,
+    "verification_note": "Row parsed from the original PSI-25 experimental table CSV (sha256 in sources.jsonl); raw values copied without change."
+   },
+   "source_metadata": {
+    "id": "src_psi25_experimental_table",
+    "data_revision": "psi-20261115-r2",
+    "title": "PSI-25 Experimental table, BASS-II (CSV)",
+    "kind": "experimental_table",
+    "canonical_url": "https://doi.org/10.60555/4qc4-de67",
+    "doi": "10.60555/4qc4-de67",
+    "publication_date": null,
+    "retrieved_at": "2026-11-14T15:09:45Z",
+    "license": "CC0-1.0",
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "71e792bf6b5fb5ea620c5dd70fbbac05515992e12aefcf5dff47312caa48c042"
+   },
+   "investigation_ids": [
+    "inv_psi25_bass2"
+   ],
+   "run_ids": [
+    "run_psi25_b2"
+   ],
+   "normalized_facts": [
+    {
+     "field": "material_id",
+     "quantity": null,
+     "text_value": "mat_pmma",
+     "evidence_ids": [
+      "ev_psi25_b2"
+     ]
+    },
+    {
+     "field": "terminal_outcome.category",
+     "quantity": null,
+     "text_value": "unknown",
+     "evidence_ids": [
+      "ev_psi25_b2"
+     ]
+    },
+    {
+     "field": "conditions.oxygen_fraction",
+     "quantity": {
+      "value": 0.222,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "22.2",
+      "raw_unit": "%",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi25_b2",
+       "ev_psi25_faq_o2"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi25_b2"
+     ]
+    },
+    {
+     "field": "conditions.airflow_speed",
+     "quantity": {
+      "value": 0.05,
+      "unit": "m_s",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "5",
+      "raw_unit": "cm/s",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi25_b2",
+       "ev_psi25_faq_air_display"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi25_b2"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_psi25_b3",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_psi25_experimental_table",
+    "kind": "table_row",
+    "locator": {
+     "page": null,
+     "section": null,
+     "row_key": "Test # B3",
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": null,
+    "table_values": [
+     {
+      "field": "PI",
+      "raw_value": "Bhattacharjee",
+      "raw_unit": null
+     },
+     {
+      "field": "Test #",
+      "raw_value": "B3",
+      "raw_unit": null
+     },
+     {
+      "field": "Date",
+      "raw_value": "2/19/2014",
+      "raw_unit": null
+     },
+     {
+      "field": "GMT",
+      "raw_value": "50",
+      "raw_unit": null
+     },
+     {
+      "field": "Sample #",
+      "raw_value": "148",
+      "raw_unit": null
+     },
+     {
+      "field": "Fuel Sample Material",
+      "raw_value": "100 micron film   2 cm wide",
+      "raw_unit": null
+     },
+     {
+      "field": "Flow restrictor",
+      "raw_value": "2",
+      "raw_unit": null
+     },
+     {
+      "field": "Fan display",
+      "raw_value": "47",
+      "raw_unit": null
+     },
+     {
+      "field": "Air display",
+      "raw_value": "2",
+      "raw_unit": "cm/s"
+     },
+     {
+      "field": "Radiometer gain   (1000   250   50   10)",
+      "raw_value": "50",
+      "raw_unit": null
+     },
+     {
+      "field": "Total Frames Shot",
+      "raw_value": "253",
+      "raw_unit": null
+     },
+     {
+      "field": "Calibrated  initial O2 % by vol",
+      "raw_value": "22.2",
+      "raw_unit": "%"
+     },
+     {
+      "field": "Calibrated final O2 % by vol",
+      "raw_value": "21.8",
+      "raw_unit": "%"
+     },
+     {
+      "field": "Initial CO2 % by vol",
+      "raw_value": "0.43",
+      "raw_unit": "%"
+     },
+     {
+      "field": "Final CO2 % by vol",
+      "raw_value": "0.49",
+      "raw_unit": "%"
+     },
+     {
+      "field": "Initial CO (ppm)",
+      "raw_value": "12",
+      "raw_unit": "ppm"
+     },
+     {
+      "field": "Final CO (ppm)",
+      "raw_value": "19",
+      "raw_unit": "ppm"
+     }
+    ],
+    "verified": true,
+    "verification_note": "Row parsed from the original PSI-25 experimental table CSV (sha256 in sources.jsonl); raw values copied without change."
+   },
+   "source_metadata": {
+    "id": "src_psi25_experimental_table",
+    "data_revision": "psi-20261115-r2",
+    "title": "PSI-25 Experimental table, BASS-II (CSV)",
+    "kind": "experimental_table",
+    "canonical_url": "https://doi.org/10.60555/4qc4-de67",
+    "doi": "10.60555/4qc4-de67",
+    "publication_date": null,
+    "retrieved_at": "2026-11-14T15:09:45Z",
+    "license": "CC0-1.0",
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "71e792bf6b5fb5ea620c5dd70fbbac05515992e12aefcf5dff47312caa48c042"
+   },
+   "investigation_ids": [
+    "inv_psi25_bass2"
+   ],
+   "run_ids": [
+    "run_psi25_b3"
+   ],
+   "normalized_facts": [
+    {
+     "field": "material_id",
+     "quantity": null,
+     "text_value": "mat_pmma",
+     "evidence_ids": [
+      "ev_psi25_b3"
+     ]
+    },
+    {
+     "field": "terminal_outcome.category",
+     "quantity": null,
+     "text_value": "unknown",
+     "evidence_ids": [
+      "ev_psi25_b3"
+     ]
+    },
+    {
+     "field": "conditions.oxygen_fraction",
+     "quantity": {
+      "value": 0.222,
+      "unit": "fraction",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "22.2",
+      "raw_unit": "%",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi25_b3",
+       "ev_psi25_faq_o2"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi25_b3"
+     ]
+    },
+    {
+     "field": "conditions.airflow_speed",
+     "quantity": {
+      "value": 0.02,
+      "unit": "m_s",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "2",
+      "raw_unit": "cm/s",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi25_b3",
+       "ev_psi25_faq_air_display"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi25_b3"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_psi101_kapton_51",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_psi101_experimental_table",
+    "kind": "table_row",
+    "locator": {
+     "page": null,
+     "section": null,
+     "row_key": "Kapton test 51",
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": null,
+    "table_values": [
+     {
+      "field": "Sample Type",
+      "raw_value": "Kapton",
+      "raw_unit": null
+     },
+     {
+      "field": "SAME Test #",
+      "raw_value": "51",
+      "raw_unit": null
+     },
+     {
+      "field": "Description",
+      "raw_value": "B.L. new formula",
+      "raw_unit": null
+     },
+     {
+      "field": "Date",
+      "raw_value": "21-Jul",
+      "raw_unit": null
+     },
+     {
+      "field": "Inlet velocity (cm/s)",
+      "raw_value": "8.1",
+      "raw_unit": "cm/s"
+     },
+     {
+      "field": "Rt/R0",
+      "raw_value": "1.38",
+      "raw_unit": null
+     },
+     {
+      "field": "Duration (sec)",
+      "raw_value": "60",
+      "raw_unit": "s"
+     },
+     {
+      "field": "Primary aging time (sec)",
+      "raw_value": "11",
+      "raw_unit": "s"
+     },
+     {
+      "field": "Primary mixing time (sec)",
+      "raw_value": "8",
+      "raw_unit": "s"
+     },
+     {
+      "field": "Net aging time (sec)",
+      "raw_value": "38",
+      "raw_unit": "s"
+     }
+    ],
+    "verified": true,
+    "verification_note": "Row parsed from the original PSI-101 experimental table CSV (sha256 in sources.jsonl); raw values copied without change."
+   },
+   "source_metadata": {
+    "id": "src_psi101_experimental_table",
+    "data_revision": "psi-20261115-r2",
+    "title": "PSI-101 Experimental table, SAME-R (CSV)",
+    "kind": "experimental_table",
+    "canonical_url": "https://doi.org/10.60555/2np7-jv14",
+    "doi": "10.60555/2np7-jv14",
+    "publication_date": null,
+    "retrieved_at": "2026-11-14T14:36:58Z",
+    "license": "CC0-1.0",
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "87164b7dc9168a4273c159f7a9f23699afbd06ad97b77974377e79b9bf8a3bef"
+   },
+   "investigation_ids": [
+    "inv_psi101_samer"
+   ],
+   "run_ids": [
+    "run_psi101_kapton_51"
+   ],
+   "normalized_facts": [
+    {
+     "field": "material_id",
+     "quantity": null,
+     "text_value": "mat_kapton",
+     "evidence_ids": [
+      "ev_psi101_kapton_51"
+     ]
+    },
+    {
+     "field": "terminal_outcome.category",
+     "quantity": null,
+     "text_value": "smoke_measurement",
+     "evidence_ids": [
+      "ev_psi101_kapton_51"
+     ]
+    },
+    {
+     "field": "conditions.airflow_speed",
+     "quantity": {
+      "value": 0.081,
+      "unit": "m_s",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "8.1",
+      "raw_unit": "cm/s",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi101_kapton_51"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi101_kapton_51"
+     ]
+    }
+   ]
+  },
+  {
+   "evidence": {
+    "id": "ev_psi101_kapton_51a",
+    "data_revision": "psi-20261115-r2",
+    "source_id": "src_psi101_experimental_table",
+    "kind": "table_row",
+    "locator": {
+     "page": null,
+     "section": null,
+     "row_key": "Kapton test 51a",
+     "start_s": null,
+     "end_s": null
+    },
+    "excerpt": null,
+    "table_values": [
+     {
+      "field": "Sample Type",
+      "raw_value": "Kapton",
+      "raw_unit": null
+     },
+     {
+      "field": "SAME Test #",
+      "raw_value": "51a",
+      "raw_unit": null
+     },
+     {
+      "field": "Description",
+      "raw_value": "B.L. new formula",
+      "raw_unit": null
+     },
+     {
+      "field": "Date",
+      "raw_value": "22-Jul",
+      "raw_unit": null
+     },
+     {
+      "field": "Inlet velocity (cm/s)",
+      "raw_value": "8.1",
+      "raw_unit": "cm/s"
+     },
+     {
+      "field": "Rt/R0",
+      "raw_value": "1.38",
+      "raw_unit": null
+     },
+     {
+      "field": "Duration (sec)",
+      "raw_value": "60",
+      "raw_unit": "s"
+     },
+     {
+      "field": "Primary aging time (sec)",
+      "raw_value": null,
+      "raw_unit": "s"
+     },
+     {
+      "field": "Primary mixing time (sec)",
+      "raw_value": null,
+      "raw_unit": "s"
+     },
+     {
+      "field": "Net aging time (sec)",
+      "raw_value": "261",
+      "raw_unit": "s"
+     }
+    ],
+    "verified": true,
+    "verification_note": "Row parsed from the original PSI-101 experimental table CSV (sha256 in sources.jsonl); raw values copied without change."
+   },
+   "source_metadata": {
+    "id": "src_psi101_experimental_table",
+    "data_revision": "psi-20261115-r2",
+    "title": "PSI-101 Experimental table, SAME-R (CSV)",
+    "kind": "experimental_table",
+    "canonical_url": "https://doi.org/10.60555/2np7-jv14",
+    "doi": "10.60555/2np7-jv14",
+    "publication_date": null,
+    "retrieved_at": "2026-11-14T14:36:58Z",
+    "license": "CC0-1.0",
+    "availability": "available",
+    "local_asset_id": null,
+    "sha256": "87164b7dc9168a4273c159f7a9f23699afbd06ad97b77974377e79b9bf8a3bef"
+   },
+   "investigation_ids": [
+    "inv_psi101_samer"
+   ],
+   "run_ids": [
+    "run_psi101_kapton_51a"
+   ],
+   "normalized_facts": [
+    {
+     "field": "material_id",
+     "quantity": null,
+     "text_value": "mat_kapton",
+     "evidence_ids": [
+      "ev_psi101_kapton_51a"
+     ]
+    },
+    {
+     "field": "terminal_outcome.category",
+     "quantity": null,
+     "text_value": "smoke_measurement",
+     "evidence_ids": [
+      "ev_psi101_kapton_51a"
+     ]
+    },
+    {
+     "field": "conditions.airflow_speed",
+     "quantity": {
+      "value": 0.081,
+      "unit": "m_s",
+      "status": "reported",
+      "qualifier": "eq",
+      "raw_value": "8.1",
+      "raw_unit": "cm/s",
+      "uncertainty": null,
+      "evidence_ids": [
+       "ev_psi101_kapton_51a"
+      ],
+      "derivation": null
+     },
+     "text_value": null,
+     "evidence_ids": [
+      "ev_psi101_kapton_51a"
+     ]
+    }
+   ]
+  }
+ ],
+ "allowed_evidence_ids": [
+  "ev_poster_p13_quench",
+  "ev_psi69_196f001",
+  "ev_psi69_192f001",
+  "ev_poster_p18_o2_margin",
+  "ev_psi69_metadata_cool_flames",
+  "ev_same2_p8_lowflow",
+  "ev_same2_p12_detection",
+  "ev_poster_p18_boundary",
+  "ev_poster_p18_blowoff_o2",
+  "ev_poster_p20_sibal",
+  "ev_psi69_304f002",
+  "ev_psi69_c07m101",
+  "ev_psi69_20cal08",
+  "ev_psi69_20cal10",
+  "ev_psi69_20cal12",
+  "ev_psi25_b1",
+  "ev_psi25_b2",
+  "ev_psi25_b3",
+  "ev_psi101_kapton_51",
+  "ev_psi101_kapton_51a"
+ ],
+ "allowed_source_ids": [
+  "src_ntrs_20130000422",
+  "src_ntrs_20160000593",
+  "src_psi101_experimental_table",
+  "src_psi25_experimental_table",
+  "src_psi69_experimental_table",
+  "src_psi69_repository"
+ ],
+ "selected_claims": [
+  {
+   "id": "clm_bass2_film_quench_blowoff",
+   "data_revision": "psi-20261115-r2",
+   "investigation_ids": [
+    "inv_psi25_bass2"
+   ],
+   "kind": "observation",
+   "text": "A 0.1 mm PMMA film in opposed flow was extinguished in two ways: radiative quenching when the flow dropped below about 2 cm/s, and blowoff when it rose above about 40 cm/s.",
+   "supporting_evidence_ids": [
+    "ev_poster_p13_quench"
+   ],
+   "contradicting_evidence_ids": [],
+   "applicable_run_ids": [],
+   "limitations": [
+    "Thin film in opposed flow only; thresholds read from a poster summary."
+   ],
+   "review_status": "reviewed"
+  },
+  {
+   "id": "clm_flex_lunar_like_atmosphere",
+   "data_revision": "psi-20261115-r2",
+   "investigation_ids": [
+    "inv_psi69_flex"
+   ],
+   "kind": "observation",
+   "text": "In the 17 FLEX tests at 30-34 % O2 and about 0.7 atm (close to the planned Moon-base atmosphere), 15 droplets ended in disruption and 2 burned to completion; none extinguished on its own.",
+   "supporting_evidence_ids": [
+    "ev_psi69_196f001",
+    "ev_psi69_192f001",
+    "ev_psi69_192f002",
+    "ev_psi69_192f003",
+    "ev_psi69_196f002",
+    "ev_psi69_196f003",
+    "ev_psi69_191r001",
+    "ev_psi69_191f001",
+    "ev_psi69_195f001",
+    "ev_psi69_195f002",
+    "ev_psi69_220r001",
+    "ev_psi69_220r002",
+    "ev_psi69_224f001",
+    "ev_psi69_219r001",
+    "ev_psi69_219f001",
+    "ev_psi69_223f001",
+    "ev_psi69_223f002"
+   ],
+   "contradicting_evidence_ids": [],
+   "applicable_run_ids": [
+    "run_psi69_196f001",
+    "run_psi69_192f001",
+    "run_psi69_192f002",
+    "run_psi69_192f003",
+    "run_psi69_196f002",
+    "run_psi69_196f003",
+    "run_psi69_191r001",
+    "run_psi69_191f001",
+    "run_psi69_195f001",
+    "run_psi69_195f002",
+    "run_psi69_220r001",
+    "run_psi69_220r002",
+    "run_psi69_224f001",
+    "run_psi69_219r001",
+    "run_psi69_219f001",
+    "run_psi69_223f001",
+    "run_psi69_223f002"
+   ],
+   "limitations": [
+    "Liquid fuel droplets (methanol, heptane) in quiescent microgravity, not cabin materials.",
+    "Lunar gravity is not represented; disruption is not extinguishment."
+   ],
+   "review_status": "reviewed"
+  },
+  {
+   "id": "clm_bass2_o2_margin",
+   "data_revision": "psi-20261115-r2",
+   "investigation_ids": [
+    "inv_psi25_bass2"
+   ],
+   "kind": "observation",
+   "text": "A 1/4-inch PMMA rod kept spreading steadily in microgravity at 13.6 % O2, while in normal gravity the flame blew off at 16 % O2: a negative oxygen margin of safety of 2.4 % O2. Normal-gravity flammability limits should be de-rated by at least that much.",
+   "supporting_evidence_ids": [
+    "ev_poster_p18_o2_margin"
+   ],
+   "contradicting_evidence_ids": [],
+   "applicable_run_ids": [],
+   "limitations": [
+    "One material and rod size, concurrent (stagnation-point) flow.",
+    "Microgravity on the ISS; no partial-gravity data."
+   ],
+   "review_status": "reviewed"
+  },
+  {
+   "id": "clm_flex_cool_flames",
+   "data_revision": "psi-20261115-r2",
+   "investigation_ids": [
+    "inv_psi69_flex"
+   ],
+   "kind": "observation",
+   "text": "FLEX observed 'cool flames': low-temperature combustion processes in microgravity.",
+   "supporting_evidence_ids": [
+    "ev_psi69_metadata_cool_flames"
+   ],
+   "contradicting_evidence_ids": [],
+   "applicable_run_ids": [],
+   "limitations": [
+    "Stated in the PSI-69 summary; the detailed evidence is in the FLEX publications.",
+    "Whether burning continues after the visible flame goes out needs a FLEX publication as evidence."
+   ],
+   "review_status": "reviewed"
+  },
+  {
+   "id": "clm_samer_detector_design",
+   "data_revision": "psi-20261115-r2",
+   "investigation_ids": [
+    "inv_psi101_samer"
+   ],
+   "kind": "synthesis",
+   "text": "Because microgravity smoke can stay in still air and particles grow at low flow, spacecraft smoke detectors should be designed and tested for larger particles than in flowing air.",
+   "supporting_evidence_ids": [
+    "ev_same2_p8_lowflow",
+    "ev_same2_p12_detection"
+   ],
+   "contradicting_evidence_ids": [],
+   "applicable_run_ids": [],
+   "limitations": [
+    "Design implication drawn by the investigators, not a detector test result."
+   ],
+   "review_status": "reviewed"
+  },
+  {
+   "id": "clm_bass2_boundary_low_flow",
+   "data_revision": "psi-20261115-r2",
+   "investigation_ids": [
+    "inv_psi25_bass2"
+   ],
+   "kind": "observation",
+   "text": "For PMMA rods the flammability boundary has its minimum at very low airflow, on the order of diffusive flows, and the flow needed to blow the flame off becomes slower as oxygen decreases.",
+   "supporting_evidence_ids": [
+    "ev_poster_p18_boundary",
+    "ev_poster_p18_blowoff_o2"
+   ],
+   "contradicting_evidence_ids": [],
+   "applicable_run_ids": [],
+   "limitations": [
+    "PMMA rods in concurrent flow; oxygen at or below cabin air."
+   ],
+   "review_status": "reviewed"
+  },
+  {
+   "id": "clm_bass2_sibal_quenching",
+   "data_revision": "psi-20261115-r2",
+   "investigation_ids": [
+    "inv_psi25_bass2"
+   ],
+   "kind": "observation",
+   "text": "Of 29 tests on SIBAL cotton-fiberglass fabric and a PMMA spherical section in purely forced concurrent flow, 6 ended in quenching while the flow was reduced and 1 in blowoff while it was increased.",
+   "supporting_evidence_ids": [
+    "ev_poster_p20_sibal"
+   ],
+   "contradicting_evidence_ids": [],
+   "applicable_run_ids": [],
+   "limitations": [
+    "Counts from the investigator summary; per-test outcomes are not in the PSI-25 table."
+   ],
+   "review_status": "reviewed"
+  },
+  {
+   "id": "clm_flex_lowest_o2_tested",
+   "data_revision": "psi-20261115-r2",
+   "investigation_ids": [
+    "inv_psi69_flex"
+   ],
+   "kind": "synthesis",
+   "text": "Lowest initial O2 among FLEX tests in the table: methanol N2 only 0.12; methanol with CO2 0.14; methanol with He 0.13; heptane N2 only 0.13; heptane with CO2 0.17; heptane with He 0.16. Adding CO2 or helium raised the lowest oxygen level at which tests were run.",
+   "supporting_evidence_ids": [
+    "ev_psi69_304f002",
+    "ev_psi69_c07m101",
+    "ev_psi69_h08m101",
+    "ev_psi69_179f001",
+    "ev_psi69_c13h102",
+    "ev_psi69_h05h103"
+   ],
+   "contradicting_evidence_ids": [],
+   "applicable_run_ids": [
+    "run_psi69_304f002",
+    "run_psi69_c07m101",
+    "run_psi69_h08m101",
+    "run_psi69_179f001",
+    "run_psi69_c13h102",
+    "run_psi69_h05h103"
+   ],
+   "limitations": [
+    "These are the lowest levels tested, not measured flammability limits.",
+    "Test levels were chosen by the investigators, so the comparison is indicative only."
+   ],
+   "review_status": "reviewed"
+  }
+ ],
+ "coverage": {
+  "matching_investigation_ids": [
+   "inv_psi69_flex",
+   "inv_psi25_bass2",
+   "inv_psi101_samer"
+  ],
+  "matching_run_ids": [
+   "run_psi101_kapton_101",
+   "run_psi101_kapton_101a",
+   "run_psi101_kapton_102",
+   "run_psi101_kapton_102a",
+   "run_psi101_kapton_108",
+   "run_psi101_kapton_108a",
+   "run_psi101_kapton_114",
+   "run_psi101_kapton_51",
+   "run_psi101_kapton_51a",
+   "run_psi101_kapton_61",
+   "run_psi101_kapton_61a",
+   "run_psi101_kapton_62",
+   "run_psi101_kapton_62a",
+   "run_psi101_kapton_70",
+   "run_psi101_kapton_73",
+   "run_psi101_kapton_73a",
+   "run_psi101_kapton_75",
+   "run_psi101_kapton_75a",
+   "run_psi101_kapton_77",
+   "run_psi101_kapton_77a",
+   "run_psi101_kapton_85",
+   "run_psi101_kapton_85a",
+   "run_psi101_kapton_90",
+   "run_psi101_kapton_90a",
+   "run_psi101_kapton_92",
+   "run_psi101_kapton_93",
+   "run_psi101_kapton_93a",
+   "run_psi101_kapton_94",
+   "run_psi101_kapton_94a",
+   "run_psi101_lampwick_106",
+   "run_psi101_lampwick_106a",
+   "run_psi101_lampwick_110",
+   "run_psi101_lampwick_49",
+   "run_psi101_lampwick_54",
+   "run_psi101_lampwick_55",
+   "run_psi101_lampwick_55a",
+   "run_psi101_lampwick_57",
+   "run_psi101_lampwick_68",
+   "run_psi101_lampwick_78",
+   "run_psi101_lampwick_78a",
+   "run_psi101_lampwick_80",
+   "run_psi101_lampwick_80a",
+   "run_psi101_lampwick_82",
+   "run_psi101_lampwick_82a",
+   "run_psi101_lampwick_88",
+   "run_psi101_lampwick_96",
+   "run_psi101_lampwick_96a",
+   "run_psi101_lampwick_98",
+   "run_psi101_lampwick_98a",
+   "run_psi101_pyrell_107",
+   "run_psi101_pyrell_107a",
+   "run_psi101_pyrell_113",
+   "run_psi101_pyrell_52",
+   "run_psi101_pyrell_63",
+   "run_psi101_pyrell_63a",
+   "run_psi101_pyrell_64",
+   "run_psi101_pyrell_64a",
+   "run_psi101_pyrell_71",
+   "run_psi101_pyrell_74",
+   "run_psi101_pyrell_74a",
+   "run_psi101_pyrell_76",
+   "run_psi101_pyrell_76a",
+   "run_psi101_pyrell_84",
+   "run_psi101_pyrell_84a",
+   "run_psi101_pyrell_87",
+   "run_psi101_pyrell_95",
+   "run_psi101_pyrell_95a",
+   "run_psi101_pyrell_97",
+   "run_psi101_pyrell_97a",
+   "run_psi101_silicone_103",
+   "run_psi101_silicone_103a",
+   "run_psi101_silicone_104",
+   "run_psi101_silicone_104a",
+   "run_psi101_silicone_109",
+   "run_psi101_silicone_48",
+   "run_psi101_silicone_53",
+   "run_psi101_silicone_59",
+   "run_psi101_silicone_59a",
+   "run_psi101_silicone_60",
+   "run_psi101_silicone_60a",
+   "run_psi101_silicone_65",
+   "run_psi101_silicone_65a",
+   "run_psi101_silicone_66",
+   "run_psi101_silicone_66a",
+   "run_psi101_silicone_67",
+   "run_psi101_silicone_72",
+   "run_psi101_silicone_86",
+   "run_psi101_silicone_86a",
+   "run_psi101_silicone_91",
+   "run_psi101_silicone_99",
+   "run_psi101_silicone_99a",
+   "run_psi101_teflon_100",
+   "run_psi101_teflon_100a",
+   "run_psi101_teflon_105",
+   "run_psi101_teflon_105a",
+   "run_psi101_teflon_111",
+   "run_psi101_teflon_50",
+   "run_psi101_teflon_56",
+   "run_psi101_teflon_58",
+   "run_psi101_teflon_58a",
+   "run_psi101_teflon_69",
+   "run_psi101_teflon_79",
+   "run_psi101_teflon_79a",
+   "run_psi101_teflon_81",
+   "run_psi101_teflon_81a",
+   "run_psi101_teflon_83",
+   "run_psi101_teflon_83a",
+   "run_psi101_teflon_89",
+   "run_psi25_b1",
+   "run_psi25_b10",
+   "run_psi25_b11",
+   "run_psi25_b12",
+   "run_psi25_b13",
+   "run_psi25_b14",
+   "run_psi25_b15",
+   "run_psi25_b16",
+   "run_psi25_b17",
+   "run_psi25_b18",
+   "run_psi25_b19",
+   "run_psi25_b2",
+   "run_psi25_b20",
+   "run_psi25_b21",
+   "run_psi25_b22",
+   "run_psi25_b3",
+   "run_psi25_b4",
+   "run_psi25_b5",
+   "run_psi25_b6",
+   "run_psi25_b7",
+   "run_psi25_b8",
+   "run_psi25_b9",
+   "run_psi25_f1",
+   "run_psi25_f2",
+   "run_psi25_f3",
+   "run_psi25_f4",
+   "run_psi25_m1",
+   "run_psi25_m10",
+   "run_psi25_m11",
+   "run_psi25_m12",
+   "run_psi25_m13",
+   "run_psi25_m14",
+   "run_psi25_m15",
+   "run_psi25_m16",
+   "run_psi25_m17",
+   "run_psi25_m18",
+   "run_psi25_m19",
+   "run_psi25_m2",
+   "run_psi25_m20",
+   "run_psi25_m3",
+   "run_psi25_m4",
+   "run_psi25_m5",
+   "run_psi25_m6",
+   "run_psi25_m7",
+   "run_psi25_m8",
+   "run_psi25_m9",
+   "run_psi25_o1",
+   "run_psi25_o10",
+   "run_psi25_o11",
+   "run_psi25_o12",
+   "run_psi25_o13a",
+   "run_psi25_o13b",
+   "run_psi25_o14",
+   "run_psi25_o15a",
+   "run_psi25_o15b",
+   "run_psi25_o16",
+   "run_psi25_o17",
+   "run_psi25_o18",
+   "run_psi25_o19",
+   "run_psi25_o2",
+   "run_psi25_o20",
+   "run_psi25_o21",
+   "run_psi25_o22",
+   "run_psi25_o3a",
+   "run_psi25_o3b",
+   "run_psi25_o4",
+   "run_psi25_o5a",
+   "run_psi25_o5b",
+   "run_psi25_o6",
+   "run_psi25_o7",
+   "run_psi25_o8a",
+   "run_psi25_o8b",
+   "run_psi25_o9",
+   "run_psi25_p1",
+   "run_psi25_p10",
+   "run_psi25_p12",
+   "run_psi25_p13a",
+   "run_psi25_p13b",
+   "run_psi25_p14",
+   "run_psi25_p15",
+   "run_psi25_p16",
+   "run_psi25_p17",
+   "run_psi25_p18",
+   "run_psi25_p19",
+   "run_psi25_p2",
+   "run_psi25_p20",
+   "run_psi25_p21a",
+   "run_psi25_p21b",
+   "run_psi25_p22a",
+   "run_psi25_p22b",
+   "run_psi25_p23",
+   "run_psi25_p24",
+   "run_psi25_p25",
+   "run_psi25_p3a",
+   "run_psi25_p3b",
+   "run_psi25_p4",
+   "run_psi25_p5",
+   "run_psi25_p6",
+   "run_psi25_p8",
+   "run_psi25_p9",
+   "run_psi25_t1",
+   "run_psi25_t10",
+   "run_psi25_t11",
+   "run_psi25_t12",
+   "run_psi25_t13",
+   "run_psi25_t14",
+   "run_psi25_t15",
+   "run_psi25_t16",
+   "run_psi25_t17",
+   "run_psi25_t18",
+   "run_psi25_t19",
+   "run_psi25_t2",
+   "run_psi25_t20",
+   "run_psi25_t21",
+   "run_psi25_t22",
+   "run_psi25_t23",
+   "run_psi25_t24",
+   "run_psi25_t25",
+   "run_psi25_t26",
+   "run_psi25_t27",
+   "run_psi25_t28a",
+   "run_psi25_t28b",
+   "run_psi25_t29",
+   "run_psi25_t3",
+   "run_psi25_t4",
+   "run_psi25_t5",
+   "run_psi25_t6",
+   "run_psi25_t7",
+   "run_psi25_t9",
+   "run_psi69_053f001",
+   "run_psi69_053r001",
+   "run_psi69_061f002",
+   "run_psi69_141f001",
+   "run_psi69_141r001",
+   "run_psi69_149f001",
+   "run_psi69_175f001",
+   "run_psi69_175r001",
+   "run_psi69_176f001",
+   "run_psi69_176r001",
+   "run_psi69_177f001",
+   "run_psi69_177r002",
+   "run_psi69_178f001",
+   "run_psi69_178r001",
+   "run_psi69_179f001",
+   "run_psi69_181f001",
+   "run_psi69_182f001",
+   "run_psi69_182f002",
+   "run_psi69_189f001",
+   "run_psi69_189f002",
+   "run_psi69_189r001",
+   "run_psi69_189r002",
+   "run_psi69_189r003",
+   "run_psi69_190f003",
+   "run_psi69_190r002",
+   "run_psi69_191f001",
+   "run_psi69_191r001",
+   "run_psi69_192f001",
+   "run_psi69_192f002",
+   "run_psi69_192f003",
+   "run_psi69_193r001",
+   "run_psi69_193r002",
+   "run_psi69_194f001",
+   "run_psi69_195f001",
+   "run_psi69_195f002",
+   "run_psi69_196f001",
+   "run_psi69_196f002",
+   "run_psi69_196f003",
+   "run_psi69_203f001",
+   "run_psi69_203r002",
+   "run_psi69_204f001",
+   "run_psi69_204r001",
+   "run_psi69_205f001",
+   "run_psi69_205r001",
+   "run_psi69_206f001",
+   "run_psi69_206r001",
+   "run_psi69_207f001",
+   "run_psi69_207f002",
+   "run_psi69_209f001",
+   "run_psi69_209f002",
+   "run_psi69_209f003",
+   "run_psi69_209f004",
+   "run_psi69_209f005",
+   "run_psi69_20cal08",
+   "run_psi69_20cal10",
+   "run_psi69_20cal12",
+   "run_psi69_20cal13",
+   "run_psi69_210f002",
+   "run_psi69_218f001",
+   "run_psi69_219f001",
+   "run_psi69_219r001",
+   "run_psi69_220r001",
+   "run_psi69_220r002",
+   "run_psi69_221f001",
+   "run_psi69_223f001",
+   "run_psi69_223f002",
+   "run_psi69_224f001",
+   "run_psi69_240r003",
+   "run_psi69_248f001",
+   "run_psi69_256f002",
+   "run_psi69_256f007",
+   "run_psi69_256f008",
+   "run_psi69_256f009",
+   "run_psi69_256r001",
+   "run_psi69_256r002",
+   "run_psi69_264f003",
+   "run_psi69_301f001",
+   "run_psi69_301f002",
+   "run_psi69_302f001",
+   "run_psi69_303f001",
+   "run_psi69_304f001",
+   "run_psi69_304f002",
+   "run_psi69_304r001",
+   "run_psi69_304r002",
+   "run_psi69_305f002",
+   "run_psi69_305f003",
+   "run_psi69_30cal02",
+   "run_psi69_30cal03",
+   "run_psi69_30cal06",
+   "run_psi69_30cal07",
+   "run_psi69_40cal01",
+   "run_psi69_c01h101",
+   "run_psi69_c01h201",
+   "run_psi69_c01h302",
+   "run_psi69_c01h501",
+   "run_psi69_c01h601",
+   "run_psi69_c01h701",
+   "run_psi69_c01m101",
+   "run_psi69_c01m201",
+   "run_psi69_c01m301",
+   "run_psi69_c01m501",
+   "run_psi69_c01m602",
+   "run_psi69_c01m603",
+   "run_psi69_c02h101",
+   "run_psi69_c02h201",
+   "run_psi69_c02h202",
+   "run_psi69_c02m101",
+   "run_psi69_c02m201",
+   "run_psi69_c03h101",
+   "run_psi69_c03h201",
+   "run_psi69_c03h302",
+   "run_psi69_c03h401",
+   "run_psi69_c03h501",
+   "run_psi69_c03h601",
+   "run_psi69_c03h701",
+   "run_psi69_c03m101",
+   "run_psi69_c03m201",
+   "run_psi69_c03m301",
+   "run_psi69_c03m501",
+   "run_psi69_c03m601",
+   "run_psi69_c03m701",
+   "run_psi69_c04h101",
+   "run_psi69_c04h201",
+   "run_psi69_c04m101",
+   "run_psi69_c04m201",
+   "run_psi69_c05m101",
+   "run_psi69_c05m201",
+   "run_psi69_c05m301",
+   "run_psi69_c05m401",
+   "run_psi69_c06m101",
+   "run_psi69_c06m201",
+   "run_psi69_c06m301",
+   "run_psi69_c06m401",
+   "run_psi69_c07m101",
+   "run_psi69_c07m201",
+   "run_psi69_c08h101",
+   "run_psi69_c08h201",
+   "run_psi69_c08h301",
+   "run_psi69_c08h502",
+   "run_psi69_c08h601",
+   "run_psi69_c08m101",
+   "run_psi69_c08m201",
+   "run_psi69_c08m301",
+   "run_psi69_c08m401",
+   "run_psi69_c08m501",
+   "run_psi69_c08m601",
+   "run_psi69_c09h101",
+   "run_psi69_c09h201",
+   "run_psi69_c09h501",
+   "run_psi69_c09h601",
+   "run_psi69_c09m101",
+   "run_psi69_c09m201",
+   "run_psi69_c09m301",
+   "run_psi69_c09m401",
+   "run_psi69_c09m501",
+   "run_psi69_c09m502",
+   "run_psi69_c09m601",
+   "run_psi69_c09m701",
+   "run_psi69_c10h101",
+   "run_psi69_c10h201",
+   "run_psi69_c10m102",
+   "run_psi69_c10m201",
+   "run_psi69_c10m303",
+   "run_psi69_c10m401",
+   "run_psi69_c11h101",
+   "run_psi69_c11h201",
+   "run_psi69_c11m101",
+   "run_psi69_c11m301",
+   "run_psi69_c11m401",
+   "run_psi69_c12h103",
+   "run_psi69_c12h201",
+   "run_psi69_c12m101",
+   "run_psi69_c12m201",
+   "run_psi69_c12m301",
+   "run_psi69_c12m401",
+   "run_psi69_c13h102",
+   "run_psi69_c13h201",
+   "run_psi69_c13m102",
+   "run_psi69_c13m103",
+   "run_psi69_c13m201",
+   "run_psi69_c13m301",
+   "run_psi69_c13m401",
+   "run_psi69_c14m101",
+   "run_psi69_c14m201",
+   "run_psi69_c14m301",
+   "run_psi69_c14m302",
+   "run_psi69_c15m101",
+   "run_psi69_c15m201",
+   "run_psi69_c15m301",
+   "run_psi69_c21h101",
+   "run_psi69_c21h201",
+   "run_psi69_c21h301",
+   "run_psi69_c21h302",
+   "run_psi69_c21h303",
+   "run_psi69_c21h304",
+   "run_psi69_c21h305",
+   "run_psi69_c21h401",
+   "run_psi69_c21h501",
+   "run_psi69_h01h102",
+   "run_psi69_h01m102",
+   "run_psi69_h01m104",
+   "run_psi69_h02h101",
+   "run_psi69_h02m101",
+   "run_psi69_h03h101",
+   "run_psi69_h03h201",
+   "run_psi69_h03h202",
+   "run_psi69_h03m101",
+   "run_psi69_h03m201",
+   "run_psi69_h04h101",
+   "run_psi69_h04h201",
+   "run_psi69_h04h302",
+   "run_psi69_h04h303",
+   "run_psi69_h04m101",
+   "run_psi69_h04m202",
+   "run_psi69_h05h103",
+   "run_psi69_h05m102",
+   "run_psi69_h05m202",
+   "run_psi69_h06m102",
+   "run_psi69_h06m201",
+   "run_psi69_h07m101",
+   "run_psi69_h07m202",
+   "run_psi69_h08m101",
+   "run_psi69_h10h101",
+   "run_psi69_h10m101",
+   "run_psi69_h10m102",
+   "run_psi69_h11h101",
+   "run_psi69_h11m101",
+   "run_psi69_h11m102",
+   "run_psi69_h12h101",
+   "run_psi69_h12h201",
+   "run_psi69_h12m101",
+   "run_psi69_h12m102",
+   "run_psi69_h12m201",
+   "run_psi69_h13h101",
+   "run_psi69_h13h201",
+   "run_psi69_h13m102",
+   "run_psi69_h13m201",
+   "run_psi69_h14h101",
+   "run_psi69_h14h201",
+   "run_psi69_h14m101",
+   "run_psi69_h14m201",
+   "run_psi69_h14m202",
+   "run_psi69_h15h101",
+   "run_psi69_h15h201",
+   "run_psi69_h15m102",
+   "run_psi69_h15m201",
+   "run_psi69_h19h101",
+   "run_psi69_h19h201",
+   "run_psi69_n01h101",
+   "run_psi69_n01h102",
+   "run_psi69_n01h201",
+   "run_psi69_n01h202",
+   "run_psi69_n01h301",
+   "run_psi69_n01h401",
+   "run_psi69_n01h502",
+   "run_psi69_n01h601",
+   "run_psi69_n01m101",
+   "run_psi69_n01m201",
+   "run_psi69_n02h101",
+   "run_psi69_n02h201",
+   "run_psi69_n02h203",
+   "run_psi69_n03h101",
+   "run_psi69_n04h101",
+   "run_psi69_n04h201",
+   "run_psi69_n04m101",
+   "run_psi69_n04m201",
+   "run_psi69_n05m101",
+   "run_psi69_n05m201",
+   "run_psi69_n06m101",
+   "run_psi69_n06m201",
+   "run_psi69_n06m202"
+  ],
+  "missing_fields": [],
+  "target_gravity_covered": true,
+  "direct_evidence_available": true,
+  "reasons": []
+ },
+ "retrieval_revision": "lexical-1"
+}
