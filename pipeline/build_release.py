@@ -17,8 +17,10 @@ import claims  # noqa: E402
 import flex  # noqa: E402
 import samer  # noqa: E402
 from common import (ID_RE, RAW, ROOT, SCHEMA_VERSION, check_quantity,  # noqa: E402
-                    sha256_file, write_jsonl)
+                    sha256_file, utc_z, write_jsonl)
 
+SINGULAR = {"investigations": "investigation", "materials": "material", "runs": "run",
+            "sources": "source", "evidence": "evidence", "claims": "claim"}
 ENTITIES = ["investigations", "materials", "runs", "sources", "evidence", "claims"]
 OUTCOME_CATEGORIES = {"no_ignition", "extinction", "burn_to_completion", "disruption",
                       "ongoing_at_stop", "smoke_measurement", "unknown"}
@@ -113,7 +115,7 @@ def control_check(data):
 def main():
     revision = sys.argv[1] if len(sys.argv) > 1 else "psi-" + datetime.now(timezone.utc).strftime("%Y%m%d") + "-r1"
     log = json.loads((RAW / "download_log.json").read_text())
-    retrieved = {v["source"]: v["retrieved_at"] for v in log.values()}
+    retrieved = {v["source"]: utc_z(v["retrieved_at"]) for v in log.values()}
 
     data = {e: [] for e in ENTITIES + ["quarantine"]}
     for module in (bass2, flex, samer):
@@ -131,12 +133,12 @@ def main():
     for entity in ENTITIES:
         path = out / f"{entity}.jsonl"
         write_jsonl(path, data[entity])
-        files.append({"path": path.name, "entity_type": entity, "sha256": sha256_file(path),
+        files.append({"path": path.name, "entity_type": SINGULAR[entity], "sha256": sha256_file(path),
                       "record_count": len(data[entity])})
     (out / "quarantine.json").write_text(json.dumps(data["quarantine"], indent=2, ensure_ascii=False) + "\n")
     checked = sum(f["record_count"] for f in files) + len(data["quarantine"])
     manifest = {"schema_version": SCHEMA_VERSION, "data_revision": revision,
-                "created_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                "created_at": utc_z(datetime.now(timezone.utc)),
                 "producer": "fire-atlas pipeline (AI 1)", "files": files,
                 "quality_summary": {"checked_records": checked, "quarantined_records": len(data["quarantine"]),
                                     "blocking_errors": len(errors), "warning_count": warnings}}

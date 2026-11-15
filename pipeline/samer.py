@@ -138,7 +138,9 @@ def build(revision, retrieved_at):
             "sample": {"geometry": "other", "thickness": absent("m", ev[:1]),
                        "initial_diameter": absent("m", ev[:1], "not_applicable")},
             "conditions": {"gravity_regime": "microgravity", "gravity_level": absent("g_fraction", ev[:1]),
-                           "oxygen_fraction": absent("fraction", ev[:1]), "pressure": absent("Pa", ev[:1]),
+                           "oxygen_fraction": absent("fraction", ev[:1]),
+                           "nitrogen_fraction": absent("fraction", ev[:1]), "co2_fraction": absent("fraction", ev[:1]),
+                           "helium_fraction": absent("fraction", ev[:1]), "pressure": absent("Pa", ev[:1]),
                            "airflow_speed": airflow,
                            "flow_configuration": "quiescent" if airflow["value"] == 0 else "other",
                            "ambient_temperature": absent("K", ev[:1])},
@@ -157,6 +159,7 @@ def build(revision, retrieved_at):
             "metadata_only"),
         src(SRC_TABLE, "PSI-101 Experimental table, SAME-R (CSV)", "experimental_table", TABLE),
         src(SRC_RESULTS, "Combined SAME-R Results workbook (PSI-101 analysed data)", "experimental_table", RESULTS),
+        src("src_psi101_final_report", "SAME-R Final Report (PSI-101 report)", "report", DIR / "SAMER_Final 0602 2014.pdf"),
     ]
     meta_ev = "ev_psi101_metadata"
     evidence.append({
@@ -178,9 +181,9 @@ def build(revision, retrieved_at):
                          "air flow on the ISS; the smoke was measured directly and again after aging in a chamber.",
         "scopes": ["detection"], "fuel_states": ["solid"], "gravity_regimes": ["microgravity"],
         "material_ids": sorted({r["material_id"] for r in runs}),
-        "source_ids": [s["id"] for s in sources], "claim_ids": [],
+        "source_ids": [s["id"] for s in sources] + ["src_ntrs_20130000422"], "claim_ids": [],
         "conditions_coverage": coverage(runs, meta_ev),
-        "available_assets": [SRC_TABLE, SRC_RESULTS],
+        "available_assets": [SRC_TABLE, SRC_RESULTS, "src_psi101_final_report"],
     }
     return {"investigations": [investigation], "materials": list(MATERIALS.values()), "runs": runs,
             "sources": sources, "evidence": evidence, "claims": [], "quarantine": quarantine}

@@ -199,7 +199,9 @@ def build(revision, retrieved_at):
             "id": run_id, "data_revision": revision, "investigation_id": INV_ID, "source_test_id": test,
             "material_id": material, "sample": sample,
             "conditions": {"gravity_regime": "microgravity", "gravity_level": absent("g_fraction", ev),
-                           "oxygen_fraction": o2, "pressure": absent("Pa", ev), "airflow_speed": airflow,
+                           "oxygen_fraction": o2, "nitrogen_fraction": absent("fraction", ev),
+                           "co2_fraction": absent("fraction", ev), "helium_fraction": absent("fraction", ev),
+                           "pressure": absent("Pa", ev), "airflow_speed": airflow,
                            "flow_configuration": flow_cfg, "ambient_temperature": absent("K", ev)},
             "metrics": [],
             "terminal_outcome": {"category": "unknown", "raw_label": None, "interpretation_status": "unmapped",
@@ -220,6 +222,10 @@ def build(revision, retrieved_at):
         src(SRC_POSTER, "Combustion of Solids in Microgravity: Results from the BASS-II Experiment "
             "(Ferkul et al., NTRS 20160000593)", "publication", POSTER,
             url="https://ntrs.nasa.gov/citations/20160000593", doi=None, date="2014-10-23", lic=None),
+        src("src_psi25_summary_report", "BASS-II Summary Report (PSI-25 report)", "report",
+            DIR / "BASS-II Summary Report.pdf", date=None),
+        src("src_psi25_test_matrix", "BASS-II Test Matrix by PI, final (PSI-25 science document)", "report",
+            DIR / "BASS-II Test Matrix by PI Final.xlsx", date=None),
     ]
     meta_ev = "ev_psi25_faq_test_matrix"
     investigation = {
@@ -234,7 +240,8 @@ def build(revision, retrieved_at):
         "material_ids": sorted({r["material_id"] for r in runs}),
         "source_ids": [s["id"] for s in sources], "claim_ids": [],
         "conditions_coverage": coverage(runs, meta_ev),
-        "available_assets": [SRC_TABLE, SRC_FAQ, SRC_FANCAL, SRC_POSTER],
+        "available_assets": [SRC_TABLE, SRC_FAQ, SRC_FANCAL, SRC_POSTER, "src_psi25_summary_report",
+                             "src_psi25_test_matrix"],
     }
     return {"investigations": [investigation], "materials": list(MATERIALS.values()), "runs": runs,
             "sources": sources, "evidence": evidence, "claims": [], "quarantine": quarantine}

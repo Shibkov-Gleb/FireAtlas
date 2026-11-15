@@ -44,6 +44,11 @@ STOP = {"и", "в", "на", "по", "для", "с", "о", "об", "при", "к�
 PARTIAL_WORDS = {"moon", "mars"}
 
 
+def reason(code, text, field=None, evidence_ids=()):
+    """Reason object (backend D-011)."""
+    return {"code": code, "text": text[:300], "field": field, "evidence_ids": list(evidence_ids)[:20]}
+
+
 def tokens(text):
     return [t for t in re.findall(r"[a-zа-яё0-9]+", (text or "").lower()) if t not in STOP]
 
@@ -105,8 +110,7 @@ def in_range(q, rng):
 def run_filter(run, f):
     """(passes, used_unknown, failed_field) for the run-level hard filters."""
     used_unknown = False
-    checks = [("oxygen_range", run["conditions"]["oxygen_fraction"]), ("pressure_range", run["conditions"]["pressure"]),
-              ("airflow_range", run["conditions"]["airflow_speed"])]
+    checks = [(k, run["conditions"][field]) for k, field, _ in COND_FIELDS]
     for key, q in checks:
         rng = f.get(key)
         if not rng:
@@ -139,9 +143,16 @@ RU_FIELD = {"oxygen_range": "кислород", "pressure_range": "давлен�
             "material_ids": "материал", "has_measurements": "наличие измерений", "scopes": "задача безопасности",
             "fuel_states": "состояние топлива", "gravity_regimes": "режим гравитации",
             "investigation_ids": "выбранные исследования"}
+FILTER_PATH = {"oxygen_range": "conditions.oxygen_fraction", "pressure_range": "conditions.pressure",
+               "airflow_range": "conditions.airflow_speed", "co2_range": "conditions.co2_fraction",
+               "helium_range": "conditions.helium_fraction", "material_ids": "material_id", "scopes": "scopes",
+               "fuel_states": "fuel_states", "gravity_regimes": "gravity_regimes", "has_measurements": "metrics",
+               "investigation_ids": None}
+RU_FIELD.update({"co2_range": "доля CO2", "helium_range": "доля гелия"})
 RU_SCOPE = {"prevention": "предотвращение", "detection": "обнаружение", "suppression": "тушение"}
 COND_FIELDS = [("oxygen_range", "oxygen_fraction", "кислород"), ("pressure_range", "pressure", "давление"),
-               ("airflow_range", "airflow_speed", "скорость потока")]
+               ("airflow_range", "airflow_speed", "скорость потока"), ("co2_range", "co2_fraction", "доля CO2"),
+               ("helium_range", "helium_fraction", "доля гелия")]
 
 
 def retrieve(request, release_dir=None):
@@ -194,27 +205,33 @@ def retrieve(request, release_dir=None):
 
         reasons, differences, missing = [], [], []
         if hit:
-            reasons.append("совпадение терминов: " + ", ".join(hit[:8]))
+            reasons.append(reason("term_match", "совпадение терминов: " + ", ".join(hit[:8])))
         if scope_ok:
-            reasons.append("задача безопасности: " + ", ".join(RU_SCOPE[s] for s in inv["scopes"]))
+            reasons.append(reason("safety_task_match", "задача безопасности: "
+                                  + ", ".join(RU_SCOPE[s] for s in inv["scopes"]), "scopes"))
         if matching:
-            reasons.append(f"{len(matching)} из {len(runs)} опытов удовлетворяют фильтрам")
+            reasons.append(reason("runs_match_filters", f"{len(matching)} из {len(runs)} опытов удовлетворяют фильтрам"))
         if unknown_used:
-            reasons.append(f"{unknown_used} опытов включены с неизвестным значением параметра (include_unknown)")
+            reasons.append(reason("unknown_values_included",
+                                  f"{unknown_used} опытов включены с неизвестным значением параметра (include_unknown)"))
         for key, field, ru in COND_FIELDS:
             unknown = sum(1 for r in runs if r["conditions"][field]["value"] is None)
             if unknown and (f.get(key) or (scenario or {}).get(field)):
-                missing.append(field)
-                differences.append(f"{ru}: нет значения у {unknown} из {len(runs)} опытов")
+                missing.append(f"conditions.{field}")
+                differences.append(reason("field_not_reported", f"{ru}: нет значения у {unknown} из {len(runs)} опытов",
+                                          f"conditions.{field}"))
         if target_partial:
-            differences.append("гравитация: в исследовании только " + ", ".join(inv["gravity_regimes"])
-                               + "; данных частичной гравитации (Луна, Марс) в корпусе нет")
+            differences.append(reason("gravity_not_covered", "гравитация: в исследовании только "
+                                      + ", ".join(inv["gravity_regimes"])
+                                      + "; данных частичной гравитации (Луна, Марс) в корпусе нет",
+                                      "conditions.gravity_regime"))
 
         if failed is not None:
             if include_related:
                 related.append({"investigation_id": inv["id"], "rank_score": score, "relevance_category": "related",
                                 "match_reasons": reasons, "differences": differences
-                                + [f"не проходит фильтр: {RU_FIELD.get(failed, failed)}"],
+                                + [reason("hard_filter_failed", f"не проходит фильтр: {RU_FIELD.get(failed, failed)}",
+                                          FILTER_PATH.get(failed))],
                                 "missing_fields": missing, "matching_run_ids": []})
             continue
         if qterms and not hit and not scope_ok:
@@ -228,7 +245,8 @@ def retrieve(request, release_dir=None):
     order = lambda x: (-x["rank_score"], x["investigation_id"])  # noqa: E731
     ranked = sorted(items, key=order)[:top_k] + sorted(related, key=order)
     bundle, coverage = build_bundle(data, request, ranked, qterms, target_partial, idf)
-    warnings = ["SEMANTIC_SEARCH_UNAVAILABLE"]
+    warnings = [{"code": "SEMANTIC_SEARCH_UNAVAILABLE",
+                 "message": "Семантический поиск не используется в P0; работает лексический поиск.", "field": None}]
     return {"request_id": request.get("request_id"), "data_revision": request["data_revision"],
             "retrieval_revision": RETRIEVAL_REVISION, "mode": "lexical", "ranked_items": ranked,
             "evidence_bundle": bundle, "coverage": coverage, "warnings": warnings}
@@ -236,15 +254,15 @@ def retrieve(request, release_dir=None):
 
 def facts(run, ev_ids):
     out = [{"field": "material_id", "quantity": None, "text_value": run["material_id"], "evidence_ids": ev_ids},
-           {"field": "terminal_outcome", "quantity": None, "text_value": run["terminal_outcome"]["category"],
+           {"field": "terminal_outcome.category", "quantity": None, "text_value": run["terminal_outcome"]["category"],
             "evidence_ids": run["terminal_outcome"]["evidence_ids"]}]
-    for k in ["oxygen_fraction", "pressure", "airflow_speed"]:
+    for k in ["oxygen_fraction", "nitrogen_fraction", "co2_fraction", "helium_fraction", "pressure", "airflow_speed"]:
         q = run["conditions"][k]
         if q["value"] is not None:
-            out.append({"field": k, "quantity": q, "text_value": None, "evidence_ids": q["evidence_ids"]})
+            out.append({"field": f"conditions.{k}", "quantity": q, "text_value": None, "evidence_ids": q["evidence_ids"]})
     for m in run["metrics"]:
         if m["quantity"]["value"] is not None:
-            out.append({"field": m["metric_key"], "quantity": m["quantity"], "text_value": None,
+            out.append({"field": f"metrics.{m['metric_key']}", "quantity": m["quantity"], "text_value": None,
                         "evidence_ids": m["quantity"]["evidence_ids"]})
     return out
 
@@ -269,8 +287,7 @@ def build_bundle(data, request, ranked, qterms, target_partial, idf):
         src = data["sources"][ev["source_id"]]
         chosen.append(ev_id)
         chars += size
-        items.append({"evidence": ev, "source_metadata": {k: src[k] for k in
-                      ["id", "title", "kind", "canonical_url", "doi", "license", "availability"]},
+        items.append({"evidence": ev, "source_metadata": src,
                       "investigation_ids": sorted(invs),
                       "run_ids": run_ids, "normalized_facts": nfacts})
 
@@ -278,7 +295,7 @@ def build_bundle(data, request, ranked, qterms, target_partial, idf):
         for e in c["supporting_evidence_ids"][:2]:
             run_ids = [r for r in c["applicable_run_ids"] if e in data["runs"][r]["evidence_ids"]][:1]
             nf = facts(data["runs"][run_ids[0]], [e]) if run_ids else \
-                [{"field": "claim_text", "quantity": None, "text_value": c["text"], "evidence_ids": [e]}]
+                [{"field": "claim.text", "quantity": None, "text_value": c["text"][:1000], "evidence_ids": [e]}]
             add(e, run_ids, nf, c["investigation_ids"])
     for x in direct:                               # then up to 3 example measurement rows each
         rows = [data["runs"][r] for r in x["matching_run_ids"]]
@@ -287,14 +304,22 @@ def build_bundle(data, request, ranked, qterms, target_partial, idf):
         for run in rows:
             add(run["evidence_ids"][0], [run["id"]], facts(run, run["evidence_ids"][:1]), [x["investigation_id"]])
 
+    allowed = set(chosen)                          # facts may cite only evidence inside this bundle
+    for it in items:
+        kept = []
+        for fact in it["normalized_facts"]:
+            ids = [e for e in fact["evidence_ids"] if e in allowed]
+            if ids:
+                kept.append({**fact, "evidence_ids": ids})
+        it["normalized_facts"] = kept
     matching_runs = sorted({r for x in direct for r in x["matching_run_ids"]})
     direct_available = any(x["relevance_category"] == "direct" for x in ranked)
     reasons = []
     if target_partial:
-        reasons.append("Целевой режим — частичная гравитация (Луна/Марс); в корпусе только микрогравитация, "
-                       "прямых наблюдений нет.")
+        reasons.append(reason("target_gravity_not_covered", "Целевой режим — частичная гравитация (Луна/Марс); "
+                              "в корпусе только микрогравитация, прямых наблюдений нет.", "conditions.gravity_regime"))
     if not direct:
-        reasons.append("Нет исследований, удовлетворяющих жёстким фильтрам.")
+        reasons.append(reason("no_matching_investigations", "Нет исследований, удовлетворяющих жёстким фильтрам."))
     missing = sorted({m for x in direct for m in x["missing_fields"]})
     coverage = {"matching_investigation_ids": inv_ids, "matching_run_ids": matching_runs, "missing_fields": missing,
                 "target_gravity_covered": not target_partial, "direct_evidence_available": direct_available,
@@ -311,11 +336,12 @@ def build_bundle(data, request, ranked, qterms, target_partial, idf):
 
 if __name__ == "__main__":
     q = sys.argv[1] if len(sys.argv) > 1 else "влияние вентиляции на твердые материалы"
-    rev = json.loads(next((ROOT / "data" / "releases").glob("*/manifest.json")).read_text())["data_revision"]
+    rev = sorted(p.parent.name for p in (ROOT / "data" / "releases").glob("*/manifest.json"))[-1]
     res = retrieve({"request_id": "cli", "question": q, "locale": "ru", "data_revision": rev,
                     "filters": {}, "scenario": None, "include_related": True, "top_k": 12})
     for it in res["ranked_items"]:
         print(f"{it['relevance_category']:<10} {it['rank_score']:.3f}  {it['investigation_id']}")
         for r in it["match_reasons"] + it["differences"]:
-            print("            -", r)
-    print("evidence in bundle:", len(res["evidence_bundle"]["items"]), "| coverage:", res["coverage"]["reasons"])
+            print("            -", r["text"])
+    print("evidence in bundle:", len(res["evidence_bundle"]["items"]), "| coverage:",
+          [x["text"] for x in res["coverage"]["reasons"]])

@@ -9,7 +9,7 @@ from pathlib import Path
 from retrieve import ROOT, retrieve
 
 qs = json.loads((Path(__file__).parent / "eval_questions.json").read_text(encoding="utf-8"))
-rev = json.loads(next((ROOT / "data" / "releases").glob("*/manifest.json")).read_text())["data_revision"]
+rev = sorted(p.parent.name for p in (ROOT / "data" / "releases").glob("*/manifest.json"))[-1]
 hits = total = false_direct = 0
 for q in qs:
     res = retrieve({"request_id": q["id"], "question": q["question"], "locale": "ru", "data_revision": rev,

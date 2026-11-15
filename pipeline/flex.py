@@ -73,11 +73,12 @@ def build(revision, retrieved_at):
 
         notes = ["Chamber gas is nominally quiescent; the source table does not say whether the droplet "
                  "was free or fiber-supported or whether it was translated near the end of the test.",
-                 "Source column 'Burning rate; mm' (average burning-rate constant) and the N2, CO2 and He "
-                 "mole fractions are kept as raw values in the evidence row; the contract has no fields for them."]
+                 "Source column 'Burning rate; mm' (average burning-rate constant, mm2/s) is kept as a raw value in "
+                 "the evidence row; the contract has no metric key for it."]
         ev = [ev_id]
         q = {}
-        for name, col, unit in [("pressure", C_P, "Pa"), ("o2", C_O2, "fraction"), ("d0", C_D0, "m"),
+        for name, col, unit in [("pressure", C_P, "Pa"), ("o2", C_O2, "fraction"), ("n2", C_N2, "fraction"),
+                                ("co2", C_CO2, "fraction"), ("he", C_HE, "fraction"), ("d0", C_D0, "m"),
                                 ("dext", C_DEXT, "m"), ("t", C_T, "s")]:
             q[name], note = quantity(r[col], RAW_UNITS[col], unit, ev)
             if note:
@@ -110,7 +111,8 @@ def build(revision, retrieved_at):
             "conditions": {
                 "gravity_regime": "microgravity",
                 "gravity_level": absent("g_fraction", ev),
-                "oxygen_fraction": q["o2"], "pressure": q["pressure"],
+                "oxygen_fraction": q["o2"], "nitrogen_fraction": q["n2"], "co2_fraction": q["co2"],
+                "helium_fraction": q["he"], "pressure": q["pressure"],
                 "airflow_speed": absent("m_s", ev),
                 "flow_configuration": "quiescent",
                 "ambient_temperature": absent("K", ev),
@@ -132,6 +134,14 @@ def build(revision, retrieved_at):
          "kind": "experimental_table", "canonical_url": URL, "doi": DOI, "publication_date": "2016-07-31",
          "retrieved_at": retrieved_at, "license": "CC0-1.0", "availability": "available",
          "local_asset_id": None, "sha256": sha256_file(TABLE)},
+        {"id": "src_psi69_test_plan", "data_revision": revision, "title": "FLEX Test Plan (PSI-69 science document)",
+         "kind": "report", "canonical_url": URL, "doi": DOI, "publication_date": None,
+         "retrieved_at": retrieved_at, "license": "CC0-1.0", "availability": "available",
+         "local_asset_id": None, "sha256": sha256_file(RAW / "PSI-69" / "FLEX_Test_Plan.pdf")},
+        {"id": "src_psi69_dod", "data_revision": revision, "title": "FLEX data documentation, DoD (PSI-69 science document)",
+         "kind": "report", "canonical_url": URL, "doi": DOI, "publication_date": None,
+         "retrieved_at": retrieved_at, "license": "CC0-1.0", "availability": "available",
+         "local_asset_id": None, "sha256": sha256_file(RAW / "PSI-69" / "FLEX DoD.docx")},
     ]
     meta_ev = "ev_psi69_metadata"
     evidence.append({
@@ -158,20 +168,22 @@ def build(revision, retrieved_at):
                          "Ambient pressure, oxygen fraction and diluent (N2, CO2, He) were varied between tests.",
         "scopes": ["suppression"], "fuel_states": ["liquid"], "gravity_regimes": ["microgravity"],
         "material_ids": sorted({r["material_id"] for r in runs}),
-        "source_ids": [SRC_REPO, SRC_TABLE], "claim_ids": [],
-        "conditions_coverage": coverage(runs, meta_ev),
-        "available_assets": [SRC_TABLE],
+        "source_ids": [SRC_REPO, SRC_TABLE, "src_psi69_test_plan", "src_psi69_dod"], "claim_ids": [],
+        "conditions_coverage": coverage(runs, meta_ev, ("co2_fraction", "helium_fraction")),
+        "available_assets": [SRC_TABLE, "src_psi69_test_plan", "src_psi69_dod"],
     }
     return {"investigations": [investigation], "materials": list(MATERIALS.values()), "runs": runs,
             "sources": sources, "evidence": evidence, "claims": [], "quarantine": quarantine}
 
 
-def coverage(runs, meta_ev):
+def coverage(runs, meta_ev, extra=()):
+    """Observed ranges; field is the full path of the run field (backend D-037)."""
     out = []
-    fields = [("oxygen_fraction", lambda r: r["conditions"]["oxygen_fraction"]),
-              ("pressure", lambda r: r["conditions"]["pressure"]),
-              ("airflow_speed", lambda r: r["conditions"]["airflow_speed"]),
-              ("initial_diameter", lambda r: r["sample"]["initial_diameter"])]
+    fields = [("conditions.oxygen_fraction", lambda r: r["conditions"]["oxygen_fraction"]),
+              ("conditions.pressure", lambda r: r["conditions"]["pressure"]),
+              ("conditions.airflow_speed", lambda r: r["conditions"]["airflow_speed"]),
+              ("sample.initial_diameter", lambda r: r["sample"]["initial_diameter"])]
+    fields += [(f"conditions.{k}", (lambda k: lambda r: r["conditions"][k])(k)) for k in extra]
     for name, get in fields:
         qs = [get(r) for r in runs]
         vals = [x["value"] for x in qs if x["value"] is not None]

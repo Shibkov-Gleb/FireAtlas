@@ -114,7 +114,7 @@ def main():
                 "download_url": url,
                 "bytes": len(data),
                 "sha256": hashlib.sha256(data).hexdigest(),
-                "retrieved_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                "retrieved_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             }
             print(f"ok     {rel}  ({len(data):,} bytes)")
         except (urllib.error.URLError, OSError, ValueError) as e:

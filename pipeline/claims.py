@@ -60,7 +60,13 @@ def build(revision, retrieved_at, data):
                          "(Urban et al., AIAA 2012-3536, NTRS 20130000422)",
                 "kind": "publication", "canonical_url": "https://ntrs.nasa.gov/citations/20130000422", "doi": None,
                 "publication_date": "2012-07-15", "retrieved_at": retrieved_at, "license": None,
-                "availability": "available", "local_asset_id": None, "sha256": sha256_file(SAME2_PDF)}]
+                "availability": "available", "local_asset_id": None, "sha256": sha256_file(SAME2_PDF)},
+               {"id": "src_track_flame_in_freefall", "data_revision": revision,
+                "title": "Flame in Freefall: SI-Powered Fire Safety Insights from Microgravity Combustion Data "
+                         "(NASA Space Apps Challenge 2026)",
+                "kind": "publication", "canonical_url": "https://www.spaceappschallenge.org/2026/challenges/flame-in-freefall/",
+                "doi": None, "publication_date": None, "retrieved_at": "2026-10-30T14:29:00Z", "license": None,
+                "availability": "metadata_only", "local_asset_id": None, "sha256": None}]
 
     runs = data["runs"]
     flex = [r for r in runs if r["investigation_id"] == "inv_psi69_flex"]

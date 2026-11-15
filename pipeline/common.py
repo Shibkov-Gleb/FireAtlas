@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
 
-SCHEMA_VERSION = "1.0.0"
+SCHEMA_VERSION = "1.1.0"
 CONVERSION_TABLE_VERSION = "conv-1"
 # Agreed normalisation factors (spec section 11.3).
 TO_SI = {
@@ -113,3 +113,11 @@ def write_jsonl(path, records):
     with open(path, "w", encoding="utf-8", newline="\n") as f:
         for r in records:
             f.write(json.dumps(r, ensure_ascii=False, allow_nan=False) + "\n")
+
+
+def utc_z(ts):
+    """ISO time -> UTC with Z suffix, as the backend contract requires."""
+    from datetime import datetime, timezone
+    if isinstance(ts, str):
+        ts = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+    return ts.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
