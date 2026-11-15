@@ -1,0 +1,100 @@
+{
+  "operation_id": "assessApplicability",
+  "case": "moon_no_direct",
+  "description": "Лунная база без прямых данных (AT-12)",
+  "fixture": true,
+  "default": true,
+  "request": {
+    "path_params": {},
+    "query": {},
+    "headers": {},
+    "body": {
+      "scenario": {
+        "scenario_id": "moon_base",
+        "name": "Лунная база",
+        "environment": "surface_habitat",
+        "celestial_body": "moon",
+        "safety_task": "prevention",
+        "material_ids": [],
+        "geometry": null,
+        "oxygen_fraction": null,
+        "pressure": null,
+        "airflow_speed": null,
+        "gravity_regime": "partial",
+        "assumptions": [
+          {
+            "field": "gravity_regime",
+            "text": "Целевой режим - частичная гравитация Луны. Наличие сценария не означает наличие опытов в корпусе.",
+            "origin": "preset_source",
+            "source_ids": [
+              "src_track_flame_in_freefall"
+            ]
+          }
+        ]
+      },
+      "investigation_ids": [
+        "inv_psi25"
+      ],
+      "data_revision": "psi-20261115-r1"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {},
+    "body": {
+      "data": {
+        "overall": "related_evidence",
+        "factors": [
+          {
+            "field": "gravity_regime",
+            "status": "not_covered",
+            "explanation": "Целевой режим - частичная гравитация; в корпусе только микрогравитация. Перенос требует обоснования.",
+            "evidence_ids": [
+              "ev_track_partial_gravity"
+            ]
+          },
+          {
+            "field": "oxygen_fraction",
+            "status": "unknown",
+            "explanation": "Доля кислорода базы не задана.",
+            "evidence_ids": []
+          },
+          {
+            "field": "pressure",
+            "status": "unknown",
+            "explanation": "Давление базы не задано.",
+            "evidence_ids": []
+          },
+          {
+            "field": "material_ids",
+            "status": "unknown",
+            "explanation": "Материал не выбран.",
+            "evidence_ids": []
+          }
+        ],
+        "gaps": [
+          {
+            "field": "gravity_regime",
+            "description": "Нет прямых опытов частичной гравитации в PSI.",
+            "suggested_next_step": "Изучить связанные микрогравитационные исследования с явной оговоркой; сохранить пробел в отчете."
+          },
+          {
+            "field": "oxygen_fraction",
+            "description": "Не задана атмосфера базы.",
+            "suggested_next_step": "Указать долю кислорода и давление сценария."
+          }
+        ],
+        "basis": {
+          "reviewed_rules_version": "applicability-rules-0.1-fixture",
+          "data_revision": "psi-20261115-r1"
+        }
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.2.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "operation_id": "compareInvestigations",
+  "case": "too_many",
+  "description": "Четыре исследования -> 422",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {},
+    "query": {},
+    "headers": {},
+    "body": {
+      "investigation_ids": [
+        "inv_psi25",
+        "inv_psi69",
+        "inv_psi101",
+        "inv_psi4"
+      ],
+      "data_revision": "psi-20261115-r1"
+    }
+  },
+  "response": {
+    "status": 422,
+    "headers": {},
+    "body": {
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Сравнить можно от двух до трех исследований.",
+        "details": [
+          {
+            "field": "investigation_ids",
+            "reason": "items_count_out_of_range",
+            "current_revision": null
+          }
+        ],
+        "retryable": false
+      },
+      "meta": {
+        "request_id": "req_demo02",
+        "contract_version": "1.2.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

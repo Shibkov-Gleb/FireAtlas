@@ -1,0 +1,31 @@
+{
+  "operation_id": "getCurrentWorkspace",
+  "case": "session_required",
+  "description": "Нет cookie сессии",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {},
+    "query": {},
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 401,
+    "headers": {},
+    "body": {
+      "error": {
+        "code": "SESSION_REQUIRED",
+        "message": "Сессия не найдена. Создайте новое гостевое пространство.",
+        "details": [],
+        "retryable": false
+      },
+      "meta": {
+        "request_id": "req_demo02",
+        "contract_version": "1.2.0",
+        "data_revision": null,
+        "warnings": []
+      }
+    }
+  }
+}

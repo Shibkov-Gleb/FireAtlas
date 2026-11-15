@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.pdf binary
+data/** -text
+*.sh text eol=lf
+Dockerfile text eol=lf
+Makefile text eol=lf

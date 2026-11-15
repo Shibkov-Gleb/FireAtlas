@@ -1,0 +1,14 @@
+.git
+.env
+.env.*.local
+**/node_modules
+**/dist
+.venv
+var
+**/__pycache__
+**/.pytest_cache
+test-results
+playwright-report
+work-*.log
+var-*.log
+data/mirror_provisional

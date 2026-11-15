@@ -1,0 +1,156 @@
+import { useQuery } from '@tanstack/react-query';
+import { ArrowUpRight, FileText, Link2 } from 'lucide-react';
+import { api, safeSourceUrl } from '../api/client';
+import type { Source } from '../api/types';
+import { Drawer } from './Drawer';
+import { Badge, Loading, Notice } from './ui';
+import { ErrorState } from './ErrorState';
+import s from './EvidenceDrawer.module.css';
+
+export function SourceCard({ source }: { source: Source }) {
+  const url = safeSourceUrl(source.canonical_url);
+  return (
+    <article className={s.source}>
+      <div className={s.sourceTop}>
+        <FileText size={18} />
+        <Badge tone={source.availability === 'unavailable' ? 'orange' : 'cyan'}>
+          {source.availability === 'unavailable'
+            ? 'Файл недоступен'
+            : source.availability === 'metadata_only'
+              ? 'Только метаданные'
+              : 'Источник'}
+        </Badge>
+      </div>
+      <h3>{source.title}</h3>
+      <p className="tiny muted">
+        {source.kind} · {source.data_revision}
+      </p>
+      {source.doi && <p className="tiny wordBreak">DOI: {source.doi}</p>}
+      {source.local_asset_id && source.availability === 'available' && (
+        <a className="textLink" href={api.sourceAssetUrl(source.id, source.data_revision)}>
+          Скачать файл источника <FileText size={14} />
+        </a>
+      )}
+      {source.availability === 'unavailable' && (
+        <p className="tiny muted">
+          Вложение недоступно. Метаданные и посадочная страница остаются доступными.
+        </p>
+      )}
+      {url ? (
+        <a className="textLink" href={url} target="_blank" rel="noopener noreferrer">
+          Открыть первоисточник <ArrowUpRight size={14} />
+          <span className="srOnly">в новой вкладке</span>
+        </a>
+      ) : (
+        <Notice tone="warning">Ссылка на источник недоступна.</Notice>
+      )}
+    </article>
+  );
+}
+export function EvidenceDrawer({
+  id,
+  revision,
+  onClose,
+}: {
+  id: string | null;
+  revision: string;
+  onClose: () => void;
+}) {
+  const query = useQuery({
+    queryKey: ['evidence', id, revision],
+    queryFn: ({ signal }) => api.evidence(id!, revision, signal).then((r) => r.data),
+    enabled: !!id,
+    staleTime: Infinity,
+  });
+  const data = query.data;
+  return (
+    <Drawer
+      open={!!id}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+      title="Основание вывода"
+      description="Проверьте источник, точное положение и исходное представление данных."
+    >
+      {query.isPending ? (
+        <Loading />
+      ) : query.isError ? (
+        <ErrorState error={query.error} onRetry={() => void query.refetch()} />
+      ) : (
+        data && (
+          <div className="stack">
+            <div className="inline">
+              <Badge tone={data.evidence.verified ? 'teal' : 'orange'}>
+                {data.evidence.verified
+                  ? 'Контрольная запись'
+                  : 'Не проверено для научного выпуска'}
+              </Badge>
+              <span className="tiny mono muted">{data.evidence.kind}</span>
+            </div>
+            {!data.evidence.verified && (
+              <Notice tone="warning">
+                Демонстрационная карточка. Это основание не прошло научную приёмку.
+              </Notice>
+            )}
+            <div className={s.locator}>
+              <Link2 size={15} />
+              <span>
+                {[
+                  data.evidence.locator.page !== null
+                    ? `Страница ${data.evidence.locator.page}`
+                    : null,
+                  data.evidence.locator.section,
+                  data.evidence.locator.row_key ? `Запись ${data.evidence.locator.row_key}` : null,
+                  data.evidence.locator.start_s !== null
+                    ? `${data.evidence.locator.start_s}–${data.evidence.locator.end_s} с`
+                    : null,
+                ]
+                  .filter(Boolean)
+                  .join(' · ') || 'Положение не сообщено'}
+              </span>
+            </div>
+            {data.evidence.excerpt && (
+              <blockquote className={s.excerpt}>{data.evidence.excerpt}</blockquote>
+            )}
+            {data.evidence.table_values.length > 0 && (
+              <div
+                className="tableScroll"
+                tabIndex={0}
+                role="region"
+                aria-label="Исходная строка доказательства"
+              >
+                <table>
+                  <caption className="srOnly">Исходные значения и единицы</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Поле</th>
+                      <th scope="col">Значение</th>
+                      <th scope="col">Единица</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.evidence.table_values.map((cell, index) => (
+                      <tr key={index}>
+                        <th scope="row">{cell.field}</th>
+                        <td className="mono">{cell.raw_value}</td>
+                        <td>{cell.raw_unit ?? '—'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {data.evidence.verification_note && (
+              <p className="tiny muted">{data.evidence.verification_note}</p>
+            )}
+            <SourceCard source={data.source} />
+            <details className={s.raw}>
+              <summary>Исходная запись API</summary>
+              <pre>{JSON.stringify(data.evidence, null, 2)}</pre>
+            </details>
+          </div>
+        )
+      )}
+    </Drawer>
+  );
+}

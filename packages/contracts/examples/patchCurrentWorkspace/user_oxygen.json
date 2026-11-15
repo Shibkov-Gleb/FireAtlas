@@ -1,0 +1,121 @@
+{
+  "operation_id": "patchCurrentWorkspace",
+  "case": "user_oxygen",
+  "description": "Пользователь задал долю кислорода 0.21",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {},
+    "query": {},
+    "headers": {
+      "If-Match": "\"3\""
+    },
+    "body": {
+      "scenario": {
+        "scenario_id": "orbital_user_o2",
+        "name": "Орбитальная станция",
+        "environment": "orbital_habitat",
+        "celestial_body": null,
+        "safety_task": "prevention",
+        "material_ids": [],
+        "geometry": null,
+        "oxygen_fraction": {
+          "value": 0.21,
+          "unit": "fraction",
+          "status": "reported",
+          "qualifier": "eq",
+          "raw_value": "21",
+          "raw_unit": "%",
+          "uncertainty": null,
+          "evidence_ids": [],
+          "derivation": null
+        },
+        "pressure": null,
+        "airflow_speed": null,
+        "gravity_regime": "microgravity",
+        "assumptions": [
+          {
+            "field": "gravity_regime",
+            "text": "Орбитальная среда задает микрогравитационный контекст; давление и кислород пресетом не задаются.",
+            "origin": "preset_source",
+            "source_ids": [
+              "src_track_flame_in_freefall"
+            ]
+          },
+          {
+            "field": "oxygen_fraction",
+            "text": "Доля кислорода задана пользователем.",
+            "origin": "user",
+            "source_ids": []
+          }
+        ]
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "ETag": "\"4\""
+    },
+    "body": {
+      "data": {
+        "id": "ws_demo01",
+        "revision": 4,
+        "scenario": {
+          "scenario_id": "orbital_user_o2",
+          "name": "Орбитальная станция",
+          "environment": "orbital_habitat",
+          "celestial_body": null,
+          "safety_task": "prevention",
+          "material_ids": [],
+          "geometry": null,
+          "oxygen_fraction": {
+            "value": 0.21,
+            "unit": "fraction",
+            "status": "reported",
+            "qualifier": "eq",
+            "raw_value": "21",
+            "raw_unit": "%",
+            "uncertainty": null,
+            "evidence_ids": [],
+            "derivation": null
+          },
+          "pressure": null,
+          "airflow_speed": null,
+          "gravity_regime": "microgravity",
+          "assumptions": [
+            {
+              "field": "gravity_regime",
+              "text": "Орбитальная среда задает микрогравитационный контекст; давление и кислород пресетом не задаются.",
+              "origin": "preset_source",
+              "source_ids": [
+                "src_track_flame_in_freefall"
+              ]
+            },
+            {
+              "field": "oxygen_fraction",
+              "text": "Доля кислорода задана пользователем.",
+              "origin": "user",
+              "source_ids": []
+            }
+          ]
+        },
+        "selected_investigation_ids": [
+          "inv_psi25"
+        ],
+        "saved_investigation_ids": [],
+        "saved_answer_ids": [],
+        "data_revision": "psi-20261115-r1",
+        "created_at": "2026-11-15T09:00:00Z",
+        "updated_at": "2026-11-15T09:05:00Z",
+        "expires_at": "2026-11-22T09:05:00Z"
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.2.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

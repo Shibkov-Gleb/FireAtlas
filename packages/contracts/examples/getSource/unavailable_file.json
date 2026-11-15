@@ -1,0 +1,43 @@
+{
+  "operation_id": "getSource",
+  "case": "unavailable_file",
+  "description": "Файл недоступен, метаданные доступны (AT-26)",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {
+      "id": "src_psi101_dataset"
+    },
+    "query": {
+      "data_revision": "psi-20261115-r1"
+    },
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {},
+    "body": {
+      "data": {
+        "id": "src_psi101_dataset",
+        "data_revision": "psi-20261115-r1",
+        "title": "SAME-R (PSI-101) - набор данных NASA PSI",
+        "kind": "repository",
+        "canonical_url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-101",
+        "doi": null,
+        "publication_date": null,
+        "retrieved_at": "2026-11-15T08:00:00Z",
+        "license": null,
+        "availability": "unavailable",
+        "local_asset_id": null,
+        "sha256": null
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.2.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

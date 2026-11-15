@@ -1,0 +1,51 @@
+{
+  "operation_id": "createReport",
+  "case": "foreign_answer",
+  "description": "Ответ из другой ревизии/пространства",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {},
+    "query": {},
+    "headers": {
+      "Idempotency-Key": "2f65cc3a-0120-4c42-a000-8e4633a22300"
+    },
+    "body": {
+      "workspace_revision": 4,
+      "title": "Вентиляция и горение материалов",
+      "answer_ids": [
+        "ans_other"
+      ],
+      "investigation_ids": [
+        "inv_psi25",
+        "inv_psi69"
+      ],
+      "include_comparison": true,
+      "locale": "ru"
+    }
+  },
+  "response": {
+    "status": 422,
+    "headers": {},
+    "body": {
+      "error": {
+        "code": "VALIDATION_ERROR",
+        "message": "Ответ не принадлежит текущему пространству.",
+        "details": [
+          {
+            "field": "answer_ids[0]",
+            "reason": "not_in_workspace",
+            "current_revision": null
+          }
+        ],
+        "retryable": false
+      },
+      "meta": {
+        "request_id": "req_demo02",
+        "contract_version": "1.2.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

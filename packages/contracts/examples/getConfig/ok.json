@@ -1,0 +1,545 @@
+{
+  "operation_id": "getConfig",
+  "case": "ok",
+  "description": "Конфигурация с активной ревизией",
+  "fixture": true,
+  "default": true,
+  "request": {
+    "path_params": {},
+    "query": {},
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {},
+    "body": {
+      "data": {
+        "contract_version": "1.2.0",
+        "active_data_revision": "psi-20261115-r1",
+        "feature_flags": {
+          "analysis": true,
+          "reports": true,
+          "semantic_search": false,
+          "video_preview": false
+        },
+        "limits": {
+          "search_limit_max": 100,
+          "run_limit_max": 200,
+          "measurement_limit_max": 1000,
+          "question_chars_max": 2000,
+          "comparison_max": 3,
+          "analysis_deadline_s": 45,
+          "report_deadline_s": 30
+        },
+        "dictionaries": {
+          "unit": [
+            {
+              "value": "Pa",
+              "label": "Па"
+            },
+            {
+              "value": "m_s",
+              "label": "м/с"
+            },
+            {
+              "value": "m",
+              "label": "м"
+            },
+            {
+              "value": "s",
+              "label": "с"
+            },
+            {
+              "value": "K",
+              "label": "К"
+            },
+            {
+              "value": "fraction",
+              "label": "доля"
+            },
+            {
+              "value": "g_fraction",
+              "label": "доля g"
+            },
+            {
+              "value": "count",
+              "label": "шт."
+            },
+            {
+              "value": "dimensionless",
+              "label": "безразмерная"
+            }
+          ],
+          "quantity_status": [
+            {
+              "value": "measured",
+              "label": "измерено"
+            },
+            {
+              "value": "reported",
+              "label": "сообщено в источнике"
+            },
+            {
+              "value": "derived",
+              "label": "вычислено"
+            },
+            {
+              "value": "not_reported",
+              "label": "не сообщено"
+            },
+            {
+              "value": "not_applicable",
+              "label": "неприменимо"
+            },
+            {
+              "value": "unusable",
+              "label": "непригодно"
+            }
+          ],
+          "scope": [
+            {
+              "value": "prevention",
+              "label": "Предотвращение"
+            },
+            {
+              "value": "detection",
+              "label": "Обнаружение"
+            },
+            {
+              "value": "suppression",
+              "label": "Подавление"
+            }
+          ],
+          "fuel_state": [
+            {
+              "value": "solid",
+              "label": "твердое"
+            },
+            {
+              "value": "liquid",
+              "label": "жидкое"
+            },
+            {
+              "value": "gas",
+              "label": "газ"
+            },
+            {
+              "value": "aerosol",
+              "label": "аэрозоль"
+            }
+          ],
+          "gravity_regime": [
+            {
+              "value": "normal",
+              "label": "нормальная"
+            },
+            {
+              "value": "microgravity",
+              "label": "микрогравитация"
+            },
+            {
+              "value": "partial",
+              "label": "частичная"
+            },
+            {
+              "value": "simulated_partial",
+              "label": "имитация частичной"
+            },
+            {
+              "value": "unknown",
+              "label": "неизвестно"
+            }
+          ],
+          "geometry": [
+            {
+              "value": "film",
+              "label": "пленка"
+            },
+            {
+              "value": "sheet",
+              "label": "лист"
+            },
+            {
+              "value": "slab",
+              "label": "пластина"
+            },
+            {
+              "value": "rod",
+              "label": "стержень"
+            },
+            {
+              "value": "sphere",
+              "label": "сфера"
+            },
+            {
+              "value": "droplet",
+              "label": "капля"
+            },
+            {
+              "value": "fabric",
+              "label": "ткань"
+            },
+            {
+              "value": "other",
+              "label": "другое"
+            },
+            {
+              "value": "unknown",
+              "label": "неизвестно"
+            }
+          ],
+          "flow_configuration": [
+            {
+              "value": "concurrent",
+              "label": "попутный"
+            },
+            {
+              "value": "opposed",
+              "label": "встречный"
+            },
+            {
+              "value": "quiescent",
+              "label": "без потока"
+            },
+            {
+              "value": "other",
+              "label": "другое"
+            },
+            {
+              "value": "unknown",
+              "label": "неизвестно"
+            }
+          ],
+          "metric_key": [
+            {
+              "value": "burn_duration",
+              "label": "Время горения"
+            },
+            {
+              "value": "visible_extinction_diameter",
+              "label": "Диаметр видимого погасания"
+            },
+            {
+              "value": "flame_spread_rate",
+              "label": "Скорость распространения пламени"
+            },
+            {
+              "value": "particle_diameter",
+              "label": "Диаметр частиц"
+            }
+          ],
+          "outcome_category": [
+            {
+              "value": "no_ignition",
+              "label": "нет воспламенения"
+            },
+            {
+              "value": "extinction",
+              "label": "погасание (Extinction)"
+            },
+            {
+              "value": "burn_to_completion",
+              "label": "полное выгорание"
+            },
+            {
+              "value": "disruption",
+              "label": "разрушение капли (Disruption)"
+            },
+            {
+              "value": "ongoing_at_stop",
+              "label": "горение при остановке"
+            },
+            {
+              "value": "smoke_measurement",
+              "label": "измерение дыма"
+            },
+            {
+              "value": "unknown",
+              "label": "неизвестно"
+            }
+          ],
+          "interpretation_status": [
+            {
+              "value": "source_explicit",
+              "label": "указано в источнике"
+            },
+            {
+              "value": "reviewed_mapping",
+              "label": "проверенное сопоставление"
+            },
+            {
+              "value": "unmapped",
+              "label": "не сопоставлено"
+            }
+          ],
+          "source_kind": [
+            {
+              "value": "repository",
+              "label": "репозиторий"
+            },
+            {
+              "value": "report",
+              "label": "отчет"
+            },
+            {
+              "value": "publication",
+              "label": "публикация"
+            },
+            {
+              "value": "experimental_table",
+              "label": "таблица опытов"
+            },
+            {
+              "value": "video",
+              "label": "видео"
+            },
+            {
+              "value": "image",
+              "label": "изображение"
+            },
+            {
+              "value": "calibration",
+              "label": "калибровка"
+            }
+          ],
+          "source_availability": [
+            {
+              "value": "available",
+              "label": "доступен"
+            },
+            {
+              "value": "metadata_only",
+              "label": "только метаданные"
+            },
+            {
+              "value": "unavailable",
+              "label": "недоступен"
+            }
+          ],
+          "claim_kind": [
+            {
+              "value": "observation",
+              "label": "Наблюдение"
+            },
+            {
+              "value": "synthesis",
+              "label": "Обобщение"
+            },
+            {
+              "value": "hypothesis",
+              "label": "Исходная гипотеза"
+            }
+          ],
+          "environment": [
+            {
+              "value": "orbital_habitat",
+              "label": "Орбитальная станция"
+            },
+            {
+              "value": "surface_habitat",
+              "label": "Поверхностная база"
+            },
+            {
+              "value": "pressurized_rover",
+              "label": "Герметичный ровер"
+            },
+            {
+              "value": "custom",
+              "label": "Свой сценарий"
+            }
+          ],
+          "celestial_body": [
+            {
+              "value": "earth",
+              "label": "Земля"
+            },
+            {
+              "value": "moon",
+              "label": "Луна"
+            },
+            {
+              "value": "mars",
+              "label": "Марс"
+            },
+            {
+              "value": "other",
+              "label": "другое"
+            }
+          ],
+          "relevance_category": [
+            {
+              "value": "direct",
+              "label": "Прямое соответствие"
+            },
+            {
+              "value": "related",
+              "label": "Связанная задача"
+            },
+            {
+              "value": "contextual",
+              "label": "Контекст"
+            }
+          ],
+          "retrieval_mode": [
+            {
+              "value": "hybrid",
+              "label": "гибридный поиск"
+            },
+            {
+              "value": "lexical",
+              "label": "текстовый поиск"
+            },
+            {
+              "value": "curated",
+              "label": "подборка"
+            }
+          ],
+          "cell_status": [
+            {
+              "value": "known",
+              "label": "известно"
+            },
+            {
+              "value": "not_reported",
+              "label": "не сообщено"
+            },
+            {
+              "value": "not_applicable",
+              "label": "неприменимо"
+            }
+          ],
+          "comparability_status": [
+            {
+              "value": "compatible",
+              "label": "сопоставимы"
+            },
+            {
+              "value": "partially_compatible",
+              "label": "частично сопоставимы"
+            },
+            {
+              "value": "incompatible",
+              "label": "несопоставимы"
+            }
+          ],
+          "applicability_overall": [
+            {
+              "value": "direct_evidence",
+              "label": "Есть прямые данные"
+            },
+            {
+              "value": "related_evidence",
+              "label": "Только связанные данные"
+            },
+            {
+              "value": "insufficient_evidence",
+              "label": "Недостаточно данных"
+            }
+          ],
+          "factor_status": [
+            {
+              "value": "match",
+              "label": "совпадает"
+            },
+            {
+              "value": "mismatch",
+              "label": "отличается"
+            },
+            {
+              "value": "unknown",
+              "label": "неизвестно"
+            },
+            {
+              "value": "not_covered",
+              "label": "прямых данных нет"
+            }
+          ],
+          "answer_status": [
+            {
+              "value": "answered",
+              "label": "Ответ"
+            },
+            {
+              "value": "insufficient_evidence",
+              "label": "Недостаточно доказательств"
+            },
+            {
+              "value": "conflicting_evidence",
+              "label": "Доказательства расходятся"
+            }
+          ],
+          "answer_block_kind": [
+            {
+              "value": "summary",
+              "label": "Кратко"
+            },
+            {
+              "value": "observation",
+              "label": "Наблюдение"
+            },
+            {
+              "value": "synthesis",
+              "label": "Обобщение"
+            },
+            {
+              "value": "limitation",
+              "label": "Ограничение"
+            }
+          ],
+          "exclusion_reason": [
+            {
+              "value": "missing_x",
+              "label": "нет значения X"
+            },
+            {
+              "value": "missing_y",
+              "label": "нет значения Y"
+            },
+            {
+              "value": "unusable_unit",
+              "label": "непригодная единица"
+            },
+            {
+              "value": "unverified_record",
+              "label": "непроверенная запись"
+            },
+            {
+              "value": "filtered_out",
+              "label": "исключено фильтром"
+            }
+          ],
+          "materials": [
+            {
+              "value": "mat_psi25_fixture_solid",
+              "label": "[FIXTURE] твердый образец"
+            },
+            {
+              "value": "mat_methanol",
+              "label": "Метанол"
+            }
+          ]
+        },
+        "measurement_axes": [
+          {
+            "x_key": "sample.initial_diameter",
+            "y_key": "metrics.burn_duration",
+            "investigation_ids": [
+              "inv_psi69"
+            ]
+          }
+        ],
+        "retention": {
+          "workspace_days": 7,
+          "report_hours": 24
+        }
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.2.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

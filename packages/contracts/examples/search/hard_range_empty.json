@@ -1,0 +1,91 @@
+{
+  "operation_id": "search",
+  "case": "hard_range_empty",
+  "description": "Жесткий диапазон без совпадений (AT-04): 200 и пустые items",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {},
+    "query": {},
+    "headers": {},
+    "body": {
+      "query": "влияние вентиляции на твердые материалы",
+      "locale": "ru",
+      "data_revision": "psi-20261115-r1",
+      "filters": {
+        "scopes": [
+          "prevention"
+        ],
+        "investigation_ids": [],
+        "material_ids": [],
+        "fuel_states": [
+          "solid"
+        ],
+        "gravity_regimes": [
+          "microgravity"
+        ],
+        "oxygen_range": {
+          "min": 0.18,
+          "max": 0.23,
+          "unit": "fraction"
+        },
+        "pressure_range": {
+          "min": 30000,
+          "max": 40000,
+          "unit": "Pa"
+        },
+        "airflow_range": null,
+        "has_measurements": null,
+        "include_unknown": false
+      },
+      "scenario": null,
+      "include_related": false,
+      "cursor": null,
+      "limit": 20
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {},
+    "body": {
+      "data": {
+        "items": [],
+        "next_cursor": null,
+        "total": 0,
+        "retrieval_mode": "lexical",
+        "applied_filters": {
+          "scopes": [
+            "prevention"
+          ],
+          "investigation_ids": [],
+          "material_ids": [],
+          "fuel_states": [
+            "solid"
+          ],
+          "gravity_regimes": [
+            "microgravity"
+          ],
+          "oxygen_range": {
+            "min": 0.18,
+            "max": 0.23,
+            "unit": "fraction"
+          },
+          "pressure_range": {
+            "min": 30000,
+            "max": 40000,
+            "unit": "Pa"
+          },
+          "airflow_range": null,
+          "has_measurements": null,
+          "include_unknown": false
+        }
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.2.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

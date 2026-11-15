@@ -1,0 +1,44 @@
+name: fire-atlas
+services:
+  api:
+    build: .
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      FA_ENV: production
+      FA_CURSOR_SECRET: ${FA_CURSOR_SECRET:?Run pnpm setup:env first}
+      FA_RELEASE_DIR: data/releases/psi-20261115-r2
+      FA_RAW_DIR: data/raw
+      FA_IMPORT_PROFILE: p0
+      FA_FEATURE_ANALYSIS: "true"
+      FA_FEATURE_REPORTS: "true"
+      FA_RETRIEVER: py:retrieve:retrieve
+      FA_REASONER: py:fa_reasoning.reason:reason
+      FA_APPLICABILITY: py:fa_reasoning.applicability:assess_applicability
+      FA_LLM_PROVIDER: ${FA_LLM_PROVIDER:-offline}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      FA_ALLOWED_ORIGINS: ${FA_ALLOWED_ORIGINS:-http://localhost:8080,http://127.0.0.1:8080}
+      FA_COOKIE_SECURE: "false"
+      FA_FORWARDED_ALLOW_IPS: "*"
+    volumes:
+      - fa-data:/var/lib/fire-atlas
+    expose: ["8000"]
+    restart: unless-stopped
+  web:
+    build:
+      context: .
+      dockerfile: deploy/web.Dockerfile
+    depends_on:
+      api:
+        condition: service_healthy
+    ports: ["127.0.0.1:${FA_WEB_PORT:-8080}:80"]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/api/v1/config"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+volumes:
+  fa-data:

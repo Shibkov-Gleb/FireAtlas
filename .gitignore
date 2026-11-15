@@ -1,0 +1,23 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+var/
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+.env
+.venv/
+node_modules/
+dist/
+.DS_Store
+data/mirror_provisional/
+data/raw/PSI-25/BASS-II Summary Report.pdf
+.env.local
+.env.*.local
+playwright-report/
+test-results/
+coverage/
+.sites-runtime/
+*.tsbuildinfo
+work-*.log
+var-*.log

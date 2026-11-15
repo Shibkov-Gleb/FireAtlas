@@ -1,0 +1,145 @@
+{
+  "operation_id": "getAnswer",
+  "case": "insufficient_evidence",
+  "description": "Недостаток доказательств (AT-13, AT-12)",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {
+      "id": "ans_demo02"
+    },
+    "query": {},
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {},
+    "body": {
+      "data": {
+        "id": "ans_demo02",
+        "data_revision": "psi-20261115-r1",
+        "workspace_revision": 3,
+        "scenario_snapshot": {
+          "scenario_id": "moon_base",
+          "name": "Лунная база",
+          "environment": "surface_habitat",
+          "celestial_body": "moon",
+          "safety_task": "prevention",
+          "material_ids": [],
+          "geometry": null,
+          "oxygen_fraction": null,
+          "pressure": null,
+          "airflow_speed": null,
+          "gravity_regime": "partial",
+          "assumptions": [
+            {
+              "field": "gravity_regime",
+              "text": "Целевой режим - частичная гравитация Луны. Наличие сценария не означает наличие опытов в корпусе.",
+              "origin": "preset_source",
+              "source_ids": [
+                "src_track_flame_in_freefall"
+              ]
+            }
+          ]
+        },
+        "question": "Как будет гореть материал на лунной базе?",
+        "status": "insufficient_evidence",
+        "answer_blocks": [
+          {
+            "id": "block_limit1",
+            "kind": "limitation",
+            "text": "В корпусе нет опытов частичной гравитации, поэтому прямого ответа для лунной базы нет. Доступны связанные микрогравитационные исследования.",
+            "evidence_ids": [
+              "ev_track_partial_gravity"
+            ],
+            "quantities": []
+          }
+        ],
+        "applicability": {
+          "overall": "related_evidence",
+          "factors": [
+            {
+              "field": "gravity_regime",
+              "status": "not_covered",
+              "explanation": "Целевой режим - частичная гравитация; в корпусе только микрогравитация. Перенос требует обоснования.",
+              "evidence_ids": [
+                "ev_track_partial_gravity"
+              ]
+            },
+            {
+              "field": "oxygen_fraction",
+              "status": "unknown",
+              "explanation": "Доля кислорода базы не задана.",
+              "evidence_ids": []
+            },
+            {
+              "field": "pressure",
+              "status": "unknown",
+              "explanation": "Давление базы не задано.",
+              "evidence_ids": []
+            },
+            {
+              "field": "material_ids",
+              "status": "unknown",
+              "explanation": "Материал не выбран.",
+              "evidence_ids": []
+            }
+          ],
+          "gaps": [
+            {
+              "field": "gravity_regime",
+              "description": "Нет прямых опытов частичной гравитации в PSI.",
+              "suggested_next_step": "Изучить связанные микрогравитационные исследования с явной оговоркой; сохранить пробел в отчете."
+            },
+            {
+              "field": "oxygen_fraction",
+              "description": "Не задана атмосфера базы.",
+              "suggested_next_step": "Указать долю кислорода и давление сценария."
+            }
+          ],
+          "basis": {
+            "reviewed_rules_version": "applicability-rules-0.1-fixture",
+            "data_revision": "psi-20261115-r1"
+          }
+        },
+        "citations": [
+          {
+            "evidence_id": "ev_track_partial_gravity",
+            "source_id": "src_track_flame_in_freefall",
+            "label": "Flame in Freefall - условия трека",
+            "locator": {
+              "page": null,
+              "section": "[FIXTURE] Details",
+              "row_key": null,
+              "start_s": null,
+              "end_s": null
+            }
+          }
+        ],
+        "limitations": [
+          "Отсутствие данных не означает безопасность."
+        ],
+        "follow_up_questions": [
+          "Какой материал рассматривается?",
+          "Какие давление и доля кислорода на базе?"
+        ],
+        "retrieval_mode": "lexical",
+        "reasoning_revision": "reasoning-0.1-fixture",
+        "validation_summary": {
+          "schema_valid": true,
+          "references_valid": true,
+          "quantities_valid": true,
+          "scope_valid": true
+        },
+        "created_at": "2026-11-15T09:00:20Z"
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.2.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

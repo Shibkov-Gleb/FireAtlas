@@ -1,0 +1,138 @@
+{
+  "operation_id": "getInvestigation",
+  "case": "flex",
+  "description": "Карточка FLEX",
+  "fixture": true,
+  "default": true,
+  "request": {
+    "path_params": {
+      "id": "inv_psi69"
+    },
+    "query": {
+      "data_revision": "psi-20261115-r1"
+    },
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {},
+    "body": {
+      "data": {
+        "investigation": {
+          "id": "inv_psi69",
+          "data_revision": "psi-20261115-r1",
+          "psi_id": "PSI-69",
+          "acronym": "FLEX",
+          "title": "Flame Extinguishment Experiment",
+          "objectives": [
+            "[FIXTURE] Цель FLEX; формулировку поставляет AI 1."
+          ],
+          "setup_summary": "[FIXTURE] Краткое описание установки FLEX.",
+          "scopes": [
+            "suppression"
+          ],
+          "fuel_states": [
+            "liquid"
+          ],
+          "gravity_regimes": [
+            "microgravity"
+          ],
+          "material_ids": [
+            "mat_methanol"
+          ],
+          "source_ids": [
+            "src_psi69_exptable"
+          ],
+          "claim_ids": [
+            "clm_psi69_30cal03_burn"
+          ],
+          "conditions_coverage": [
+            {
+              "field": "sample.initial_diameter",
+              "min_value": 0.00161,
+              "max_value": 0.00206,
+              "unit": "m",
+              "known_count": 5,
+              "unknown_count": 0,
+              "derivation_evidence_ids": [
+                "ev_psi69_20cal08",
+                "ev_psi69_20cal10",
+                "ev_psi69_20cal12",
+                "ev_psi69_30cal02",
+                "ev_psi69_30cal03"
+              ]
+            },
+            {
+              "field": "conditions.oxygen_fraction",
+              "min_value": 0.21,
+              "max_value": 0.21,
+              "unit": "fraction",
+              "known_count": 5,
+              "unknown_count": 0,
+              "derivation_evidence_ids": [
+                "ev_psi69_20cal08",
+                "ev_psi69_20cal10",
+                "ev_psi69_20cal12",
+                "ev_psi69_30cal02",
+                "ev_psi69_30cal03"
+              ]
+            }
+          ],
+          "available_assets": [
+            "src_psi69_exptable"
+          ]
+        },
+        "claims": [
+          {
+            "id": "clm_psi69_30cal03_burn",
+            "data_revision": "psi-20261115-r1",
+            "investigation_ids": [
+              "inv_psi69"
+            ],
+            "kind": "observation",
+            "text": "В опыте 30CAL03 время горения капли метанола составило 6,34 с.",
+            "supporting_evidence_ids": [
+              "ev_psi69_30cal03"
+            ],
+            "contradicting_evidence_ids": [],
+            "applicable_run_ids": [
+              "run_psi69_30cal03"
+            ],
+            "limitations": [
+              "Одна запись; не устанавливает зависимость времени горения от диаметра."
+            ],
+            "review_status": "reviewed"
+          }
+        ],
+        "sources": [
+          {
+            "id": "src_psi69_exptable",
+            "data_revision": "psi-20261115-r1",
+            "title": "FLEX (PSI-69) - Experimental Table, версия 5",
+            "kind": "experimental_table",
+            "canonical_url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-69",
+            "doi": null,
+            "publication_date": null,
+            "retrieved_at": "2026-11-15T08:00:00Z",
+            "license": null,
+            "availability": "available",
+            "local_asset_id": "asset_psi69_exptable_v5",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000001"
+          }
+        ],
+        "run_summary": {
+          "total": 5,
+          "verified_count": 5,
+          "excluded_count": 0
+        }
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.2.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

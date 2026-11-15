@@ -1,0 +1,113 @@
+.questionPanel {
+  padding: 27px;
+}
+.questionPanel h2 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+.questionPanel form {
+  margin-top: 23px;
+}
+.questionPanel textarea {
+  min-height: 130px;
+  font-size: 13px;
+  line-height: 1.9;
+  padding: 17px 18px;
+}
+.questionMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin: 12px 0 24px;
+  font-size: 9px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+.questionMeta > span:last-child {
+  font-family: var(--mono);
+  flex: none;
+}
+.selection {
+  padding: 17px;
+  margin-bottom: 24px;
+}
+.selection legend {
+  font-size: 10px;
+}
+.selection label {
+  font-size: 11px;
+}
+.selection > div {
+  gap: 24px;
+}
+.submitRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.submitRow > span {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px;
+  margin: 28px 0;
+}
+.examples > span {
+  font-size: 10px;
+  color: var(--muted);
+}
+.examples > button {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: #ffffff02;
+  padding: 11px 13px;
+  font-size: 10px;
+  color: #c0cee1;
+}
+.examples > button:hover {
+  border-color: #78d4fc40;
+}
+.demoNote {
+  font-size: 10px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin-top: 26px;
+}
+@media (max-width: 767px) {
+  .questionPanel {
+    padding: 22px 17px;
+  }
+  .questionPanel textarea {
+    font-size: 12px;
+    padding: 14px;
+  }
+  .questionMeta {
+    font-size: 8px;
+  }
+  .submitRow {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .submitRow button {
+    width: 100%;
+  }
+  .examples {
+    gap: 11px;
+  }
+  .examples > span {
+    width: 100%;
+  }
+  .selection > div {
+    gap: 16px;
+  }
+}

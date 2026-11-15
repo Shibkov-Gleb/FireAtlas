@@ -1,0 +1,53 @@
+{
+  "operation_id": "getJob",
+  "case": "provider_failed",
+  "description": "Отказ провайдера модели (AT-14): failed + найденные материалы",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {
+      "id": "job_demo01"
+    },
+    "query": {},
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {},
+    "body": {
+      "data": {
+        "id": "job_demo01",
+        "type": "analysis",
+        "state": "failed",
+        "stage": null,
+        "created_at": "2026-11-15T09:00:00Z",
+        "updated_at": "2026-11-15T09:00:05Z",
+        "deadline_at": "2026-11-15T09:00:45Z",
+        "result_kind": "answer",
+        "result_id": null,
+        "error": {
+          "code": "MODEL_PROVIDER_ERROR",
+          "message": "Сервис генерации ответа недоступен. Найденные материалы доступны для просмотра.",
+          "details": [],
+          "retryable": true
+        },
+        "input_context": {
+          "workspace_revision": 3,
+          "data_revision": "psi-20261115-r1",
+          "scenario_id": "orbital_custom"
+        },
+        "fallback_evidence_ids": [
+          "ev_psi25_fixture01",
+          "ev_psi25_fixture02"
+        ]
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.2.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

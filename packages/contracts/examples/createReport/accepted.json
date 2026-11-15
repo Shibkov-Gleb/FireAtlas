@@ -1,0 +1,57 @@
+{
+  "operation_id": "createReport",
+  "case": "accepted",
+  "description": "Экспорт принят",
+  "fixture": true,
+  "default": true,
+  "request": {
+    "path_params": {},
+    "query": {},
+    "headers": {
+      "Idempotency-Key": "2f65cc3a-0120-4c42-a000-8e4633a22300"
+    },
+    "body": {
+      "workspace_revision": 4,
+      "title": "Вентиляция и горение материалов",
+      "answer_ids": [
+        "ans_demo01"
+      ],
+      "investigation_ids": [
+        "inv_psi25",
+        "inv_psi69"
+      ],
+      "include_comparison": true,
+      "locale": "ru"
+    }
+  },
+  "response": {
+    "status": 202,
+    "headers": {},
+    "body": {
+      "data": {
+        "id": "job_demo01",
+        "type": "report",
+        "state": "queued",
+        "stage": null,
+        "created_at": "2026-11-15T09:00:00Z",
+        "updated_at": "2026-11-15T09:00:00Z",
+        "deadline_at": "2026-11-15T09:00:30Z",
+        "result_kind": "report",
+        "result_id": null,
+        "error": null,
+        "input_context": {
+          "workspace_revision": 4,
+          "data_revision": "psi-20261115-r1",
+          "scenario_id": "moon_base"
+        },
+        "fallback_evidence_ids": []
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.2.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

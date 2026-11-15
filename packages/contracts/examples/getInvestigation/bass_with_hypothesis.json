@@ -1,0 +1,144 @@
+{
+  "operation_id": "getInvestigation",
+  "case": "bass_with_hypothesis",
+  "description": "BASS-II: наблюдение и отдельно гипотеза",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {
+      "id": "inv_psi25"
+    },
+    "query": {
+      "data_revision": "psi-20261115-r1"
+    },
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 200,
+    "headers": {},
+    "body": {
+      "data": {
+        "investigation": {
+          "id": "inv_psi25",
+          "data_revision": "psi-20261115-r1",
+          "psi_id": "PSI-25",
+          "acronym": "BASS-II",
+          "title": "Burning and Suppression of Solids - II",
+          "objectives": [
+            "[FIXTURE] Цель BASS-II; формулировку поставляет AI 1."
+          ],
+          "setup_summary": "[FIXTURE] Краткое описание установки BASS-II.",
+          "scopes": [
+            "prevention",
+            "suppression"
+          ],
+          "fuel_states": [
+            "solid"
+          ],
+          "gravity_regimes": [
+            "microgravity"
+          ],
+          "material_ids": [
+            "mat_psi25_fixture_solid"
+          ],
+          "source_ids": [
+            "src_psi25_dataset",
+            "src_ntrs_20160000593"
+          ],
+          "claim_ids": [
+            "clm_psi25_fixture_obs",
+            "clm_psi25_fixture_hyp"
+          ],
+          "conditions_coverage": [
+            {
+              "field": "conditions.pressure",
+              "min_value": null,
+              "max_value": null,
+              "unit": "Pa",
+              "known_count": 0,
+              "unknown_count": 1,
+              "derivation_evidence_ids": []
+            }
+          ],
+          "available_assets": []
+        },
+        "claims": [
+          {
+            "id": "clm_psi25_fixture_obs",
+            "data_revision": "psi-20261115-r1",
+            "investigation_ids": [
+              "inv_psi25"
+            ],
+            "kind": "observation",
+            "text": "[FIXTURE] Наблюдение BASS-II о слабом потоке; текст и условия поставляет AI 1 (A1-05).",
+            "supporting_evidence_ids": [
+              "ev_psi25_fixture01"
+            ],
+            "contradicting_evidence_ids": [],
+            "applicable_run_ids": [],
+            "limitations": [
+              "[FIXTURE] Результат относится к условиям опыта."
+            ],
+            "review_status": "reviewed"
+          },
+          {
+            "id": "clm_psi25_fixture_hyp",
+            "data_revision": "psi-20261115-r1",
+            "investigation_ids": [
+              "inv_psi25"
+            ],
+            "kind": "hypothesis",
+            "text": "[FIXTURE] Исходная гипотеза исследования - отображается отдельно от результатов.",
+            "supporting_evidence_ids": [],
+            "contradicting_evidence_ids": [],
+            "applicable_run_ids": [],
+            "limitations": [],
+            "review_status": "reviewed"
+          }
+        ],
+        "sources": [
+          {
+            "id": "src_psi25_dataset",
+            "data_revision": "psi-20261115-r1",
+            "title": "BASS-II (PSI-25) - набор данных NASA PSI",
+            "kind": "repository",
+            "canonical_url": "https://psi.nasa.gov/physci/repo/data/investigations/PSI-25",
+            "doi": null,
+            "publication_date": null,
+            "retrieved_at": "2026-11-15T08:00:00Z",
+            "license": null,
+            "availability": "metadata_only",
+            "local_asset_id": null,
+            "sha256": null
+          },
+          {
+            "id": "src_ntrs_20160000593",
+            "data_revision": "psi-20261115-r1",
+            "title": "Результаты BASS-II, NASA NTRS 20160000593",
+            "kind": "report",
+            "canonical_url": "https://ntrs.nasa.gov/citations/20160000593",
+            "doi": null,
+            "publication_date": null,
+            "retrieved_at": "2026-11-15T08:00:00Z",
+            "license": null,
+            "availability": "metadata_only",
+            "local_asset_id": null,
+            "sha256": null
+          }
+        ],
+        "run_summary": {
+          "total": 1,
+          "verified_count": 1,
+          "excluded_count": 0
+        }
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.2.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

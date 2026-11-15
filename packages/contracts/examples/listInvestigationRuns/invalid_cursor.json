@@ -1,0 +1,42 @@
+{
+  "operation_id": "listInvestigationRuns",
+  "case": "invalid_cursor",
+  "description": "Недействительный курсор",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {
+      "id": "inv_psi69"
+    },
+    "query": {
+      "data_revision": "psi-20261115-r1",
+      "cursor": "garbage"
+    },
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 422,
+    "headers": {},
+    "body": {
+      "error": {
+        "code": "INVALID_CURSOR",
+        "message": "Список изменился. Загрузите его заново.",
+        "details": [
+          {
+            "field": "cursor",
+            "reason": "invalid",
+            "current_revision": null
+          }
+        ],
+        "retryable": false
+      },
+      "meta": {
+        "request_id": "req_demo02",
+        "contract_version": "1.2.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

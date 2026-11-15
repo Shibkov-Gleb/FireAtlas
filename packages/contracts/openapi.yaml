@@ -1,0 +1,2009 @@
+openapi: 3.1.0
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+info:
+  title: Fire Atlas API
+  version: 1.2.0
+  description: |
+    Нормативный контракт Fire Atlas (ТЗ v1, разделы 10-18, CT-01..CT-16).
+    Владелец: Backend Engineer. Научные поля: AI 1. Ответ и применимость: AI 2.
+
+    Общие правила:
+    * Все поля объектов ответа присутствуют всегда (null / [] вместо отсутствия ключа).
+    * Дополнительные свойства запрещены во всех объектах контракта (422 на запросах).
+    * Даты: UTC ISO 8601 с суффиксом Z. Числа: конечные, без NaN/Infinity.
+    * Успех: {data, meta}. Ошибка: {error, meta}. Бинарный PDF отдается без envelope.
+    * Схемы с префиксом Internal* и x-internal: true относятся к внутренним контрактам
+      CT-09, CT-13..CT-15 и не публикуются браузеру.
+  x-contract-version: 1.1.0
+  x-status: draft-h1
+servers:
+  - url: /api/v1
+tags:
+  - name: system
+  - name: workspace
+  - name: catalog
+  - name: search
+  - name: analysis
+  - name: reports
+
+paths:
+  /config:
+    get:
+      operationId: getConfig
+      tags: [system]
+      summary: Версии, активная ревизия, функции, лимиты и словари
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigEnvelope'
+        '503': {$ref: '#/components/responses/Error'}
+
+  /workspaces:
+    post:
+      operationId: createWorkspace
+      tags: [workspace]
+      summary: Создать гостевое пространство (или вернуть существующее для действующей сессии)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmptyObject'
+      responses:
+        '201':
+          description: Создано новое пространство; выставлена cookie сессии
+          headers:
+            Set-Cookie:
+              schema: {type: string}
+              description: fa_session=...; HttpOnly; SameSite=Lax; Path=/api; Secure (production)
+            ETag: {$ref: '#/components/headers/ETag'}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/WorkspaceEnvelope'}
+        '200':
+          description: Сессия уже действует; возвращено существующее пространство без очистки выбора
+          headers:
+            ETag: {$ref: '#/components/headers/ETag'}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/WorkspaceEnvelope'}
+        '400': {$ref: '#/components/responses/Error'}
+        '403': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+        '503': {$ref: '#/components/responses/Error'}
+
+  /workspaces/current:
+    get:
+      operationId: getCurrentWorkspace
+      tags: [workspace]
+      security: [{sessionCookie: []}]
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag: {$ref: '#/components/headers/ETag'}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/WorkspaceEnvelope'}
+        '401': {$ref: '#/components/responses/Error'}
+        '410': {$ref: '#/components/responses/Error'}
+    patch:
+      operationId: patchCurrentWorkspace
+      tags: [workspace]
+      security: [{sessionCookie: []}]
+      parameters:
+        - $ref: '#/components/parameters/IfMatch'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/WorkspacePatch'}
+      responses:
+        '200':
+          description: Обновлено; revision увеличена на 1
+          headers:
+            ETag: {$ref: '#/components/headers/ETag'}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/WorkspaceEnvelope'}
+        '400': {$ref: '#/components/responses/Error'}
+        '401': {$ref: '#/components/responses/Error'}
+        '403': {$ref: '#/components/responses/Error'}
+        '409': {$ref: '#/components/responses/Error'}
+        '410': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+
+  /search:
+    post:
+      operationId: search
+      tags: [search]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/SearchRequest'}
+      responses:
+        '200':
+          description: Результат поиска; пустая выдача тоже 200 с items=[]
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SearchResultEnvelope'}
+        '400': {$ref: '#/components/responses/Error'}
+        '410': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+        '429': {$ref: '#/components/responses/Error'}
+        '503': {$ref: '#/components/responses/Error'}
+
+  /investigations/{id}:
+    get:
+      operationId: getInvestigation
+      tags: [catalog]
+      parameters:
+        - $ref: '#/components/parameters/InvestigationIdPath'
+        - $ref: '#/components/parameters/DataRevisionQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/InvestigationDetailEnvelope'}
+        '404': {$ref: '#/components/responses/Error'}
+        '410': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+        '503': {$ref: '#/components/responses/Error'}
+
+  /investigations/{id}/runs:
+    get:
+      operationId: listInvestigationRuns
+      tags: [catalog]
+      parameters:
+        - $ref: '#/components/parameters/InvestigationIdPath'
+        - $ref: '#/components/parameters/DataRevisionQuery'
+        - $ref: '#/components/parameters/Cursor'
+        - name: limit
+          in: query
+          required: false
+          schema: {type: integer, minimum: 1, maximum: 200, default: 20}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/RunPageEnvelope'}
+        '404': {$ref: '#/components/responses/Error'}
+        '410': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+
+  /runs/{id}:
+    get:
+      operationId: getRun
+      tags: [catalog]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {$ref: '#/components/schemas/RunId'}
+        - $ref: '#/components/parameters/DataRevisionQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/TestRunEnvelope'}
+        '404': {$ref: '#/components/responses/Error'}
+        '410': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+
+  /measurements/query:
+    post:
+      operationId: queryMeasurements
+      tags: [catalog]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/MeasurementRequest'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/MeasurementResponseEnvelope'}
+        '404': {$ref: '#/components/responses/Error'}
+        '410': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+
+  /comparisons:
+    post:
+      operationId: compareInvestigations
+      tags: [catalog]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ComparisonRequest'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ComparisonResponseEnvelope'}
+        '404': {$ref: '#/components/responses/Error'}
+        '410': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+
+  /applicability:
+    post:
+      operationId: assessApplicability
+      tags: [catalog]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ApplicabilityRequest'}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ApplicabilityResultEnvelope'}
+        '404': {$ref: '#/components/responses/Error'}
+        '410': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+
+  /scenario-presets:
+    get:
+      operationId: listScenarioPresets
+      tags: [catalog]
+      summary: "[ПРЕДЛОЖЕНИЕ D-007] Пресеты среды с происхождением условий"
+      x-status: proposed
+      parameters:
+        - $ref: '#/components/parameters/DataRevisionQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ScenarioPresetListEnvelope'}
+        '410': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+
+  /evidence/{id}:
+    get:
+      operationId: getEvidence
+      tags: [catalog]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {$ref: '#/components/schemas/EvidenceId'}
+        - $ref: '#/components/parameters/DataRevisionQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/EvidenceDetailEnvelope'}
+        '404': {$ref: '#/components/responses/Error'}
+        '410': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+
+  /sources/{id}:
+    get:
+      operationId: getSource
+      tags: [catalog]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {$ref: '#/components/schemas/SourceId'}
+        - $ref: '#/components/parameters/DataRevisionQuery'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SourceEnvelope'}
+        '404': {$ref: '#/components/responses/Error'}
+        '410': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+
+  /sources/{id}/asset:
+    get:
+      operationId: getSourceAsset
+      tags: [catalog]
+      summary: Разрешенный переход к локальному файлу источника (BE-11)
+      description: Отдает только зарегистрированный asset с проверенным sha256. Путь файла из запроса не принимается.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {$ref: '#/components/schemas/SourceId'}
+        - $ref: '#/components/parameters/DataRevisionQuery'
+      responses:
+        '200':
+          description: Файл источника
+          content:
+            application/pdf: {schema: {type: string, contentEncoding: binary}}
+            image/png: {schema: {type: string, contentEncoding: binary}}
+            text/csv: {schema: {type: string}}
+        '404': {$ref: '#/components/responses/Error'}
+        '410': {$ref: '#/components/responses/Error'}
+
+  /analyses:
+    post:
+      operationId: createAnalysis
+      tags: [analysis]
+      security: [{sessionCookie: []}]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/AnalysisRequest'}
+      responses:
+        '202':
+          description: Задача принята (или возвращена существующая по тому же Idempotency-Key)
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/JobEnvelope'}
+        '400': {$ref: '#/components/responses/Error'}
+        '401': {$ref: '#/components/responses/Error'}
+        '403': {$ref: '#/components/responses/Error'}
+        '409': {$ref: '#/components/responses/Error'}
+        '410': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+        '429': {$ref: '#/components/responses/Error'}
+        '503': {$ref: '#/components/responses/Error'}
+
+  /jobs/{id}:
+    get:
+      operationId: getJob
+      tags: [analysis]
+      security: [{sessionCookie: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {$ref: '#/components/schemas/JobId'}
+      responses:
+        '200':
+          description: Состояние задачи без незавершенного текста AI
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/JobEnvelope'}
+        '401': {$ref: '#/components/responses/Error'}
+        '403': {$ref: '#/components/responses/Error'}
+        '404': {$ref: '#/components/responses/Error'}
+    delete:
+      operationId: cancelJob
+      tags: [analysis]
+      security: [{sessionCookie: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {$ref: '#/components/schemas/JobId'}
+      responses:
+        '204':
+          description: Отмена зафиксирована (state=cancelled)
+        '401': {$ref: '#/components/responses/Error'}
+        '403': {$ref: '#/components/responses/Error'}
+        '404': {$ref: '#/components/responses/Error'}
+        '409':
+          description: JOB_ALREADY_FINISHED - задача уже в терминальном состоянии
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ErrorResponse'}
+
+  /answers/{id}:
+    get:
+      operationId: getAnswer
+      tags: [analysis]
+      security: [{sessionCookie: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {$ref: '#/components/schemas/AnswerId'}
+      responses:
+        '200':
+          description: Проверенный AnalysisResult
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AnalysisResultEnvelope'}
+        '401': {$ref: '#/components/responses/Error'}
+        '403': {$ref: '#/components/responses/Error'}
+        '404': {$ref: '#/components/responses/Error'}
+        '410': {$ref: '#/components/responses/Error'}
+
+  /reports:
+    post:
+      operationId: createReport
+      tags: [reports]
+      security: [{sessionCookie: []}]
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ReportRequest'}
+      responses:
+        '202':
+          description: Задача экспорта принята (result_kind=report)
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/JobEnvelope'}
+        '400': {$ref: '#/components/responses/Error'}
+        '401': {$ref: '#/components/responses/Error'}
+        '403': {$ref: '#/components/responses/Error'}
+        '409': {$ref: '#/components/responses/Error'}
+        '422': {$ref: '#/components/responses/Error'}
+        '429': {$ref: '#/components/responses/Error'}
+
+  /reports/{id}:
+    get:
+      operationId: getReport
+      tags: [reports]
+      security: [{sessionCookie: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {$ref: '#/components/schemas/ReportId'}
+      responses:
+        '200':
+          description: Статус и metadata отчета
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ReportEnvelope'}
+        '401': {$ref: '#/components/responses/Error'}
+        '403': {$ref: '#/components/responses/Error'}
+        '404': {$ref: '#/components/responses/Error'}
+        '410': {$ref: '#/components/responses/Error'}
+
+  /reports/{id}/download:
+    get:
+      operationId: downloadReport
+      tags: [reports]
+      security: [{sessionCookie: []}]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {$ref: '#/components/schemas/ReportId'}
+      responses:
+        '200':
+          description: PDF; безопасное имя файла в Content-Disposition; без JSON envelope
+          headers:
+            Content-Disposition:
+              schema: {type: string}
+          content:
+            application/pdf:
+              schema: {type: string, contentEncoding: binary}
+        '401': {$ref: '#/components/responses/Error'}
+        '403': {$ref: '#/components/responses/Error'}
+        '404': {$ref: '#/components/responses/Error'}
+        '409':
+          description: REPORT_NOT_READY - отчет готовится (retryable=true) или не создан (retryable=false)
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ErrorResponse'}
+        '410': {$ref: '#/components/responses/Error'}
+
+  /health/live:
+    servers: [{url: /}]
+    get:
+      operationId: healthLive
+      tags: [system]
+      responses:
+        '200':
+          description: Процесс жив
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/HealthStatus'}
+
+  /health/ready:
+    servers: [{url: /}]
+    get:
+      operationId: healthReady
+      tags: [system]
+      description: Готов, если есть опубликованная ревизия и доступно хранилище. Отказ внешней модели не влияет.
+      responses:
+        '200':
+          description: Готов
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/HealthStatus'}
+        '503':
+          description: Не готов
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/HealthStatus'}
+
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: fa_session
+
+  headers:
+    ETag:
+      description: Ревизия пространства в кавычках, например "3"
+      schema: {type: string, pattern: '^"[1-9][0-9]*"$'}
+
+  parameters:
+    IfMatch:
+      name: If-Match
+      in: header
+      required: true
+      description: ETag текущей ревизии пространства, например "3"
+      schema: {type: string, pattern: '^"[1-9][0-9]*"$'}
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: UUID клиента; область - пространство и тип операции; срок 24 ч
+      schema: {type: string, format: uuid}
+    DataRevisionQuery:
+      name: data_revision
+      in: query
+      required: true
+      description: Обязательна; неявная замена на активную ревизию запрещена (BE-04)
+      schema: {$ref: '#/components/schemas/DataRevision'}
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      schema: {$ref: '#/components/schemas/Cursor'}
+    InvestigationIdPath:
+      name: id
+      in: path
+      required: true
+      schema: {$ref: '#/components/schemas/InvestigationId'}
+
+  responses:
+    Error:
+      description: Ошибка в едином формате CT-12
+      content:
+        application/json:
+          schema: {$ref: '#/components/schemas/ErrorResponse'}
+
+  schemas:
+    # ------------------------------------------------------------------
+    # CT-01 Идентификаторы и ревизии
+    # ------------------------------------------------------------------
+    Id:
+      type: string
+      pattern: '^[A-Za-z0-9_-]{1,128}$'
+    InvestigationId: {type: string, pattern: '^inv_[A-Za-z0-9_-]{1,124}$'}
+    RunId: {type: string, pattern: '^run_[A-Za-z0-9_-]{1,124}$'}
+    MaterialId: {type: string, pattern: '^mat_[A-Za-z0-9_-]{1,124}$'}
+    SourceId: {type: string, pattern: '^src_[A-Za-z0-9_-]{1,124}$'}
+    EvidenceId: {type: string, pattern: '^ev_[A-Za-z0-9_-]{1,125}$'}
+    ClaimId: {type: string, pattern: '^clm_[A-Za-z0-9_-]{1,124}$'}
+    WorkspaceId: {type: string, pattern: '^ws_[A-Za-z0-9_-]{1,125}$'}
+    AnswerId: {type: string, pattern: '^ans_[A-Za-z0-9_-]{1,124}$'}
+    JobId: {type: string, pattern: '^job_[A-Za-z0-9_-]{1,124}$'}
+    ReportId: {type: string, pattern: '^rpt_[A-Za-z0-9_-]{1,124}$'}
+    RequestId: {type: string, pattern: '^req_[A-Za-z0-9_-]{1,124}$'}
+    DataRevision:
+      description: Непрозрачная неизменяемая строка ревизии корпуса, например psi-20261115-r1
+      type: string
+      pattern: '^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$'
+    Cursor:
+      description: Непрозрачный курсор, связан с ревизией, фильтрами и сортировкой
+      type: string
+      minLength: 1
+      maxLength: 1024
+    Timestamp:
+      description: UTC ISO 8601 с суффиксом Z
+      type: string
+      format: date-time
+      pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,6})?Z$'
+    Sha256: {type: string, pattern: '^[a-f0-9]{64}$'}
+    HttpsUrl: {type: string, format: uri, pattern: '^https://', maxLength: 2048}
+    ShortText: {type: string, minLength: 1, maxLength: 500}
+    EmptyObject:
+      type: object
+      additionalProperties: false
+      maxProperties: 0
+
+    # ------------------------------------------------------------------
+    # Словари enum
+    # ------------------------------------------------------------------
+    Unit:
+      type: string
+      enum: [Pa, m_s, m, s, K, fraction, g_fraction, count, dimensionless]
+    QuantityStatus:
+      type: string
+      enum: [measured, reported, derived, not_reported, not_applicable, unusable]
+    Qualifier:
+      type: [string, 'null']
+      enum: [eq, lt, lte, gt, gte, null]
+    Scope:
+      type: string
+      enum: [prevention, detection, suppression]
+    FuelState:
+      type: string
+      enum: [solid, liquid, gas, aerosol]
+    GravityRegime:
+      type: string
+      enum: [normal, microgravity, partial, simulated_partial, unknown]
+    Geometry:
+      type: string
+      enum: [film, sheet, slab, rod, sphere, droplet, fabric, other, unknown]
+    FlowConfiguration:
+      type: string
+      enum: [concurrent, opposed, quiescent, other, unknown]
+    MetricKey:
+      description: Нормативные ключи P0. Новый ключ - только через изменение контракта (раздел 18).
+      type: string
+      enum: [burn_duration, visible_extinction_diameter, flame_spread_rate, particle_diameter]
+    OutcomeCategory:
+      type: string
+      enum: [no_ignition, extinction, burn_to_completion, disruption, ongoing_at_stop, smoke_measurement, unknown]
+    InterpretationStatus:
+      type: string
+      enum: [source_explicit, reviewed_mapping, unmapped]
+    SourceKind:
+      type: string
+      enum: [repository, report, publication, experimental_table, video, image, calibration]
+    SourceAvailability:
+      type: string
+      enum: [available, metadata_only, unavailable]
+    EvidenceKind:
+      type: string
+      enum: [text_excerpt, table_row, video_span, metadata]
+    ClaimKind:
+      type: string
+      enum: [observation, synthesis, hypothesis]
+    ReviewStatus:
+      type: string
+      enum: [reviewed, pending, rejected]
+    Environment:
+      type: string
+      enum: [orbital_habitat, surface_habitat, pressurized_rover, custom]
+    CelestialBody:
+      type: [string, 'null']
+      enum: [earth, moon, mars, other, null]
+    AssumptionOrigin:
+      type: string
+      enum: [user, preset_source, derived]
+    RelevanceCategory:
+      type: string
+      enum: [direct, related, contextual]
+    RetrievalMode:
+      type: string
+      enum: [hybrid, lexical, curated]
+    CellStatus:
+      type: string
+      enum: [known, not_reported, not_applicable]
+    ComparabilityStatus:
+      type: string
+      enum: [compatible, partially_compatible, incompatible]
+    ApplicabilityOverall:
+      type: string
+      enum: [direct_evidence, related_evidence, insufficient_evidence]
+    FactorStatus:
+      type: string
+      enum: [match, mismatch, unknown, not_covered]
+    AnswerStatus:
+      type: string
+      enum: [answered, insufficient_evidence, conflicting_evidence]
+    AnswerBlockKind:
+      type: string
+      enum: [summary, observation, synthesis, limitation]
+    JobType:
+      type: string
+      enum: [analysis, report]
+    JobState:
+      type: string
+      enum: [queued, running, succeeded, failed, cancelled, expired]
+    JobStage:
+      type: [string, 'null']
+      enum: [retrieving, reasoning, validating, exporting, null]
+    ResultKind:
+      type: string
+      enum: [answer, report]
+    ReportState:
+      type: string
+      enum: [preparing, ready, failed, expired]
+    ExclusionReason:
+      type: string
+      enum: [missing_x, missing_y, unusable_unit, unverified_record, filtered_out]
+    ErrorCode:
+      description: |
+        Публичные коды ошибок (раздел 14). Коды задач (Job.error): VALIDATION_FAILED, REASONING_TIMEOUT,
+        MODEL_PROVIDER_ERROR, JOB_TIMEOUT, AI_UNAVAILABLE, INTERNAL_ERROR, EXPORT_FAILED.
+        Клиент обязан иметь обработку по умолчанию для неизвестного кода.
+      type: string
+      enum:
+        - MALFORMED_JSON
+        - SESSION_REQUIRED
+        - ACCESS_DENIED
+        - NOT_FOUND
+        - WORKSPACE_CONFLICT
+        - IDEMPOTENCY_CONFLICT
+        - JOB_ALREADY_FINISHED
+        - REPORT_NOT_READY
+        - DATA_REVISION_GONE
+        - RESOURCE_EXPIRED
+        - VALIDATION_ERROR
+        - INVALID_CURSOR
+        - RATE_LIMITED
+        - MODEL_PROVIDER_ERROR
+        - AI_UNAVAILABLE
+        - DATA_NOT_READY
+        - JOB_TIMEOUT
+        - VALIDATION_FAILED
+        - REASONING_TIMEOUT
+        - EXPORT_FAILED
+        - INTERNAL_ERROR
+
+    # ------------------------------------------------------------------
+    # CT-02 Quantity
+    # ------------------------------------------------------------------
+    Derivation:
+      type: object
+      additionalProperties: false
+      required: [formula_id, input_refs]
+      properties:
+        formula_id: {type: string, pattern: '^[a-z0-9_.-]{1,64}$', description: 'ID формулы из версионированной таблицы преобразований, например partial_pressure_o2.v1'}
+        input_refs:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items: {$ref: '#/components/schemas/InputRef'}
+    InputRef:
+      type: object
+      additionalProperties: false
+      required: [entity_id, field]
+      properties:
+        entity_id: {$ref: '#/components/schemas/Id'}
+        field: {type: string, minLength: 1, maxLength: 128, description: 'Путь поля, например conditions.pressure'}
+    Quantity:
+      type: object
+      additionalProperties: false
+      required: [value, unit, status, qualifier, raw_value, raw_unit, uncertainty, evidence_ids, derivation]
+      properties:
+        value: {type: [number, 'null']}
+        unit: {$ref: '#/components/schemas/Unit'}
+        status: {$ref: '#/components/schemas/QuantityStatus'}
+        qualifier: {$ref: '#/components/schemas/Qualifier'}
+        raw_value: {type: [string, 'null'], maxLength: 256}
+        raw_unit: {type: [string, 'null'], maxLength: 64}
+        uncertainty: {type: [number, 'null'], minimum: 0}
+        evidence_ids:
+          type: array
+          maxItems: 50
+          items: {$ref: '#/components/schemas/EvidenceId'}
+        derivation:
+          anyOf:
+            - {$ref: '#/components/schemas/Derivation'}
+            - {type: 'null'}
+      allOf:
+        - if:
+            properties: {status: {enum: [measured, reported, derived]}}
+          then:
+            properties: {value: {type: number}}
+          else:
+            properties:
+              value: {type: 'null'}
+              qualifier: {type: 'null'}
+              uncertainty: {type: 'null'}
+        - if:
+            properties: {status: {const: derived}}
+          then:
+            properties: {derivation: {$ref: '#/components/schemas/Derivation'}}
+          else:
+            properties: {derivation: {type: 'null'}}
+    QuantityFraction:
+      allOf: [{$ref: '#/components/schemas/Quantity'}, {properties: {unit: {const: fraction}}}]
+    QuantityPa:
+      allOf: [{$ref: '#/components/schemas/Quantity'}, {properties: {unit: {const: Pa}}}]
+    QuantityMs:
+      allOf: [{$ref: '#/components/schemas/Quantity'}, {properties: {unit: {const: m_s}}}]
+    QuantityM:
+      allOf: [{$ref: '#/components/schemas/Quantity'}, {properties: {unit: {const: m}}}]
+    QuantityK:
+      allOf: [{$ref: '#/components/schemas/Quantity'}, {properties: {unit: {const: K}}}]
+    QuantityG:
+      allOf: [{$ref: '#/components/schemas/Quantity'}, {properties: {unit: {const: g_fraction}}}]
+
+    # ------------------------------------------------------------------
+    # CT-03 Source, CT-04 Evidence
+    # ------------------------------------------------------------------
+    Source:
+      type: object
+      additionalProperties: false
+      required: [id, data_revision, title, kind, canonical_url, doi, publication_date, retrieved_at, license, availability, local_asset_id, sha256]
+      properties:
+        id: {$ref: '#/components/schemas/SourceId'}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+        title: {type: string, minLength: 1, maxLength: 500}
+        kind: {$ref: '#/components/schemas/SourceKind'}
+        canonical_url: {$ref: '#/components/schemas/HttpsUrl'}
+        doi: {type: [string, 'null'], pattern: '^10\.\d{4,9}/\S+$'}
+        publication_date: {type: [string, 'null'], format: date, description: 'YYYY-MM-DD или null'}
+        retrieved_at: {$ref: '#/components/schemas/Timestamp'}
+        license: {type: [string, 'null'], maxLength: 200}
+        availability: {$ref: '#/components/schemas/SourceAvailability'}
+        local_asset_id: {type: [string, 'null'], pattern: '^asset_[A-Za-z0-9_-]{1,122}$', description: 'ID бэкенда, не путь'}
+        sha256: {anyOf: [{$ref: '#/components/schemas/Sha256'}, {type: 'null'}]}
+      if:
+        properties: {local_asset_id: {type: string}}
+      then:
+        properties: {sha256: {$ref: '#/components/schemas/Sha256'}}
+    Locator:
+      type: object
+      additionalProperties: false
+      required: [page, section, row_key, start_s, end_s]
+      properties:
+        page: {type: [integer, 'null'], minimum: 1}
+        section: {type: [string, 'null'], maxLength: 200}
+        row_key: {type: [string, 'null'], maxLength: 128}
+        start_s: {type: [number, 'null'], minimum: 0}
+        end_s: {type: [number, 'null'], minimum: 0}
+    TableValue:
+      type: object
+      additionalProperties: false
+      required: [field, raw_value, raw_unit]
+      properties:
+        field: {type: string, minLength: 1, maxLength: 128}
+        raw_value: {type: [string, 'null'], maxLength: 256}
+        raw_unit: {type: [string, 'null'], maxLength: 64}
+    Evidence:
+      type: object
+      additionalProperties: false
+      required: [id, data_revision, source_id, kind, locator, excerpt, table_values, verified, verification_note]
+      properties:
+        id: {$ref: '#/components/schemas/EvidenceId'}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+        source_id: {$ref: '#/components/schemas/SourceId'}
+        kind: {$ref: '#/components/schemas/EvidenceKind'}
+        locator: {$ref: '#/components/schemas/Locator'}
+        excerpt: {type: [string, 'null'], minLength: 1, maxLength: 1200}
+        table_values:
+          type: array
+          maxItems: 100
+          items: {$ref: '#/components/schemas/TableValue'}
+        verified: {type: boolean}
+        verification_note: {type: [string, 'null'], maxLength: 1000}
+      allOf:
+        - if: {properties: {kind: {const: text_excerpt}}}
+          then:
+            properties: {excerpt: {type: string}}
+            anyOf:
+              - properties: {locator: {properties: {page: {type: integer}}}}
+              - properties: {locator: {properties: {section: {type: string}}}}
+        - if: {properties: {kind: {const: table_row}}}
+          then:
+            properties:
+              locator: {properties: {row_key: {type: string}}}
+              table_values: {minItems: 1}
+        - if: {properties: {kind: {const: video_span}}}
+          then:
+            properties:
+              locator: {properties: {start_s: {type: number}, end_s: {type: number}}}
+            description: end_s > start_s проверяется семантическим валидатором
+
+    # ------------------------------------------------------------------
+    # CT-05 Investigation, CT-06 Material/TestRun
+    # ------------------------------------------------------------------
+    ConditionsCoverage:
+      type: object
+      additionalProperties: false
+      required: [field, min_value, max_value, unit, known_count, unknown_count, derivation_evidence_ids]
+      properties:
+        field: {type: string, minLength: 1, maxLength: 128}
+        min_value: {type: [number, 'null']}
+        max_value: {type: [number, 'null']}
+        unit: {$ref: '#/components/schemas/Unit'}
+        known_count: {type: integer, minimum: 0}
+        unknown_count: {type: integer, minimum: 0}
+        derivation_evidence_ids:
+          type: array
+          items: {$ref: '#/components/schemas/EvidenceId'}
+    Investigation:
+      type: object
+      additionalProperties: false
+      required: [id, data_revision, psi_id, acronym, title, objectives, setup_summary, scopes, fuel_states, gravity_regimes, material_ids, source_ids, claim_ids, conditions_coverage, available_assets]
+      properties:
+        id: {$ref: '#/components/schemas/InvestigationId'}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+        psi_id: {type: string, pattern: '^PSI-[0-9]{1,6}$'}
+        acronym: {type: string, minLength: 1, maxLength: 64}
+        title: {type: string, minLength: 1, maxLength: 500}
+        objectives:
+          type: array
+          maxItems: 50
+          items: {type: string, minLength: 1, maxLength: 2000}
+        setup_summary: {type: string, maxLength: 4000}
+        scopes: {type: array, uniqueItems: true, items: {$ref: '#/components/schemas/Scope'}}
+        fuel_states: {type: array, uniqueItems: true, items: {$ref: '#/components/schemas/FuelState'}}
+        gravity_regimes: {type: array, uniqueItems: true, items: {$ref: '#/components/schemas/GravityRegime'}}
+        material_ids: {type: array, uniqueItems: true, items: {$ref: '#/components/schemas/MaterialId'}}
+        source_ids: {type: array, uniqueItems: true, items: {$ref: '#/components/schemas/SourceId'}}
+        claim_ids: {type: array, uniqueItems: true, items: {$ref: '#/components/schemas/ClaimId'}}
+        conditions_coverage: {type: array, items: {$ref: '#/components/schemas/ConditionsCoverage'}}
+        available_assets: {type: array, uniqueItems: true, items: {$ref: '#/components/schemas/SourceId'}}
+    Material:
+      type: object
+      additionalProperties: false
+      required: [id, label, state, composition, aliases]
+      properties:
+        id: {$ref: '#/components/schemas/MaterialId'}
+        label: {type: string, minLength: 1, maxLength: 200}
+        state: {$ref: '#/components/schemas/FuelState'}
+        composition: {type: [string, 'null'], maxLength: 1000}
+        aliases: {type: array, items: {type: string, minLength: 1, maxLength: 200}}
+    Sample:
+      type: object
+      additionalProperties: false
+      required: [geometry, thickness, initial_diameter]
+      properties:
+        geometry: {$ref: '#/components/schemas/Geometry'}
+        thickness: {$ref: '#/components/schemas/QuantityM'}
+        initial_diameter: {$ref: '#/components/schemas/QuantityM'}
+    RunConditions:
+      type: object
+      additionalProperties: false
+      description: |
+        Условия опыта. Состав атмосферы - мольные доли начальной среды (D-036): oxygen_fraction, nitrogen_fraction,
+        co2_fraction, helium_fraction. 0 - газ отсутствует (сообщено источником), not_reported - источник не сообщает.
+      required: [gravity_regime, gravity_level, oxygen_fraction, nitrogen_fraction, co2_fraction, helium_fraction, pressure, airflow_speed, flow_configuration, ambient_temperature]
+      properties:
+        gravity_regime: {$ref: '#/components/schemas/GravityRegime'}
+        gravity_level: {$ref: '#/components/schemas/QuantityG'}
+        oxygen_fraction: {$ref: '#/components/schemas/QuantityFraction'}
+        nitrogen_fraction: {$ref: '#/components/schemas/QuantityFraction'}
+        co2_fraction: {$ref: '#/components/schemas/QuantityFraction'}
+        helium_fraction: {$ref: '#/components/schemas/QuantityFraction'}
+        pressure: {$ref: '#/components/schemas/QuantityPa'}
+        airflow_speed: {$ref: '#/components/schemas/QuantityMs'}
+        flow_configuration: {$ref: '#/components/schemas/FlowConfiguration'}
+        ambient_temperature: {$ref: '#/components/schemas/QuantityK'}
+    Metric:
+      type: object
+      additionalProperties: false
+      required: [metric_key, quantity]
+      properties:
+        metric_key: {$ref: '#/components/schemas/MetricKey'}
+        quantity: {$ref: '#/components/schemas/Quantity'}
+    TerminalOutcome:
+      type: object
+      additionalProperties: false
+      required: [category, raw_label, interpretation_status, evidence_ids]
+      properties:
+        category: {$ref: '#/components/schemas/OutcomeCategory'}
+        raw_label: {type: [string, 'null'], maxLength: 200}
+        interpretation_status: {$ref: '#/components/schemas/InterpretationStatus'}
+        evidence_ids: {type: array, items: {$ref: '#/components/schemas/EvidenceId'}}
+    TestRun:
+      type: object
+      additionalProperties: false
+      required: [id, data_revision, investigation_id, source_test_id, material_id, sample, conditions, metrics, terminal_outcome, regime_tags, evidence_ids, quality_notes]
+      properties:
+        id: {$ref: '#/components/schemas/RunId'}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+        investigation_id: {$ref: '#/components/schemas/InvestigationId'}
+        source_test_id: {type: [string, 'null'], minLength: 1, maxLength: 128, description: 'Исходное обозначение NASA, например 30CAL03'}
+        material_id: {anyOf: [{$ref: '#/components/schemas/MaterialId'}, {type: 'null'}]}
+        sample: {$ref: '#/components/schemas/Sample'}
+        conditions: {$ref: '#/components/schemas/RunConditions'}
+        metrics: {type: array, maxItems: 50, items: {$ref: '#/components/schemas/Metric'}}
+        terminal_outcome: {$ref: '#/components/schemas/TerminalOutcome'}
+        regime_tags: {type: array, uniqueItems: true, items: {type: string, pattern: '^[a-z0-9_]{1,64}$'}}
+        evidence_ids: {type: array, minItems: 1, items: {$ref: '#/components/schemas/EvidenceId'}}
+        quality_notes: {type: array, items: {type: string, minLength: 1, maxLength: 1000}}
+
+    # ------------------------------------------------------------------
+    # CT-07 Claim, CT-08 Scenario
+    # ------------------------------------------------------------------
+    Claim:
+      type: object
+      additionalProperties: false
+      required: [id, data_revision, investigation_ids, kind, text, supporting_evidence_ids, contradicting_evidence_ids, applicable_run_ids, limitations, review_status]
+      properties:
+        id: {$ref: '#/components/schemas/ClaimId'}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+        investigation_ids: {type: array, minItems: 1, uniqueItems: true, items: {$ref: '#/components/schemas/InvestigationId'}}
+        kind: {$ref: '#/components/schemas/ClaimKind'}
+        text: {type: string, minLength: 1, maxLength: 2000}
+        supporting_evidence_ids: {type: array, uniqueItems: true, items: {$ref: '#/components/schemas/EvidenceId'}}
+        contradicting_evidence_ids: {type: array, uniqueItems: true, items: {$ref: '#/components/schemas/EvidenceId'}}
+        applicable_run_ids: {type: array, uniqueItems: true, items: {$ref: '#/components/schemas/RunId'}}
+        limitations: {type: array, items: {type: string, minLength: 1, maxLength: 1000}}
+        review_status: {$ref: '#/components/schemas/ReviewStatus'}
+      allOf:
+        - if: {properties: {kind: {const: observation}}}
+          then: {properties: {supporting_evidence_ids: {minItems: 1}}}
+        - if: {properties: {kind: {const: synthesis}}}
+          then: {properties: {supporting_evidence_ids: {minItems: 1}}, description: 'минимум 2 либо документированный обзорный источник - семантическая проверка'}
+    Assumption:
+      type: object
+      additionalProperties: false
+      required: [field, text, origin, source_ids]
+      properties:
+        field: {type: string, minLength: 1, maxLength: 128}
+        text: {type: string, minLength: 1, maxLength: 1000}
+        origin: {$ref: '#/components/schemas/AssumptionOrigin'}
+        source_ids: {type: array, items: {$ref: '#/components/schemas/SourceId'}}
+      if: {properties: {origin: {const: preset_source}}}
+      then: {properties: {source_ids: {minItems: 1}}}
+    Scenario:
+      description: |
+        Контекст миссии CT-08. Численные поля - Quantity или null, если ограничение не задано.
+        Для значений, введенных пользователем, evidence_ids может быть пустым; происхождение
+        фиксируется в assumptions (origin=user). См. D-006.
+      type: object
+      additionalProperties: false
+      required: [scenario_id, name, environment, celestial_body, safety_task, material_ids, geometry, oxygen_fraction, pressure, airflow_speed, gravity_regime, assumptions]
+      properties:
+        scenario_id: {$ref: '#/components/schemas/Id'}
+        name: {type: string, minLength: 1, maxLength: 120}
+        environment: {$ref: '#/components/schemas/Environment'}
+        celestial_body: {$ref: '#/components/schemas/CelestialBody'}
+        safety_task: {$ref: '#/components/schemas/Scope'}
+        material_ids: {type: array, maxItems: 20, uniqueItems: true, items: {$ref: '#/components/schemas/MaterialId'}}
+        geometry: {anyOf: [{$ref: '#/components/schemas/Geometry'}, {type: 'null'}]}
+        oxygen_fraction: {anyOf: [{$ref: '#/components/schemas/QuantityFraction'}, {type: 'null'}]}
+        pressure: {anyOf: [{$ref: '#/components/schemas/QuantityPa'}, {type: 'null'}]}
+        airflow_speed: {anyOf: [{$ref: '#/components/schemas/QuantityMs'}, {type: 'null'}]}
+        gravity_regime: {$ref: '#/components/schemas/GravityRegime'}
+        assumptions: {type: array, maxItems: 50, items: {$ref: '#/components/schemas/Assumption'}}
+      allOf:
+        - if: {properties: {environment: {const: pressurized_rover}}}
+          then: {properties: {celestial_body: {type: string}}}
+    ScenarioPreset:
+      type: object
+      additionalProperties: false
+      required: [preset_id, label, scenario]
+      properties:
+        preset_id: {$ref: '#/components/schemas/Id'}
+        label: {type: string, minLength: 1, maxLength: 120}
+        scenario: {$ref: '#/components/schemas/Scenario'}
+    ScenarioPresetList:
+      type: object
+      additionalProperties: false
+      required: [items]
+      properties:
+        items: {type: array, items: {$ref: '#/components/schemas/ScenarioPreset'}}
+
+    # ------------------------------------------------------------------
+    # 13.1 Envelope и ошибки
+    # ------------------------------------------------------------------
+    Warning:
+      type: object
+      additionalProperties: false
+      required: [code, message, field]
+      properties:
+        code: {type: string, pattern: '^[A-Z][A-Z0-9_]{1,63}$'}
+        message: {type: string, maxLength: 500}
+        field: {type: [string, 'null'], maxLength: 128}
+    Meta:
+      type: object
+      additionalProperties: false
+      required: [request_id, contract_version, data_revision, warnings]
+      properties:
+        request_id: {$ref: '#/components/schemas/RequestId'}
+        contract_version: {type: string, pattern: '^\d+\.\d+\.\d+$'}
+        data_revision: {anyOf: [{$ref: '#/components/schemas/DataRevision'}, {type: 'null'}]}
+        warnings: {type: array, items: {$ref: '#/components/schemas/Warning'}}
+    ErrorDetail:
+      type: object
+      additionalProperties: false
+      required: [field, reason, current_revision]
+      properties:
+        field: {type: [string, 'null'], maxLength: 256}
+        reason: {type: [string, 'null'], maxLength: 256}
+        current_revision: {type: [integer, string, 'null'], description: 'integer для workspace_revision, строка для data_revision'}
+    ErrorObject:
+      type: object
+      additionalProperties: false
+      required: [code, message, details, retryable]
+      properties:
+        code: {$ref: '#/components/schemas/ErrorCode'}
+        message: {type: string, minLength: 1, maxLength: 500}
+        details: {type: array, maxItems: 50, items: {$ref: '#/components/schemas/ErrorDetail'}}
+        retryable: {type: boolean}
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      required: [error, meta]
+      properties:
+        error: {$ref: '#/components/schemas/ErrorObject'}
+        meta: {$ref: '#/components/schemas/Meta'}
+    HealthStatus:
+      type: object
+      additionalProperties: false
+      required: [status, checks]
+      properties:
+        status: {type: string, enum: [ok, not_ready]}
+        checks:
+          type: object
+          additionalProperties: false
+          required: [storage, active_revision]
+          properties:
+            storage: {type: boolean}
+            active_revision: {type: [string, 'null']}
+
+    # ------------------------------------------------------------------
+    # Config (Б.6)
+    # ------------------------------------------------------------------
+    DictionaryEntry:
+      type: object
+      additionalProperties: false
+      required: [value, label]
+      properties:
+        value: {type: string}
+        label: {type: string}
+    Dictionary:
+      type: array
+      items: {$ref: '#/components/schemas/DictionaryEntry'}
+    Config:
+      type: object
+      additionalProperties: false
+      required: [contract_version, active_data_revision, feature_flags, limits, dictionaries, measurement_axes, retention]
+      properties:
+        contract_version: {type: string, pattern: '^\d+\.\d+\.\d+$'}
+        active_data_revision: {anyOf: [{$ref: '#/components/schemas/DataRevision'}, {type: 'null'}]}
+        feature_flags:
+          type: object
+          additionalProperties: false
+          required: [analysis, reports, semantic_search, video_preview]
+          properties:
+            analysis: {type: boolean}
+            reports: {type: boolean}
+            semantic_search: {type: boolean}
+            video_preview: {type: boolean}
+        limits:
+          type: object
+          additionalProperties: false
+          required: [search_limit_max, run_limit_max, measurement_limit_max, question_chars_max, comparison_max, analysis_deadline_s, report_deadline_s]
+          properties:
+            search_limit_max: {type: integer, minimum: 1}
+            run_limit_max: {type: integer, minimum: 1}
+            measurement_limit_max: {type: integer, minimum: 1}
+            question_chars_max: {type: integer, minimum: 1}
+            comparison_max: {type: integer, minimum: 2}
+            analysis_deadline_s: {type: integer, minimum: 1}
+            report_deadline_s: {type: integer, minimum: 1}
+        dictionaries:
+          type: object
+          additionalProperties: false
+          required: [unit, quantity_status, scope, fuel_state, gravity_regime, geometry, flow_configuration, metric_key, outcome_category, interpretation_status, source_kind, source_availability, claim_kind, environment, celestial_body, relevance_category, retrieval_mode, cell_status, comparability_status, applicability_overall, factor_status, answer_status, answer_block_kind, exclusion_reason, materials]
+          properties:
+            materials:
+              $ref: '#/components/schemas/Dictionary'
+              description: 'D-040 (1.2.0): материалы активной ревизии, value = material_id, label = Material.label. Единственный публичный источник подписей материалов.'
+            unit: {$ref: '#/components/schemas/Dictionary'}
+            quantity_status: {$ref: '#/components/schemas/Dictionary'}
+            scope: {$ref: '#/components/schemas/Dictionary'}
+            fuel_state: {$ref: '#/components/schemas/Dictionary'}
+            gravity_regime: {$ref: '#/components/schemas/Dictionary'}
+            geometry: {$ref: '#/components/schemas/Dictionary'}
+            flow_configuration: {$ref: '#/components/schemas/Dictionary'}
+            metric_key: {$ref: '#/components/schemas/Dictionary'}
+            outcome_category: {$ref: '#/components/schemas/Dictionary'}
+            interpretation_status: {$ref: '#/components/schemas/Dictionary'}
+            source_kind: {$ref: '#/components/schemas/Dictionary'}
+            source_availability: {$ref: '#/components/schemas/Dictionary'}
+            claim_kind: {$ref: '#/components/schemas/Dictionary'}
+            environment: {$ref: '#/components/schemas/Dictionary'}
+            celestial_body: {$ref: '#/components/schemas/Dictionary'}
+            relevance_category: {$ref: '#/components/schemas/Dictionary'}
+            retrieval_mode: {$ref: '#/components/schemas/Dictionary'}
+            cell_status: {$ref: '#/components/schemas/Dictionary'}
+            comparability_status: {$ref: '#/components/schemas/Dictionary'}
+            applicability_overall: {$ref: '#/components/schemas/Dictionary'}
+            factor_status: {$ref: '#/components/schemas/Dictionary'}
+            answer_status: {$ref: '#/components/schemas/Dictionary'}
+            answer_block_kind: {$ref: '#/components/schemas/Dictionary'}
+            exclusion_reason: {$ref: '#/components/schemas/Dictionary'}
+        measurement_axes:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            required: [x_key, y_key, investigation_ids]
+            properties:
+              x_key: {$ref: '#/components/schemas/MetricPath'}
+              y_key: {$ref: '#/components/schemas/MetricPath'}
+              investigation_ids: {type: array, items: {$ref: '#/components/schemas/InvestigationId'}}
+        retention:
+          type: object
+          additionalProperties: false
+          required: [workspace_days, report_hours]
+          properties:
+            workspace_days: {type: integer, minimum: 1}
+            report_hours: {type: integer, minimum: 1}
+
+    # ------------------------------------------------------------------
+    # 13.3 Workspace
+    # ------------------------------------------------------------------
+    Workspace:
+      type: object
+      additionalProperties: false
+      required: [id, revision, scenario, selected_investigation_ids, saved_investigation_ids, saved_answer_ids, data_revision, created_at, updated_at, expires_at]
+      properties:
+        id: {$ref: '#/components/schemas/WorkspaceId'}
+        revision: {type: integer, minimum: 1}
+        scenario: {anyOf: [{$ref: '#/components/schemas/Scenario'}, {type: 'null'}]}
+        selected_investigation_ids: {type: array, maxItems: 3, uniqueItems: true, items: {$ref: '#/components/schemas/InvestigationId'}}
+        saved_investigation_ids: {type: array, maxItems: 100, uniqueItems: true, items: {$ref: '#/components/schemas/InvestigationId'}}
+        saved_answer_ids: {type: array, maxItems: 30, uniqueItems: true, items: {$ref: '#/components/schemas/AnswerId'}}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+        created_at: {$ref: '#/components/schemas/Timestamp'}
+        updated_at: {$ref: '#/components/schemas/Timestamp'}
+        expires_at: {$ref: '#/components/schemas/Timestamp'}
+    WorkspacePatch:
+      description: Меняются только переданные поля; массив заменяется целиком; дубли удаляются с сохранением первого вхождения.
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        scenario: {anyOf: [{$ref: '#/components/schemas/Scenario'}, {type: 'null'}]}
+        selected_investigation_ids: {type: array, maxItems: 3, items: {$ref: '#/components/schemas/InvestigationId'}}
+        saved_investigation_ids: {type: array, maxItems: 100, items: {$ref: '#/components/schemas/InvestigationId'}}
+        saved_answer_ids: {type: array, maxItems: 30, items: {$ref: '#/components/schemas/AnswerId'}}
+
+    # ------------------------------------------------------------------
+    # 13.4 Search
+    # ------------------------------------------------------------------
+    RangeBase:
+      type: object
+      additionalProperties: false
+      required: [min, max, unit]
+      properties:
+        min: {type: [number, 'null']}
+        max: {type: [number, 'null']}
+        unit: {$ref: '#/components/schemas/Unit'}
+      not:
+        properties: {min: {type: 'null'}, max: {type: 'null'}}
+      description: Границы включены; min <= max проверяется сервером.
+    OxygenRange:
+      anyOf:
+        - allOf: [{$ref: '#/components/schemas/RangeBase'}, {properties: {unit: {const: fraction}, min: {type: [number, 'null'], minimum: 0, maximum: 1}, max: {type: [number, 'null'], minimum: 0, maximum: 1}}}]
+        - {type: 'null'}
+    FractionRange:
+      description: Диапазон мольной доли газа (D-036); та же форма, что OxygenRange.
+      anyOf:
+        - allOf: [{$ref: '#/components/schemas/RangeBase'}, {properties: {unit: {const: fraction}, min: {type: [number, 'null'], minimum: 0, maximum: 1}, max: {type: [number, 'null'], minimum: 0, maximum: 1}}}]
+        - {type: 'null'}
+    PressureRange:
+      anyOf:
+        - allOf: [{$ref: '#/components/schemas/RangeBase'}, {properties: {unit: {const: Pa}, min: {type: [number, 'null'], minimum: 0}, max: {type: [number, 'null'], minimum: 0}}}]
+        - {type: 'null'}
+    AirflowRange:
+      anyOf:
+        - allOf: [{$ref: '#/components/schemas/RangeBase'}, {properties: {unit: {const: m_s}, min: {type: [number, 'null'], minimum: 0}, max: {type: [number, 'null'], minimum: 0}}}]
+        - {type: 'null'}
+    SearchFilters:
+      description: Во входе все поля необязательны (значения по умолчанию); в applied_filters присутствуют все.
+      type: object
+      additionalProperties: false
+      properties:
+        scopes: {type: array, maxItems: 3, items: {$ref: '#/components/schemas/Scope'}, default: []}
+        investigation_ids: {type: array, maxItems: 50, items: {$ref: '#/components/schemas/InvestigationId'}, default: []}
+        material_ids: {type: array, maxItems: 50, items: {$ref: '#/components/schemas/MaterialId'}, default: []}
+        fuel_states: {type: array, maxItems: 4, items: {$ref: '#/components/schemas/FuelState'}, default: []}
+        gravity_regimes: {type: array, maxItems: 5, items: {$ref: '#/components/schemas/GravityRegime'}, default: []}
+        oxygen_range: {$ref: '#/components/schemas/OxygenRange'}
+        pressure_range: {$ref: '#/components/schemas/PressureRange'}
+        airflow_range: {$ref: '#/components/schemas/AirflowRange'}
+        has_measurements: {type: [boolean, 'null'], default: null}
+        include_unknown: {type: boolean, default: false}
+    AppliedFilters:
+      allOf:
+        - {$ref: '#/components/schemas/SearchFilters'}
+        - required: [scopes, investigation_ids, material_ids, fuel_states, gravity_regimes, oxygen_range, pressure_range, airflow_range, has_measurements, include_unknown]
+    SearchSort:
+      description: '[ПРЕДЛОЖЕНИЕ D-008] Сортировка выдачи (FR-03). relevance - порядок AI 1; acronym - по аббревиатуре.'
+      type: string
+      enum: [relevance, acronym]
+    SearchRequest:
+      type: object
+      additionalProperties: false
+      required: [query, locale, data_revision]
+      properties:
+        query: {type: string, maxLength: 2000, description: 'Пустая строка допустима только при наличии хотя бы одного фильтра'}
+        locale: {type: string, const: ru}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+        filters: {$ref: '#/components/schemas/SearchFilters'}
+        scenario: {anyOf: [{$ref: '#/components/schemas/Scenario'}, {type: 'null'}], default: null}
+        include_related: {type: boolean, default: false}
+        sort: {$ref: '#/components/schemas/SearchSort', default: relevance}
+        cursor: {anyOf: [{$ref: '#/components/schemas/Cursor'}, {type: 'null'}], default: null}
+        limit: {type: integer, minimum: 1, maximum: 100, default: 20}
+    Reason:
+      description: Причина соответствия или различия. text - готовая русская подпись для UI.
+      type: object
+      additionalProperties: false
+      required: [code, text, field, evidence_ids]
+      properties:
+        code: {type: string, pattern: '^[a-z][a-z0-9_]{1,63}$'}
+        text: {type: string, minLength: 1, maxLength: 300}
+        field: {type: [string, 'null'], maxLength: 128}
+        evidence_ids: {type: array, maxItems: 20, items: {$ref: '#/components/schemas/EvidenceId'}}
+    SearchItem:
+      type: object
+      additionalProperties: false
+      required: [investigation, relevance_category, match_reasons, differences, missing_fields, matching_run_ids, related, evidence_ids]
+      properties:
+        investigation: {$ref: '#/components/schemas/Investigation'}
+        relevance_category: {$ref: '#/components/schemas/RelevanceCategory'}
+        match_reasons: {type: array, maxItems: 20, items: {$ref: '#/components/schemas/Reason'}}
+        differences: {type: array, maxItems: 20, items: {$ref: '#/components/schemas/Reason'}}
+        missing_fields: {type: array, maxItems: 50, items: {type: string, maxLength: 128}}
+        matching_run_ids: {type: array, items: {$ref: '#/components/schemas/RunId'}}
+        related: {type: boolean}
+        evidence_ids: {type: array, maxItems: 50, items: {$ref: '#/components/schemas/EvidenceId'}}
+      if: {properties: {related: {const: true}}}
+      then: {properties: {relevance_category: {enum: [related, contextual]}}}
+    SearchResult:
+      type: object
+      additionalProperties: false
+      required: [items, next_cursor, total, retrieval_mode, applied_filters]
+      properties:
+        items: {type: array, maxItems: 100, items: {$ref: '#/components/schemas/SearchItem'}}
+        next_cursor: {anyOf: [{$ref: '#/components/schemas/Cursor'}, {type: 'null'}]}
+        total: {type: [integer, 'null'], minimum: 0}
+        retrieval_mode: {$ref: '#/components/schemas/RetrievalMode'}
+        applied_filters: {$ref: '#/components/schemas/AppliedFilters'}
+
+    # ------------------------------------------------------------------
+    # Каталог: детальные ответы
+    # ------------------------------------------------------------------
+    InvestigationDetail:
+      type: object
+      additionalProperties: false
+      required: [investigation, claims, sources, run_summary]
+      properties:
+        investigation: {$ref: '#/components/schemas/Investigation'}
+        claims: {type: array, items: {$ref: '#/components/schemas/Claim'}, description: 'reviewed observation/synthesis и hypothesis (с kind=hypothesis)'}
+        sources: {type: array, items: {$ref: '#/components/schemas/Source'}}
+        run_summary:
+          type: object
+          additionalProperties: false
+          required: [total, verified_count, excluded_count]
+          properties:
+            total: {type: integer, minimum: 0}
+            verified_count: {type: integer, minimum: 0}
+            excluded_count: {type: integer, minimum: 0}
+    RunPage:
+      type: object
+      additionalProperties: false
+      required: [items, next_cursor, total]
+      properties:
+        items: {type: array, maxItems: 200, items: {$ref: '#/components/schemas/TestRun'}}
+        next_cursor: {anyOf: [{$ref: '#/components/schemas/Cursor'}, {type: 'null'}]}
+        total: {type: [integer, 'null'], minimum: 0}
+    EvidenceDetail:
+      type: object
+      additionalProperties: false
+      required: [evidence, source]
+      properties:
+        evidence: {$ref: '#/components/schemas/Evidence'}
+        source: {$ref: '#/components/schemas/Source'}
+
+    # ------------------------------------------------------------------
+    # 13.5 Measurements
+    # ------------------------------------------------------------------
+    MetricPath:
+      description: Путь показателя TestRun. P0 - sample.initial_diameter и metrics.burn_duration; остальные пары перечислены в GET /config.
+      type: string
+      pattern: '^(sample\.(initial_diameter|thickness)|conditions\.(oxygen_fraction|pressure|airflow_speed|ambient_temperature|gravity_level)|metrics\.[a-z_]{1,64})$'
+    MeasurementFilters:
+      description: '[ПРЕДЛОЖЕНИЕ D-009] Фильтры набора точек.'
+      type: object
+      additionalProperties: false
+      properties:
+        outcome_categories: {type: array, maxItems: 7, items: {$ref: '#/components/schemas/OutcomeCategory'}, default: []}
+        material_ids: {type: array, maxItems: 50, items: {$ref: '#/components/schemas/MaterialId'}, default: []}
+        oxygen_range: {$ref: '#/components/schemas/OxygenRange'}
+        pressure_range: {$ref: '#/components/schemas/PressureRange'}
+        co2_range: {$ref: '#/components/schemas/FractionRange'}
+        helium_range: {$ref: '#/components/schemas/FractionRange'}
+    MeasurementRequest:
+      type: object
+      additionalProperties: false
+      required: [investigation_id, data_revision, x_metric, y_metric]
+      properties:
+        investigation_id: {$ref: '#/components/schemas/InvestigationId'}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+        run_ids: {type: array, maxItems: 1000, items: {$ref: '#/components/schemas/RunId'}, default: []}
+        x_metric: {$ref: '#/components/schemas/MetricPath'}
+        y_metric: {$ref: '#/components/schemas/MetricPath'}
+        filters: {$ref: '#/components/schemas/MeasurementFilters'}
+        cursor: {anyOf: [{$ref: '#/components/schemas/Cursor'}, {type: 'null'}], default: null}
+        limit: {type: integer, minimum: 1, maximum: 1000, default: 200}
+    Axis:
+      type: object
+      additionalProperties: false
+      required: [key, label, unit]
+      properties:
+        key: {$ref: '#/components/schemas/MetricPath'}
+        label: {type: string, minLength: 1, maxLength: 200}
+        unit: {$ref: '#/components/schemas/Unit'}
+    MeasurementPoint:
+      type: object
+      additionalProperties: false
+      required: [run_id, x, y, outcome, evidence_ids]
+      properties:
+        run_id: {$ref: '#/components/schemas/RunId'}
+        x: {type: number}
+        y: {type: number}
+        outcome: {$ref: '#/components/schemas/OutcomeCategory'}
+        evidence_ids: {type: array, minItems: 1, items: {$ref: '#/components/schemas/EvidenceId'}}
+    MeasurementResponse:
+      type: object
+      additionalProperties: false
+      required: [x_axis, y_axis, points, excluded_count, exclusions_by_reason, truncated, next_cursor]
+      properties:
+        x_axis: {$ref: '#/components/schemas/Axis'}
+        y_axis: {$ref: '#/components/schemas/Axis'}
+        points: {type: array, maxItems: 1000, items: {$ref: '#/components/schemas/MeasurementPoint'}}
+        excluded_count: {type: integer, minimum: 0}
+        exclusions_by_reason:
+          type: object
+          additionalProperties: false
+          required: [missing_x, missing_y, unusable_unit, unverified_record, filtered_out]
+          properties:
+            missing_x: {type: integer, minimum: 0}
+            missing_y: {type: integer, minimum: 0}
+            unusable_unit: {type: integer, minimum: 0}
+            unverified_record: {type: integer, minimum: 0}
+            filtered_out: {type: integer, minimum: 0}
+        truncated: {type: boolean}
+        next_cursor: {anyOf: [{$ref: '#/components/schemas/Cursor'}, {type: 'null'}]}
+
+    # ------------------------------------------------------------------
+    # 13.6 Comparison и Applicability
+    # ------------------------------------------------------------------
+    ComparisonRequest:
+      type: object
+      additionalProperties: false
+      required: [investigation_ids, data_revision]
+      properties:
+        investigation_ids: {type: array, minItems: 2, maxItems: 3, uniqueItems: true, items: {$ref: '#/components/schemas/InvestigationId'}}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+        scenario: {anyOf: [{$ref: '#/components/schemas/Scenario'}, {type: 'null'}], default: null}
+    ComparisonCell:
+      type: object
+      additionalProperties: false
+      required: [investigation_id, value_text, status, evidence_ids]
+      properties:
+        investigation_id: {$ref: '#/components/schemas/InvestigationId'}
+        value_text: {type: [string, 'null'], maxLength: 1000}
+        status: {$ref: '#/components/schemas/CellStatus'}
+        evidence_ids: {type: array, items: {$ref: '#/components/schemas/EvidenceId'}}
+      if: {properties: {status: {const: known}}}
+      then: {properties: {value_text: {type: string}}}
+    ComparisonRow:
+      type: object
+      additionalProperties: false
+      required: [field, label, cells]
+      properties:
+        field: {type: string, minLength: 1, maxLength: 128}
+        label: {type: string, minLength: 1, maxLength: 200}
+        cells: {type: array, minItems: 2, maxItems: 3, items: {$ref: '#/components/schemas/ComparisonCell'}}
+    Comparability:
+      type: object
+      additionalProperties: false
+      required: [status, reasons]
+      properties:
+        status: {$ref: '#/components/schemas/ComparabilityStatus'}
+        reasons: {type: array, items: {$ref: '#/components/schemas/Reason'}}
+    ComparisonResponse:
+      type: object
+      additionalProperties: false
+      required: [investigations, rows, comparability, applicability, limitations]
+      properties:
+        investigations: {type: array, minItems: 2, maxItems: 3, items: {$ref: '#/components/schemas/Investigation'}}
+        rows: {type: array, items: {$ref: '#/components/schemas/ComparisonRow'}}
+        comparability: {$ref: '#/components/schemas/Comparability'}
+        applicability: {anyOf: [{$ref: '#/components/schemas/ApplicabilityResult'}, {type: 'null'}], description: 'null, если scenario не передан'}
+        limitations: {type: array, items: {type: string, minLength: 1, maxLength: 1000}}
+    ApplicabilityRequest:
+      type: object
+      additionalProperties: false
+      required: [scenario, investigation_ids, data_revision]
+      properties:
+        scenario: {$ref: '#/components/schemas/Scenario'}
+        investigation_ids: {type: array, minItems: 1, maxItems: 3, uniqueItems: true, items: {$ref: '#/components/schemas/InvestigationId'}}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+    ApplicabilityFactor:
+      type: object
+      additionalProperties: false
+      required: [field, status, explanation, evidence_ids]
+      properties:
+        field: {type: string, minLength: 1, maxLength: 128}
+        status: {$ref: '#/components/schemas/FactorStatus'}
+        explanation: {type: string, minLength: 1, maxLength: 1000}
+        evidence_ids: {type: array, items: {$ref: '#/components/schemas/EvidenceId'}}
+    ApplicabilityGap:
+      type: object
+      additionalProperties: false
+      required: [field, description, suggested_next_step]
+      properties:
+        field: {type: string, minLength: 1, maxLength: 128}
+        description: {type: string, minLength: 1, maxLength: 1000}
+        suggested_next_step: {type: [string, 'null'], maxLength: 1000}
+    ApplicabilityResult:
+      type: object
+      additionalProperties: false
+      required: [overall, factors, gaps, basis]
+      properties:
+        overall: {$ref: '#/components/schemas/ApplicabilityOverall'}
+        factors: {type: array, items: {$ref: '#/components/schemas/ApplicabilityFactor'}}
+        gaps: {type: array, items: {$ref: '#/components/schemas/ApplicabilityGap'}}
+        basis:
+          type: object
+          additionalProperties: false
+          required: [reviewed_rules_version, data_revision]
+          properties:
+            reviewed_rules_version: {type: string, minLength: 1, maxLength: 64}
+            data_revision: {$ref: '#/components/schemas/DataRevision'}
+
+    # ------------------------------------------------------------------
+    # 13.7-13.9 Анализ, задачи, ответ
+    # ------------------------------------------------------------------
+    AnalysisRequest:
+      type: object
+      additionalProperties: false
+      required: [question, locale, workspace_revision, data_revision, selected_investigation_ids, mode]
+      properties:
+        question: {type: string, minLength: 3, maxLength: 2000}
+        locale: {type: string, const: ru}
+        workspace_revision: {type: integer, minimum: 1}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+        selected_investigation_ids: {type: array, maxItems: 3, uniqueItems: true, items: {$ref: '#/components/schemas/InvestigationId'}}
+        mode: {type: string, const: evidence_answer}
+    InputContext:
+      type: object
+      additionalProperties: false
+      required: [workspace_revision, data_revision, scenario_id]
+      properties:
+        workspace_revision: {type: integer, minimum: 1}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+        scenario_id: {anyOf: [{$ref: '#/components/schemas/Id'}, {type: 'null'}]}
+    Job:
+      type: object
+      additionalProperties: false
+      required: [id, type, state, stage, created_at, updated_at, deadline_at, result_kind, result_id, error, input_context, fallback_evidence_ids]
+      properties:
+        id: {$ref: '#/components/schemas/JobId'}
+        type: {$ref: '#/components/schemas/JobType'}
+        state: {$ref: '#/components/schemas/JobState'}
+        stage: {$ref: '#/components/schemas/JobStage'}
+        created_at: {$ref: '#/components/schemas/Timestamp'}
+        updated_at: {$ref: '#/components/schemas/Timestamp'}
+        deadline_at: {$ref: '#/components/schemas/Timestamp'}
+        result_kind: {$ref: '#/components/schemas/ResultKind'}
+        result_id: {type: [string, 'null'], pattern: '^(ans|rpt)_[A-Za-z0-9_-]{1,124}$'}
+        error: {anyOf: [{$ref: '#/components/schemas/ErrorObject'}, {type: 'null'}]}
+        input_context: {$ref: '#/components/schemas/InputContext'}
+        fallback_evidence_ids: {type: array, maxItems: 20, items: {$ref: '#/components/schemas/EvidenceId'}}
+      allOf:
+        - if: {properties: {state: {const: succeeded}}}
+          then: {properties: {result_id: {type: string}, error: {type: 'null'}}}
+          else: {properties: {result_id: {type: 'null'}}}
+        - if: {properties: {state: {enum: [failed, expired]}}}
+          then: {properties: {error: {$ref: '#/components/schemas/ErrorObject'}}}
+        - if: {properties: {state: {enum: [queued, running, succeeded, cancelled]}}}
+          then: {properties: {error: {type: 'null'}}}
+        - if: {properties: {type: {const: analysis}}}
+          then: {properties: {result_kind: {const: answer}}}
+          else: {properties: {result_kind: {const: report}}}
+    QuantityRef:
+      type: object
+      additionalProperties: false
+      required: [name, quantity, evidence_ids]
+      properties:
+        name: {type: string, minLength: 1, maxLength: 128}
+        quantity: {$ref: '#/components/schemas/Quantity'}
+        evidence_ids: {type: array, minItems: 1, items: {$ref: '#/components/schemas/EvidenceId'}}
+    AnswerBlock:
+      type: object
+      additionalProperties: false
+      required: [id, kind, text, evidence_ids, quantities]
+      properties:
+        id: {type: string, pattern: '^[A-Za-z0-9_-]{1,64}$'}
+        kind: {$ref: '#/components/schemas/AnswerBlockKind'}
+        text: {type: string, minLength: 1, maxLength: 1500, description: 'Обычный текст, не HTML и не Markdown'}
+        evidence_ids: {type: array, maxItems: 20, items: {$ref: '#/components/schemas/EvidenceId'}}
+        quantities: {type: array, maxItems: 20, items: {$ref: '#/components/schemas/QuantityRef'}}
+      allOf:
+        - if: {properties: {kind: {enum: [observation, synthesis]}}}
+          then: {properties: {evidence_ids: {minItems: 1}}}
+    Citation:
+      type: object
+      additionalProperties: false
+      required: [evidence_id, source_id, label, locator]
+      properties:
+        evidence_id: {$ref: '#/components/schemas/EvidenceId'}
+        source_id: {$ref: '#/components/schemas/SourceId'}
+        label: {type: string, minLength: 1, maxLength: 300}
+        locator: {$ref: '#/components/schemas/Locator'}
+    ValidationSummary:
+      type: object
+      additionalProperties: false
+      required: [schema_valid, references_valid, quantities_valid, scope_valid]
+      properties:
+        schema_valid: {type: boolean}
+        references_valid: {type: boolean}
+        quantities_valid: {type: boolean}
+        scope_valid: {type: boolean}
+    AnalysisResult:
+      type: object
+      additionalProperties: false
+      required: [id, data_revision, workspace_revision, scenario_snapshot, question, status, answer_blocks, applicability, citations, limitations, follow_up_questions, retrieval_mode, reasoning_revision, validation_summary, created_at]
+      properties:
+        id: {$ref: '#/components/schemas/AnswerId'}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+        workspace_revision: {type: integer, minimum: 1}
+        scenario_snapshot: {anyOf: [{$ref: '#/components/schemas/Scenario'}, {type: 'null'}]}
+        question: {type: string, minLength: 3, maxLength: 2000}
+        status: {$ref: '#/components/schemas/AnswerStatus'}
+        answer_blocks: {type: array, maxItems: 8, items: {$ref: '#/components/schemas/AnswerBlock'}}
+        applicability: {anyOf: [{$ref: '#/components/schemas/ApplicabilityResult'}, {type: 'null'}]}
+        citations: {type: array, maxItems: 20, items: {$ref: '#/components/schemas/Citation'}}
+        limitations: {type: array, maxItems: 20, items: {type: string, minLength: 1, maxLength: 1000}}
+        follow_up_questions: {type: array, maxItems: 3, items: {type: string, minLength: 1, maxLength: 500}}
+        retrieval_mode: {$ref: '#/components/schemas/RetrievalMode'}
+        reasoning_revision: {type: string, minLength: 1, maxLength: 64}
+        validation_summary:
+          description: Опубликованный ответ всегда прошел все проверки
+          allOf:
+            - {$ref: '#/components/schemas/ValidationSummary'}
+            - properties:
+                schema_valid: {const: true}
+                references_valid: {const: true}
+                quantities_valid: {const: true}
+                scope_valid: {const: true}
+        created_at: {$ref: '#/components/schemas/Timestamp'}
+
+    # ------------------------------------------------------------------
+    # 13.10 Отчеты
+    # ------------------------------------------------------------------
+    ReportRequest:
+      type: object
+      additionalProperties: false
+      required: [workspace_revision, title, answer_ids, investigation_ids, include_comparison, locale]
+      properties:
+        workspace_revision: {type: integer, minimum: 1}
+        title: {type: string, minLength: 3, maxLength: 120}
+        answer_ids: {type: array, maxItems: 30, uniqueItems: true, items: {$ref: '#/components/schemas/AnswerId'}}
+        investigation_ids: {type: array, maxItems: 100, uniqueItems: true, items: {$ref: '#/components/schemas/InvestigationId'}}
+        include_comparison: {type: boolean}
+        locale: {type: string, const: ru}
+      allOf:
+        - anyOf:
+            - properties: {answer_ids: {minItems: 1}}
+            - properties: {investigation_ids: {minItems: 1}}
+    Report:
+      type: object
+      additionalProperties: false
+      required: [id, state, title, source_workspace_revision, data_revision, created_at, expires_at, download_path, sha256, error]
+      properties:
+        id: {$ref: '#/components/schemas/ReportId'}
+        state: {$ref: '#/components/schemas/ReportState'}
+        title: {type: string, minLength: 3, maxLength: 120}
+        source_workspace_revision: {type: integer, minimum: 1}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+        created_at: {$ref: '#/components/schemas/Timestamp'}
+        expires_at: {$ref: '#/components/schemas/Timestamp'}
+        download_path: {type: [string, 'null'], pattern: '^/api/v1/reports/rpt_[A-Za-z0-9_-]{1,124}/download$'}
+        sha256: {anyOf: [{$ref: '#/components/schemas/Sha256'}, {type: 'null'}]}
+        error: {anyOf: [{$ref: '#/components/schemas/ErrorObject'}, {type: 'null'}]}
+      allOf:
+        - if: {properties: {state: {const: ready}}}
+          then: {properties: {download_path: {type: string}, sha256: {$ref: '#/components/schemas/Sha256'}, error: {type: 'null'}}}
+          else: {properties: {download_path: {type: 'null'}}}
+        - if: {properties: {state: {const: failed}}}
+          then: {properties: {error: {$ref: '#/components/schemas/ErrorObject'}}}
+
+    # ------------------------------------------------------------------
+    # Envelope-обертки публичных ответов
+    # ------------------------------------------------------------------
+    ConfigEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties: {data: {$ref: '#/components/schemas/Config'}, meta: {$ref: '#/components/schemas/Meta'}}
+    WorkspaceEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties: {data: {$ref: '#/components/schemas/Workspace'}, meta: {$ref: '#/components/schemas/Meta'}}
+    SearchResultEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties: {data: {$ref: '#/components/schemas/SearchResult'}, meta: {$ref: '#/components/schemas/Meta'}}
+    InvestigationDetailEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties: {data: {$ref: '#/components/schemas/InvestigationDetail'}, meta: {$ref: '#/components/schemas/Meta'}}
+    RunPageEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties: {data: {$ref: '#/components/schemas/RunPage'}, meta: {$ref: '#/components/schemas/Meta'}}
+    TestRunEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties: {data: {$ref: '#/components/schemas/TestRun'}, meta: {$ref: '#/components/schemas/Meta'}}
+    MeasurementResponseEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties: {data: {$ref: '#/components/schemas/MeasurementResponse'}, meta: {$ref: '#/components/schemas/Meta'}}
+    ComparisonResponseEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties: {data: {$ref: '#/components/schemas/ComparisonResponse'}, meta: {$ref: '#/components/schemas/Meta'}}
+    ApplicabilityResultEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties: {data: {$ref: '#/components/schemas/ApplicabilityResult'}, meta: {$ref: '#/components/schemas/Meta'}}
+    ScenarioPresetListEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties: {data: {$ref: '#/components/schemas/ScenarioPresetList'}, meta: {$ref: '#/components/schemas/Meta'}}
+    EvidenceDetailEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties: {data: {$ref: '#/components/schemas/EvidenceDetail'}, meta: {$ref: '#/components/schemas/Meta'}}
+    SourceEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties: {data: {$ref: '#/components/schemas/Source'}, meta: {$ref: '#/components/schemas/Meta'}}
+    JobEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties: {data: {$ref: '#/components/schemas/Job'}, meta: {$ref: '#/components/schemas/Meta'}}
+    AnalysisResultEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties: {data: {$ref: '#/components/schemas/AnalysisResult'}, meta: {$ref: '#/components/schemas/Meta'}}
+    ReportEnvelope:
+      type: object
+      additionalProperties: false
+      required: [data, meta]
+      properties: {data: {$ref: '#/components/schemas/Report'}, meta: {$ref: '#/components/schemas/Meta'}}
+
+    # ==================================================================
+    # ВНУТРЕННИЕ КОНТРАКТЫ (не публикуются браузеру)
+    # ==================================================================
+    InternalManifestFile:
+      x-internal: true
+      type: object
+      additionalProperties: false
+      required: [path, entity_type, sha256, record_count]
+      properties:
+        path: {type: string, pattern: '^(?!/)(?!.*\.\.)[A-Za-z0-9_./-]{1,256}$'}
+        entity_type: {type: string, enum: [investigation, material, run, source, evidence, claim]}
+        sha256: {$ref: '#/components/schemas/Sha256'}
+        record_count: {type: integer, minimum: 0}
+    InternalManifest:
+      x-internal: true
+      description: CT-09 manifest.json пакета data_release
+      type: object
+      additionalProperties: false
+      required: [schema_version, data_revision, created_at, producer, files, quality_summary]
+      properties:
+        schema_version: {type: string, pattern: '^\d+\.\d+\.\d+$'}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+        created_at: {$ref: '#/components/schemas/Timestamp'}
+        producer: {type: string, minLength: 1, maxLength: 200}
+        files: {type: array, minItems: 6, maxItems: 6, items: {$ref: '#/components/schemas/InternalManifestFile'}}
+        quality_summary:
+          type: object
+          additionalProperties: false
+          required: [checked_records, quarantined_records, blocking_errors, warning_count]
+          properties:
+            checked_records: {type: integer, minimum: 0}
+            quarantined_records: {type: integer, minimum: 0}
+            blocking_errors: {type: integer, const: 0}
+            warning_count: {type: integer, minimum: 0}
+    InternalImportIssue:
+      x-internal: true
+      type: object
+      additionalProperties: false
+      required: [code, file, line, entity_id, message]
+      properties:
+        code: {type: string}
+        file: {type: [string, 'null']}
+        line: {type: [integer, 'null'], minimum: 1}
+        entity_id: {type: [string, 'null']}
+        message: {type: string}
+    InternalImportReport:
+      x-internal: true
+      type: object
+      additionalProperties: false
+      required: [accepted, data_revision, entity_counts, errors, warnings]
+      properties:
+        accepted: {type: boolean}
+        data_revision: {type: [string, 'null']}
+        entity_counts:
+          type: object
+          additionalProperties: {type: integer, minimum: 0}
+        errors: {type: array, items: {$ref: '#/components/schemas/InternalImportIssue'}}
+        warnings: {type: array, items: {$ref: '#/components/schemas/InternalImportIssue'}}
+
+    InternalRetrievalRequest:
+      x-internal: true
+      description: CT-13. include_related добавлен по D-010 (упомянут в тексте CT-13, отсутствовал в списке полей).
+      type: object
+      additionalProperties: false
+      required: [request_id, question, locale, scenario, filters, selected_investigation_ids, data_revision, top_k, deadline_at, include_related]
+      properties:
+        request_id: {$ref: '#/components/schemas/RequestId'}
+        question: {type: string, maxLength: 2000}
+        locale: {type: string, const: ru}
+        scenario: {anyOf: [{$ref: '#/components/schemas/Scenario'}, {type: 'null'}]}
+        filters: {$ref: '#/components/schemas/AppliedFilters'}
+        selected_investigation_ids: {type: array, maxItems: 3, items: {$ref: '#/components/schemas/InvestigationId'}}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+        top_k: {type: integer, minimum: 1, maximum: 20, default: 12}
+        deadline_at: {$ref: '#/components/schemas/Timestamp'}
+        include_related: {type: boolean}
+    InternalRankedItem:
+      x-internal: true
+      type: object
+      additionalProperties: false
+      required: [investigation_id, rank_score, relevance_category, match_reasons, differences, missing_fields, matching_run_ids]
+      properties:
+        investigation_id: {$ref: '#/components/schemas/InvestigationId'}
+        rank_score: {type: number, minimum: 0, maximum: 1}
+        relevance_category: {$ref: '#/components/schemas/RelevanceCategory'}
+        match_reasons: {type: array, items: {$ref: '#/components/schemas/Reason'}}
+        differences: {type: array, items: {$ref: '#/components/schemas/Reason'}}
+        missing_fields: {type: array, items: {type: string}}
+        matching_run_ids: {type: array, items: {$ref: '#/components/schemas/RunId'}}
+    InternalCoverage:
+      x-internal: true
+      type: object
+      additionalProperties: false
+      required: [matching_investigation_ids, matching_run_ids, missing_fields, target_gravity_covered, direct_evidence_available, reasons]
+      properties:
+        matching_investigation_ids: {type: array, items: {$ref: '#/components/schemas/InvestigationId'}}
+        matching_run_ids: {type: array, items: {$ref: '#/components/schemas/RunId'}}
+        missing_fields: {type: array, items: {type: string}}
+        target_gravity_covered: {type: boolean}
+        direct_evidence_available: {type: boolean}
+        reasons: {type: array, items: {$ref: '#/components/schemas/Reason'}}
+    InternalNormalizedFact:
+      x-internal: true
+      type: object
+      additionalProperties: false
+      required: [field, quantity, text_value, evidence_ids]
+      properties:
+        field: {type: string, minLength: 1, maxLength: 128}
+        quantity: {anyOf: [{$ref: '#/components/schemas/Quantity'}, {type: 'null'}]}
+        text_value: {type: [string, 'null'], maxLength: 1000}
+        evidence_ids: {type: array, minItems: 1, items: {$ref: '#/components/schemas/EvidenceId'}}
+      oneOf:
+        - properties: {quantity: {type: object}, text_value: {type: 'null'}}
+        - properties: {quantity: {type: 'null'}, text_value: {type: string}}
+    InternalBundleItem:
+      x-internal: true
+      type: object
+      additionalProperties: false
+      required: [evidence, source_metadata, investigation_ids, run_ids, normalized_facts]
+      properties:
+        evidence: {$ref: '#/components/schemas/Evidence'}
+        source_metadata: {$ref: '#/components/schemas/Source'}
+        investigation_ids: {type: array, items: {$ref: '#/components/schemas/InvestigationId'}}
+        run_ids: {type: array, items: {$ref: '#/components/schemas/RunId'}}
+        normalized_facts: {type: array, items: {$ref: '#/components/schemas/InternalNormalizedFact'}}
+    InternalEvidenceBundle:
+      x-internal: true
+      description: CT-14. Не более 20 доказательств; суммарный excerpt <= 24000 символов (проверка BE).
+      type: object
+      additionalProperties: false
+      required: [bundle_id, data_revision, question, scenario, items, allowed_evidence_ids, allowed_source_ids, selected_claims, coverage, retrieval_revision]
+      properties:
+        bundle_id: {type: string, pattern: '^bnd_[A-Za-z0-9_-]{1,124}$'}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+        question: {type: string, maxLength: 2000}
+        scenario: {anyOf: [{$ref: '#/components/schemas/Scenario'}, {type: 'null'}]}
+        items: {type: array, maxItems: 20, items: {$ref: '#/components/schemas/InternalBundleItem'}}
+        allowed_evidence_ids: {type: array, maxItems: 20, uniqueItems: true, items: {$ref: '#/components/schemas/EvidenceId'}}
+        allowed_source_ids: {type: array, uniqueItems: true, items: {$ref: '#/components/schemas/SourceId'}}
+        selected_claims: {type: array, items: {$ref: '#/components/schemas/Claim'}}
+        coverage: {$ref: '#/components/schemas/InternalCoverage'}
+        retrieval_revision: {type: string, minLength: 1, maxLength: 64}
+    InternalRetrievalResult:
+      x-internal: true
+      type: object
+      additionalProperties: false
+      required: [request_id, data_revision, retrieval_revision, mode, ranked_items, evidence_bundle, coverage, warnings]
+      properties:
+        request_id: {$ref: '#/components/schemas/RequestId'}
+        data_revision: {$ref: '#/components/schemas/DataRevision'}
+        retrieval_revision: {type: string, minLength: 1, maxLength: 64}
+        mode: {$ref: '#/components/schemas/RetrievalMode'}
+        ranked_items: {type: array, items: {$ref: '#/components/schemas/InternalRankedItem'}}
+        evidence_bundle: {$ref: '#/components/schemas/InternalEvidenceBundle'}
+        coverage: {$ref: '#/components/schemas/InternalCoverage'}
+        warnings: {type: array, items: {$ref: '#/components/schemas/Warning'}}
+    InternalReasoningRequest:
+      x-internal: true
+      type: object
+      additionalProperties: false
+      required: [request_id, evidence_bundle, locale, output_limits, deadline_at, reasoning_revision]
+      properties:
+        request_id: {$ref: '#/components/schemas/RequestId'}
+        evidence_bundle: {$ref: '#/components/schemas/InternalEvidenceBundle'}
+        locale: {type: string, const: ru}
+        output_limits:
+          type: object
+          additionalProperties: false
+          required: [max_blocks, max_follow_ups, max_total_chars]
+          properties:
+            max_blocks: {type: integer, const: 8}
+            max_follow_ups: {type: integer, const: 3}
+            max_total_chars: {type: integer, const: 10000}
+        deadline_at: {$ref: '#/components/schemas/Timestamp'}
+        reasoning_revision: {type: string, minLength: 1, maxLength: 64}
+    InternalReasoningResponse:
+      x-internal: true
+      description: CT-15. Без id и дат - их присваивает бэкенд. audit не публикуется.
+      type: object
+      additionalProperties: false
+      required: [status, answer_blocks, applicability, citations, limitations, follow_up_questions, reasoning_revision, validation_summary, audit]
+      properties:
+        status: {$ref: '#/components/schemas/AnswerStatus'}
+        answer_blocks: {type: array, maxItems: 8, items: {$ref: '#/components/schemas/AnswerBlock'}}
+        applicability: {anyOf: [{$ref: '#/components/schemas/ApplicabilityResult'}, {type: 'null'}]}
+        citations: {type: array, maxItems: 20, items: {$ref: '#/components/schemas/Citation'}}
+        limitations: {type: array, maxItems: 20, items: {type: string, minLength: 1, maxLength: 1000}}
+        follow_up_questions: {type: array, maxItems: 3, items: {type: string, minLength: 1, maxLength: 500}}
+        reasoning_revision: {type: string, minLength: 1, maxLength: 64}
+        validation_summary: {$ref: '#/components/schemas/ValidationSummary'}
+        audit:
+          type: object
+          additionalProperties: false
+          required: [checked_evidence_ids, rejections, model, model_version]
+          properties:
+            checked_evidence_ids: {type: array, items: {$ref: '#/components/schemas/EvidenceId'}}
+            rejections:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                required: [rule, block_id, reason]
+                properties:
+                  rule: {type: string}
+                  block_id: {type: [string, 'null']}
+                  reason: {type: string}
+            model: {type: [string, 'null']}
+            model_version: {type: [string, 'null']}
+    InternalError:
+      x-internal: true
+      type: object
+      additionalProperties: false
+      required: [code, message, retryable]
+      properties:
+        code: {type: string, enum: [VALIDATION_FAILED, REASONING_TIMEOUT, MODEL_PROVIDER_ERROR, AI_UNAVAILABLE, DATA_REVISION_GONE, RETRIEVAL_FAILED, INTERNAL_ERROR]}
+        message: {type: string}
+        retryable: {type: boolean}

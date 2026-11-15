@@ -1,0 +1,33 @@
+{
+  "operation_id": "downloadReport",
+  "case": "preparing",
+  "description": "Отчет еще готовится",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {
+      "id": "rpt_demo01"
+    },
+    "query": {},
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 409,
+    "headers": {},
+    "body": {
+      "error": {
+        "code": "REPORT_NOT_READY",
+        "message": "Отчет еще готовится.",
+        "details": [],
+        "retryable": true
+      },
+      "meta": {
+        "request_id": "req_demo02",
+        "contract_version": "1.2.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

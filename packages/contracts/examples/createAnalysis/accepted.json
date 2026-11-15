@@ -1,0 +1,54 @@
+{
+  "operation_id": "createAnalysis",
+  "case": "accepted",
+  "description": "Задача принята (Б.3)",
+  "fixture": true,
+  "default": true,
+  "request": {
+    "path_params": {},
+    "query": {},
+    "headers": {
+      "Idempotency-Key": "2f65cc3a-0120-4c42-a000-8e4633a22300"
+    },
+    "body": {
+      "question": "Как поток воздуха влияет на горение?",
+      "locale": "ru",
+      "workspace_revision": 3,
+      "data_revision": "psi-20261115-r1",
+      "selected_investigation_ids": [
+        "inv_psi25"
+      ],
+      "mode": "evidence_answer"
+    }
+  },
+  "response": {
+    "status": 202,
+    "headers": {},
+    "body": {
+      "data": {
+        "id": "job_demo01",
+        "type": "analysis",
+        "state": "queued",
+        "stage": null,
+        "created_at": "2026-11-15T09:00:00Z",
+        "updated_at": "2026-11-15T09:00:00Z",
+        "deadline_at": "2026-11-15T09:00:45Z",
+        "result_kind": "answer",
+        "result_id": null,
+        "error": null,
+        "input_context": {
+          "workspace_revision": 3,
+          "data_revision": "psi-20261115-r1",
+          "scenario_id": "orbital_custom"
+        },
+        "fallback_evidence_ids": []
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.2.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

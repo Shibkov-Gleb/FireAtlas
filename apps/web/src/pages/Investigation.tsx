@@ -1,0 +1,328 @@
+import { useState, type KeyboardEvent } from 'react';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Bookmark,
+  ChartScatter,
+  Check,
+  GitCompareArrows,
+} from 'lucide-react';
+import { api } from '../api/client';
+import { useWorkspace } from '../state/WorkspaceProvider';
+import { Badge, Button, EmptyState, Loading, Notice, PageHeader, Panel } from '../components/ui';
+import { ErrorState } from '../components/ErrorState';
+import { EvidenceDrawer, SourceCard } from '../components/EvidenceDrawer';
+import { QuantityValue, RunPanel } from '../components/RunPanel';
+import s from './Investigation.module.css';
+
+const tabs = [
+  ['overview', 'Обзор'],
+  ['runs', 'Испытания'],
+  ['materials', 'Материалы и файлы'],
+  ['publications', 'Публикации'],
+] as const;
+export function InvestigationPage() {
+  const { id = '' } = useParams();
+  const { workspace, toggleComparison, toggleSaved, pending } = useWorkspace();
+  const [params, setParams] = useSearchParams();
+  const active = tabs.some(([key]) => key === params.get('tab')) ? params.get('tab')! : 'overview';
+  const [evidenceId, setEvidenceId] = useState<string | null>(null);
+  const query = useQuery({
+    queryKey: ['investigation', id, workspace.data_revision],
+    queryFn: ({ signal }) =>
+      api.investigation(id, workspace.data_revision, signal).then((r) => r.data),
+  });
+  const runQuery = useQuery({
+    queryKey: ['runs', id, workspace.data_revision, params.get('cursor')],
+    queryFn: ({ signal }) =>
+      api.runs(id, workspace.data_revision, params.get('cursor'), signal).then((r) => r.data),
+    enabled: active === 'runs',
+  });
+  function selectTab(key: string) {
+    const next = new URLSearchParams(params);
+    next.set('tab', key);
+    next.delete('cursor');
+    setParams(next);
+  }
+  function tabKey(event: KeyboardEvent<HTMLButtonElement>, index: number) {
+    let target: number | undefined;
+    if (event.key === 'ArrowRight') target = (index + 1) % tabs.length;
+    if (event.key === 'ArrowLeft') target = (index + tabs.length - 1) % tabs.length;
+    if (event.key === 'Home') target = 0;
+    if (event.key === 'End') target = tabs.length - 1;
+    if (target !== undefined) {
+      event.preventDefault();
+      selectTab(tabs[target]![0]);
+      event.currentTarget.parentElement
+        ?.querySelectorAll<HTMLButtonElement>('[role=tab]')
+        [target]?.focus();
+    }
+  }
+  if (query.isPending) return <Loading />;
+  if (query.isError) return <ErrorState error={query.error} onRetry={() => void query.refetch()} />;
+  const { investigation: inv, claims, sources, run_summary } = query.data;
+  const compared = workspace.selected_investigation_ids.includes(id);
+  const saved = workspace.saved_investigation_ids.includes(id);
+  return (
+    <>
+      <Link className="textLink" to="/investigations">
+        <ArrowLeft size={13} /> К исследованиям
+      </Link>
+      <div className={s.heading}>
+        <PageHeader
+          eyebrow={`ИССЛЕДОВАНИЕ / ${inv.psi_id}`}
+          title={inv.acronym}
+          description={inv.title}
+          action={
+            <div className="inline">
+              <Button
+                variant="ghost"
+                disabled={pending}
+                aria-pressed={saved}
+                onClick={() => void toggleSaved(id)}
+              >
+                <Bookmark size={15} fill={saved ? 'currentColor' : 'none'} />
+                {saved ? 'Сохранено' : 'Сохранить'}
+              </Button>
+              <Button
+                variant="secondary"
+                disabled={pending}
+                aria-pressed={compared}
+                onClick={() => void toggleComparison(id)}
+              >
+                {compared ? <Check size={15} /> : <GitCompareArrows size={15} />}{' '}
+                {compared ? 'В сравнении' : 'В сравнение'}
+              </Button>
+            </div>
+          }
+        />
+      </div>
+      <div className={s.meta}>
+        <Badge tone="cyan">NASA PSI · {inv.psi_id}</Badge>
+        <Badge>
+          {inv.gravity_regimes.includes('microgravity') ? 'Микрогравитация' : 'Другой режим'}
+        </Badge>
+        <span>Записей в наборе: {run_summary.total}</span>
+      </div>
+      <div role="tablist" aria-label="Разделы исследования" className={s.tabs}>
+        {tabs.map(([key, label], index) => (
+          <button
+            key={key}
+            id={`tab-${key}`}
+            role="tab"
+            aria-selected={active === key}
+            aria-controls={`panel-${key}`}
+            tabIndex={active === key ? 0 : -1}
+            onKeyDown={(event) => tabKey(event, index)}
+            onClick={() => selectTab(key)}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+      <div
+        role="tabpanel"
+        id={`panel-${active}`}
+        aria-labelledby={`tab-${active}`}
+        className={s.tabPanel}
+      >
+        {active === 'overview' && (
+          <>
+            <div className={s.overviewGrid}>
+              <Panel className={s.section}>
+                <h2>Задачи исследования</h2>
+                <ul className={s.objectives}>
+                  {inv.objectives.map((text) => (
+                    <li key={text}>{text}</li>
+                  ))}
+                </ul>
+                <div className="divider" />
+                <h2>Установка и методика</h2>
+                <p>{inv.setup_summary}</p>
+              </Panel>
+              <Panel className={s.section}>
+                <h2>Условия имеют значение</h2>
+                <p>
+                  Материал, геометрия, состав атмосферы, давление и направление потока
+                  рассматриваются вместе.
+                </p>
+                <Notice>Сходство задачи не означает сопоставимость численных результатов.</Notice>
+                <Link className="textLink" to="/compare">
+                  Сопоставить методики <ArrowRight size={13} />
+                </Link>
+              </Panel>
+            </div>
+            <section className={s.claims}>
+              <h2 className="sectionTitle">Выводы и вопросы для проверки</h2>
+              {claims.map((claim) => (
+                <Panel key={claim.id} className={s.claim}>
+                  <div className="inline">
+                    <Badge
+                      tone={
+                        claim.kind === 'hypothesis'
+                          ? 'orange'
+                          : claim.kind === 'observation'
+                            ? 'teal'
+                            : 'purple'
+                      }
+                    >
+                      {claim.kind === 'hypothesis'
+                        ? 'Гипотеза / вопрос'
+                        : claim.kind === 'observation'
+                          ? 'Наблюдение'
+                          : 'Обобщение'}
+                    </Badge>
+                    {claim.review_status !== 'reviewed' && (
+                      <span className="tiny muted">Демонстрационная формулировка</span>
+                    )}
+                  </div>
+                  <p>{claim.text}</p>
+                  {claim.limitations.map((text) => (
+                    <p className="tiny muted" key={text}>
+                      {text}
+                    </p>
+                  ))}
+                  <div className="inline">
+                    {claim.supporting_evidence_ids.map((evidence, index) => (
+                      <button
+                        className="textLink"
+                        key={evidence}
+                        onClick={() => setEvidenceId(evidence)}
+                      >
+                        Открыть основание {index + 1} <ArrowRight size={12} />
+                      </button>
+                    ))}
+                  </div>
+                </Panel>
+              ))}
+            </section>
+          </>
+        )}
+        {active === 'runs' && (
+          <>
+            {runQuery.isPending ? (
+              <Loading />
+            ) : runQuery.isError ? (
+              <ErrorState error={runQuery.error} onRetry={() => void runQuery.refetch()} />
+            ) : runQuery.data.items.length ? (
+              <div className={s.runsGrid}>
+                <div>
+                  <div
+                    className="tableScroll"
+                    role="region"
+                    aria-label="Таблица испытаний"
+                    tabIndex={0}
+                  >
+                    <table>
+                      <thead>
+                        <tr>
+                          <th scope="col">Запись</th>
+                          <th scope="col">Кислород</th>
+                          <th scope="col">Давление</th>
+                          <th scope="col">Исход источника</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {runQuery.data.items.map((run) => (
+                          <tr key={run.id} data-selected={params.get('run') === run.id}>
+                            <th scope="row">
+                              <button
+                                className="textLink mono"
+                                aria-pressed={params.get('run') === run.id}
+                                onClick={() => {
+                                  const next = new URLSearchParams(params);
+                                  next.set('run', run.id);
+                                  setParams(next);
+                                }}
+                              >
+                                {run.source_test_id}
+                              </button>
+                            </th>
+                            <td>
+                              <QuantityValue
+                                quantity={run.conditions.oxygen_fraction}
+                                expectedUnit="fraction"
+                                compact
+                              />
+                            </td>
+                            <td>
+                              <QuantityValue
+                                quantity={run.conditions.pressure}
+                                expectedUnit="Pa"
+                                compact
+                              />
+                            </td>
+                            <td>{run.terminal_outcome.raw_label}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {runQuery.data.next_cursor && (
+                    <Button
+                      variant="secondary"
+                      onClick={() => {
+                        const next = new URLSearchParams(params);
+                        next.set('cursor', runQuery.data.next_cursor!);
+                        setParams(next);
+                      }}
+                    >
+                      Следующие испытания
+                    </Button>
+                  )}
+                  <p style={{ marginTop: 20 }}>
+                    <Link className="textLink" to="/measurements">
+                      <ChartScatter size={14} /> Открыть измерения FLEX
+                    </Link>
+                  </p>
+                </div>
+                <RunPanel
+                  runId={params.get('run')}
+                  revision={workspace.data_revision}
+                  investigationId={id}
+                  onEvidence={setEvidenceId}
+                />
+              </div>
+            ) : (
+              <EmptyState title="В этой ревизии нет отдельных записей" />
+            )}
+          </>
+        )}
+        {active === 'materials' && (
+          <div className={s.sourceGrid}>
+            {sources
+              .filter((source) => !['publication', 'report'].includes(source.kind))
+              .map((source) => (
+                <SourceCard key={source.id} source={source} />
+              ))}
+          </div>
+        )}
+        {active === 'publications' && (
+          <div className={s.sourceGrid}>
+            {sources.some((source) => ['publication', 'report'].includes(source.kind)) ? (
+              sources
+                .filter((source) => ['publication', 'report'].includes(source.kind))
+                .map((source) => <SourceCard key={source.id} source={source} />)
+            ) : (
+              <EmptyState
+                title="Публикации в этой ревизии не добавлены"
+                action={
+                  <Button variant="secondary" onClick={() => selectTab('materials')}>
+                    Открыть доступные источники
+                  </Button>
+                }
+              />
+            )}
+          </div>
+        )}
+      </div>
+      <EvidenceDrawer
+        id={evidenceId}
+        revision={workspace.data_revision}
+        onClose={() => setEvidenceId(null)}
+      />
+    </>
+  );
+}

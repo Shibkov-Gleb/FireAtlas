@@ -1,0 +1,31 @@
+{
+  "operation_id": "getConfig",
+  "case": "data_not_ready",
+  "description": "Корпус еще не импортирован",
+  "fixture": true,
+  "default": false,
+  "request": {
+    "path_params": {},
+    "query": {},
+    "headers": {},
+    "body": null
+  },
+  "response": {
+    "status": 503,
+    "headers": {},
+    "body": {
+      "error": {
+        "code": "DATA_NOT_READY",
+        "message": "Данные еще не опубликованы. Попробуйте позже.",
+        "details": [],
+        "retryable": true
+      },
+      "meta": {
+        "request_id": "req_demo02",
+        "contract_version": "1.2.0",
+        "data_revision": null,
+        "warnings": []
+      }
+    }
+  }
+}

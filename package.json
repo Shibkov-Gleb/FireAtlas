@@ -1,0 +1,55 @@
+{
+  "name": "fire-atlas",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.28.2",
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @fire-atlas/web dev",
+    "dev:api": "pnpm --filter @fire-atlas/web dev:api",
+    "build": "pnpm --filter @fire-atlas/web build",
+    "build:demo": "pnpm --filter @fire-atlas/web build:demo",
+    "preview": "pnpm --filter @fire-atlas/web preview",
+    "typecheck": "pnpm --filter @fire-atlas/web typecheck",
+    "test": "vitest run --config apps/web/vitest.config.ts",
+    "test:e2e": "playwright test",
+    "contracts:generate": "openapi-typescript packages/contracts/openapi.yaml -o apps/web/src/api/schema.d.ts",
+    "format:check": "prettier --check apps/web/src apps/web/*.ts tests/e2e tests/live scripts/*.mjs playwright*.ts package.json apps/web/package.json docs/frontend*.md docs/service*.md README.md",
+    "contracts:check": "vitest run --config apps/web/vitest.config.ts apps/web/src/api/contract.test.ts",
+    "build:check": "node scripts/check-build.mjs production",
+    "build:demo:check": "node scripts/check-build.mjs demo",
+    "start": "node scripts/service.mjs start",
+    "stop": "node scripts/service.mjs stop",
+    "logs": "node scripts/service.mjs logs",
+    "status": "node scripts/service.mjs status",
+    "setup:env": "node scripts/service.mjs setup",
+    "test:live": "playwright test --config playwright.live.config.ts",
+    "test:restart": "node scripts/check-restart.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@playwright/test": "1.65.1",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.3",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.3.0",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "jsdom": "31.0.1",
+    "openapi-typescript": "7.13.0",
+    "typescript": "5.9.3",
+    "vite": "8.3.8",
+    "vitest": "5.1.0",
+    "yaml": "2.9.1",
+    "prettier": "3.10.1",
+    "@types/node": "26.6.6"
+  },
+  "msw": {
+    "workerDirectory": [
+      "apps\\web\\public"
+    ]
+  }
+}

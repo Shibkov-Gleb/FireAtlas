@@ -1,0 +1,102 @@
+{
+  "operation_id": "queryMeasurements",
+  "case": "flex_5_points",
+  "description": "График FLEX: пять контрольных точек (AT-07)",
+  "fixture": true,
+  "default": true,
+  "request": {
+    "path_params": {},
+    "query": {},
+    "headers": {},
+    "body": {
+      "investigation_id": "inv_psi69",
+      "data_revision": "psi-20261115-r1",
+      "run_ids": [],
+      "x_metric": "sample.initial_diameter",
+      "y_metric": "metrics.burn_duration",
+      "cursor": null,
+      "limit": 200
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {},
+    "body": {
+      "data": {
+        "x_axis": {
+          "key": "sample.initial_diameter",
+          "label": "Начальный диаметр капли",
+          "unit": "m"
+        },
+        "y_axis": {
+          "key": "metrics.burn_duration",
+          "label": "Время горения",
+          "unit": "s"
+        },
+        "points": [
+          {
+            "run_id": "run_psi69_20cal08",
+            "x": 0.00169,
+            "y": 4.3,
+            "outcome": "disruption",
+            "evidence_ids": [
+              "ev_psi69_20cal08"
+            ]
+          },
+          {
+            "run_id": "run_psi69_20cal10",
+            "x": 0.00186,
+            "y": 5.0,
+            "outcome": "extinction",
+            "evidence_ids": [
+              "ev_psi69_20cal10"
+            ]
+          },
+          {
+            "run_id": "run_psi69_20cal12",
+            "x": 0.00161,
+            "y": 3.2,
+            "outcome": "extinction",
+            "evidence_ids": [
+              "ev_psi69_20cal12"
+            ]
+          },
+          {
+            "run_id": "run_psi69_30cal02",
+            "x": 0.00206,
+            "y": 7.64,
+            "outcome": "extinction",
+            "evidence_ids": [
+              "ev_psi69_30cal02"
+            ]
+          },
+          {
+            "run_id": "run_psi69_30cal03",
+            "x": 0.00192,
+            "y": 6.34,
+            "outcome": "extinction",
+            "evidence_ids": [
+              "ev_psi69_30cal03"
+            ]
+          }
+        ],
+        "excluded_count": 0,
+        "exclusions_by_reason": {
+          "missing_x": 0,
+          "missing_y": 0,
+          "unusable_unit": 0,
+          "unverified_record": 0,
+          "filtered_out": 0
+        },
+        "truncated": false,
+        "next_cursor": null
+      },
+      "meta": {
+        "request_id": "req_demo01",
+        "contract_version": "1.2.0",
+        "data_revision": "psi-20261115-r1",
+        "warnings": []
+      }
+    }
+  }
+}

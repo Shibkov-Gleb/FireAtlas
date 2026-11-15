@@ -1,0 +1,13 @@
+{"id": "mat_pmma", "label": "PMMA (colour not stated)", "state": "solid", "composition": null, "aliases": ["PMMA", "polymethyl methacrylate", "acrylic"]}
+{"id": "mat_pmma_clear", "label": "PMMA, clear", "state": "solid", "composition": null, "aliases": ["clear PMMA", "clear rod"]}
+{"id": "mat_pmma_black", "label": "PMMA, black", "state": "solid", "composition": null, "aliases": ["black PMMA", "black rod"]}
+{"id": "mat_sibal", "label": "SIBAL fabric", "state": "solid", "composition": "75/25 cotton/fiberglass blend", "aliases": ["SIBAL", "Sibal"]}
+{"id": "mat_nomex_iii", "label": "Nomex III (natural)", "state": "solid", "composition": null, "aliases": ["Nomex", "Nomex natural"]}
+{"id": "mat_japan_wax", "label": "Japan wax candle", "state": "solid", "composition": null, "aliases": ["candle", "Japan Wax"]}
+{"id": "mat_methanol", "label": "Methanol", "state": "liquid", "composition": null, "aliases": ["methanol"]}
+{"id": "mat_heptane", "label": "Heptane", "state": "liquid", "composition": null, "aliases": ["heptane", "n-heptane"]}
+{"id": "mat_kapton", "label": "Kapton", "state": "solid", "composition": null, "aliases": ["Kapton", "polyimide"]}
+{"id": "mat_silicone_rubber", "label": "Silicone rubber", "state": "solid", "composition": null, "aliases": ["Silicone", "silicone rubber"]}
+{"id": "mat_lampwick", "label": "Lamp wick (cotton)", "state": "solid", "composition": null, "aliases": ["Lampwick", "lamp wick", "cotton", "cellulose"]}
+{"id": "mat_teflon", "label": "Teflon", "state": "solid", "composition": null, "aliases": ["Teflon", "PTFE"]}
+{"id": "mat_pyrell", "label": "Pyrell foam", "state": "solid", "composition": null, "aliases": ["Pyrell"]}

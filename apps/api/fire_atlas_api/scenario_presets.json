@@ -1,0 +1,56 @@
+[
+  {
+    "preset_id": "orbital_habitat",
+    "label": "Орбитальная станция",
+    "scenario": {
+      "scenario_id": "orbital_custom",
+      "name": "Орбитальная станция",
+      "environment": "orbital_habitat",
+      "celestial_body": null,
+      "safety_task": "prevention",
+      "material_ids": [],
+      "geometry": null,
+      "oxygen_fraction": null,
+      "pressure": null,
+      "airflow_speed": null,
+      "gravity_regime": "microgravity",
+      "assumptions": [
+        {
+          "field": "gravity_regime",
+          "text": "Орбитальная среда задает микрогравитационный контекст; давление и кислород пресетом не задаются.",
+          "origin": "preset_source",
+          "source_ids": [
+            "src_track_flame_in_freefall"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "preset_id": "moon_base",
+    "label": "Лунная база",
+    "scenario": {
+      "scenario_id": "moon_base",
+      "name": "Лунная база",
+      "environment": "surface_habitat",
+      "celestial_body": "moon",
+      "safety_task": "prevention",
+      "material_ids": [],
+      "geometry": null,
+      "oxygen_fraction": null,
+      "pressure": null,
+      "airflow_speed": null,
+      "gravity_regime": "partial",
+      "assumptions": [
+        {
+          "field": "gravity_regime",
+          "text": "Целевой режим - частичная гравитация Луны. Наличие сценария не означает наличие опытов в корпусе.",
+          "origin": "preset_source",
+          "source_ids": [
+            "src_track_flame_in_freefall"
+          ]
+        }
+      ]
+    }
+  }
+]
