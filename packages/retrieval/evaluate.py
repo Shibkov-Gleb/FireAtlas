@@ -27,7 +27,7 @@ for q in qs:
         ev_hits += ev_ok
     fd = q["lunar"] and any(x["relevance_category"] == "direct" for x in res["ranked_items"])
     false_direct += fd
-    print(f"{q['id']} inv {found}/{len(q['relevant'])} ev {'ok' if ev_ok else 'MISS'} {'FALSE-DIRECT ' if fd else ''}"
+    print(f"{q['id']} inv {found}/{len(q['relevant'])} ev {'-' if ev_ok is None else 'ok' if ev_ok else 'MISS'} {'FALSE-DIRECT ' if fd else ''}"
           f"{top5[:3]}  {q['question']}")
 print(f"\nInvestigation Recall@5 = {hits / total:.2f}; evidence Recall@5 = {ev_hits / ev_total:.2f} "
       f"(target >= 0.85); false direct on lunar/Mars questions: {false_direct}")

@@ -12,7 +12,7 @@ import re
 import sys
 from pathlib import Path
 
-RETRIEVAL_REVISION = "lexical-1"
+RETRIEVAL_REVISION = "lexical-2"
 ROOT = Path(__file__).resolve().parents[2]
 MAX_EVIDENCE, MAX_EXCERPT_CHARS = 20, 24000
 
@@ -27,7 +27,7 @@ SYNONYMS = {
     "погас": ["extinction"], "гашен": ["extinction"], "затух": ["extinction"],
     "срыв": ["blowoff"], "blow": ["blowoff"],
     "обнаруж": ["detection"], "тлен": ["smoke", "detection", "pyrolysis"], "тле": ["smoke", "detection"], "изоляц": ["kapton", "teflon", "insulation"], "провод": ["kapton", "teflon", "wire"], "электр": ["kapton", "teflon"], "горен": ["flame", "burn", "combustion"], "горит": ["flame", "burn"], "burn": ["burn"], "combust": ["combustion"], "детектор": ["detection", "detector"], "датчик": ["detection", "detector"],
-    "дым": ["smoke", "detection"], "частиц": ["particle", "smoke"], "аэрозол": ["aerosol", "smoke"],
+    "дым": ["smoke", "detection"], "задымл": ["smoke", "detection"], "дыма": ["smoke"], "частиц": ["particle", "smoke"], "аэрозол": ["aerosol", "smoke"],
     "предотвращ": ["prevention"], "горюч": ["flammability", "prevention"], "загора": ["ignition", "flammability"], "воспламен": ["ignition"],
     "распростран": ["spread"], "твёрд": ["solid"], "тверд": ["solid"],
     "пластик": ["pmma", "solid"], "оргстекл": ["pmma"], "акрил": ["pmma"], "ткан": ["fabric", "sibal", "nomex"],
@@ -42,6 +42,30 @@ SYNONYMS = {
 STOP = {"и", "в", "на", "по", "для", "с", "о", "об", "при", "как", "что", "the", "of", "in", "on", "and", "a",
         "to", "for", "at", "is", "влияние", "какие", "какой", "как"}
 PARTIAL_WORDS = {"moon", "mars"}
+# Topics the corpus has no experiments on. A query about them can still find
+# related investigations, but never as a direct match.
+UNSUPPORTED = {"туман": "водяной туман", "mist": "водяной туман", "аккумулят": "аккумуляторы",
+               "батаре": "аккумуляторы", "лити": "литий", "водород": "водород", "hydrogen": "водород",
+               "металл": "горение металлов", "алюмини": "горение металлов", "скафандр": "скафандры",
+               "spacesuit": "скафандры", "sf6": "SF6"}
+O2_RE = re.compile(r"(\d+(?:[.,]\d+)?)\s*%")
+
+
+def unsupported_topics(text):
+    found = []
+    for t in tokens(text):
+        for stem, name in UNSUPPORTED.items():
+            if t.startswith(stem) and name not in found:
+                found.append(name)
+    return found
+
+
+def query_oxygen(text):
+    """Oxygen fractions named in the question (only when oxygen is mentioned)."""
+    low = (text or "").lower()
+    if not re.search(r"кислор|oxygen|o2", low):
+        return []
+    return [float(v.replace(",", ".")) / 100 for v in O2_RE.findall(low)]
 
 
 def reason(code, text, field=None, evidence_ids=()):
@@ -173,6 +197,9 @@ def retrieve(request, release_dir=None):
     target_partial = bool(qterms & PARTIAL_WORDS) or (scenario or {}).get("gravity_regime") in {"partial",
                                                                                               "simulated_partial"}
     task = (scenario or {}).get("safety_task")
+    qtext = request.get("question") or request.get("query") or ""
+    off_topic = unsupported_topics(qtext)
+    q_o2 = query_oxygen(qtext)
     query_tasks = {TASK_TERMS[t] for t in qterms if t in TASK_TERMS}
     default_idf = math.log(1 + len(docs))
     max_idf = sum(idf.get(t, default_idf) for t in qterms) or 1.0
@@ -226,6 +253,16 @@ def retrieve(request, release_dir=None):
                                       + "; данных частичной гравитации (Луна, Марс) в корпусе нет",
                                       "conditions.gravity_regime"))
 
+        o2cov = next((c for c in inv["conditions_coverage"] if c["field"] == "conditions.oxygen_fraction"), None)
+        o2_out = [v for v in q_o2 if o2cov and o2cov["max_value"] is not None
+                  and not (o2cov["min_value"] - 1e-9 <= v <= o2cov["max_value"] + 1e-9)]
+        if o2_out:
+            differences.append(reason("oxygen_outside_tested_range",
+                                      f"кислород {round(o2_out[0] * 100)} % вне диапазона опытов "
+                                      f"({round(o2cov['min_value'] * 100, 1)}–{round(o2cov['max_value'] * 100, 1)} %)",
+                                      "conditions.oxygen_fraction"))
+        if off_topic:
+            differences.append(reason("topic_not_in_corpus", "в корпусе нет опытов по теме: " + ", ".join(off_topic)))
         if failed is not None:
             if include_related:
                 related.append({"investigation_id": inv["id"], "rank_score": score, "relevance_category": "related",
@@ -236,7 +273,7 @@ def retrieve(request, release_dir=None):
             continue
         if qterms and not hit and not scope_ok:
             continue
-        direct = (text >= 0.25 or not qterms or scope_ok) and not target_partial
+        direct = (text >= 0.25 or not qterms or scope_ok) and not target_partial and not off_topic and not o2_out
         items.append({"investigation_id": inv["id"], "rank_score": score,
                       "relevance_category": "direct" if direct else "contextual",
                       "match_reasons": reasons, "differences": differences, "missing_fields": missing,
@@ -274,6 +311,13 @@ def build_bundle(data, request, ranked, qterms, target_partial, idf):
               and c["review_status"] == "reviewed"]
     claims.sort(key=lambda c: (-sum(idf.get(t, 0) for t in qterms & expand(c["text"])),
                               -len(qterms & expand(c["text"])), c["id"]))
+    # Round robin over the found investigations in rank order, best claim of each first;
+    # direct matches before contextual ones.
+    def rr(ids):
+        queues = [[c for c in claims if c["investigation_ids"][0] == i] for i in ids]
+        return [q[k] for k in range(max(map(len, queues), default=0)) for q in queues if k < len(q)]
+    claims = rr([x["investigation_id"] for x in direct if x["relevance_category"] == "direct"]) + \
+        rr([x["investigation_id"] for x in direct if x["relevance_category"] == "contextual"])
     chosen, items, chars = [], [], 0
 
     def add(ev_id, run_ids, nfacts, invs):
@@ -320,6 +364,10 @@ def build_bundle(data, request, ranked, qterms, target_partial, idf):
                               "в корпусе только микрогравитация, прямых наблюдений нет.", "conditions.gravity_regime"))
     if not direct:
         reasons.append(reason("no_matching_investigations", "Нет исследований, удовлетворяющих жёстким фильтрам."))
+    off = unsupported_topics(request.get("question") or request.get("query") or "")
+    if off:
+        reasons.append(reason("topic_not_in_corpus", "В корпусе нет опытов по теме: " + ", ".join(off)
+                              + "; найденные исследования только связаны с вопросом."))
     missing = sorted({m for x in direct for m in x["missing_fields"]})
     coverage = {"matching_investigation_ids": inv_ids, "matching_run_ids": matching_runs, "missing_fields": missing,
                 "target_gravity_covered": not target_partial, "direct_evidence_available": direct_available,
