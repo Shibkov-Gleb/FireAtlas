@@ -1,5 +1,6 @@
 PY ?= python3
-export PYTHONPATH := apps/api:packages/contracts
+# Модули AI 1 (packages/retrieval) и AI 2 (packages/reasoning) подключаются через FA_RETRIEVER/FA_REASONER (D-025)
+export PYTHONPATH := apps/api:packages/contracts:packages/retrieval:packages/reasoning
 
 .PHONY: check examples test mock fixture-release dev validate-release start backup loadtest
 

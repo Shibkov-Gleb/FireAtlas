@@ -4,9 +4,12 @@
 
 ## Запуск
 ```bash
-cp .env.example .env          # заполнить FA_CURSOR_SECRET, FA_INTERNAL_TOKEN, FA_ALLOWED_ORIGINS
-FA_RELEASE_DIR=data/releases/<rev> bash scripts/start.sh
+cp .env.example .env          # заполнить FA_CURSOR_SECRET, FA_INTERNAL_TOKEN, FA_ALLOWED_ORIGINS, OPENAI_API_KEY
+bash scripts/start.sh          # читает .env; переменные, заданные снаружи, важнее
 ```
+`PYTHONPATH` в `start.sh` и `Makefile` включает `packages/retrieval` и `packages/reasoning`.
+Windows без make и bash: `PYTHONPATH=apps/api;packages/contracts;packages/retrieval;packages/reasoning`, затем
+`python -m fire_atlas_api.cli migrate`, `... import data/releases/<rev>`, `... serve --port 8000`.
 `start.sh` выполняет миграции, затем импорт выпуска, затем запускает сервер. Повторный импорт того же пакета ничего не меняет.
 Если пакет отклонен, активной остается предыдущая ревизия, а сервер все равно стартует.
 Docker: `docker compose up -d --build` (сборка в среде разработки не проверялась).
@@ -43,9 +46,10 @@ bash scripts/start.sh
 ## Подключение модулей AI (D-025)
 | Переменная | Значение |
 |---|---|
-| `FA_RETRIEVER` | `py:retrieval.api:retrieve` или `http://retrieval:9001/internal/v1/retrieve` |
-| `FA_REASONER` | `py:reasoning.api:reason` или `http://reasoning:9002/internal/v1/reason` |
-| `FA_APPLICABILITY` | `py:reasoning.applicability:assess_applicability` (только в процессе) |
+| `FA_RETRIEVER` | `py:retrieve:retrieve` (AI 1, `packages/retrieval`; читает `data/releases/<rev>`) |
+| `FA_REASONER` | `py:fa_reasoning.reason:reason` (AI 2, `packages/reasoning`) |
+| `FA_APPLICABILITY` | `py:fa_reasoning.applicability:assess_applicability` (только в процессе) |
+| `FA_LLM_PROVIDER`, `FA_LLM_MODEL`, `OPENAI_API_KEY` | модель AI 2: `openai` + `gpt-6-luna`; `offline` - ответ из проверенных выводов без модели (запасной режим демонстрации) |
 | `FA_FEATURE_ANALYSIS` | `true` только при подключенных настоящих модулях; в production заглушки запрещены |
 | `FA_SEARCH_DEADLINE_S` | дедлайн `retrieve` для `POST /search` (10 с) |
 | `FA_SEARCH_PER_MINUTE` | лимит поиска на адрес клиента (60); для `make loadtest` - `0` |

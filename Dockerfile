@@ -11,6 +11,9 @@ COPY apps/api/requirements.txt apps/api/requirements.txt
 RUN pip install --no-cache-dir -r apps/api/requirements.txt
 
 COPY packages/contracts packages/contracts
+# Модули AI 1 и AI 2 (D-025); без них анализ в production не стартует
+COPY packages/retrieval packages/retrieval
+COPY packages/reasoning/fa_reasoning packages/reasoning/fa_reasoning
 COPY apps/api apps/api
 COPY scripts scripts
 COPY data/releases data/releases

@@ -5,7 +5,16 @@
 #   FA_PORT=8000
 set -euo pipefail
 cd "$(dirname "$0")/.."
-export PYTHONPATH="apps/api:packages/contracts${PYTHONPATH:+:$PYTHONPATH}"
+# Локальный запуск: переменные из .env, если они не заданы снаружи (в Docker .env передает compose).
+if [[ -f .env ]]; then
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    [[ "$line" =~ ^[[:space:]]*([A-Z_][A-Z0-9_]*)=(.*)$ ]] || continue
+    key="${BASH_REMATCH[1]}"; val="${BASH_REMATCH[2]%%[[:space:]]#*}"; val="${val%"${val##*[![:space:]]}"}"
+    [[ -n "${!key:-}" || -z "$val" ]] && continue
+    export "$key=$val"
+  done < .env
+fi
+export PYTHONPATH="apps/api:packages/contracts:packages/retrieval:packages/reasoning${PYTHONPATH:+:$PYTHONPATH}"
 PY="${PYTHON:-python3}"
 
 "$PY" -m fire_atlas_api.cli migrate
