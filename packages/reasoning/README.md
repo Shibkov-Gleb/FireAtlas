@@ -8,7 +8,24 @@
 |---|---|---|
 | A2-04 Применимость | ready_for_integration | `fa_reasoning.applicability.assess_applicability`, 25 тестов |
 | A2-03, A2-05…A2-08 `reason` | planned | — |
-| A2-09…A2-11 Оценка | planned | — |
+| A2-09 Набор оценки | in_progress | `eval/eval_questions.json`, 30 вопросов, черновик для сверки с AI 1 |
+| A2-10, A2-11 Состязательные проверки, регрессия | planned | — |
+
+## Набор оценки (ТЗ 24.2)
+
+`eval/eval_questions.json` — 30 вопросов: 10 `direct`, 5 `comparison`, 5 `no_data`, 5 `lunar_mars`, 5 `adversarial`.
+Вопросы q01–q12 взяты из `packages/retrieval/eval_questions.json` (AI 1) без изменений.
+
+Поля AI 1 сохранены, по ним считается Recall@5 в `packages/retrieval/evaluate.py`:
+`id`, `question`, `relevant` (нужные исследования), `relevant_claims` (нужные выводы), `lunar`
+(`true` — прямых совпадений быть не должно; так помечены лунные, марсианские вопросы и вопросы без данных).
+
+Поля AI 2: `group`, `scenario` (краткая форма: пресет и отличающиеся условия), `data_revision`,
+`expected_evidence_ids` (до 3 доказательств каждого вывода из `relevant_claims`), `expected_status`,
+`expected_applicability_max`, `required_limitations`, `forbidden_claims`, `adversarial_fixture`, `note`.
+
+Прогон поиска AI 1 на этом наборе (ревизия `psi-20261115-r2`): Recall@5 по исследованиям 0.97,
+по доказательствам 0.95, ложных прямых совпадений 2 (q23, q25).
 
 ## Подключение к бэкенду (D-025)
 
